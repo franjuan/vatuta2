@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.bytesandchips.vatuta</groupId>
+  <artifactId>vatuta</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Vatuta</name>
+  <url>http://vatuta.com</url>
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-jsp</artifactId>
+			<version>9.2.13.v20150730</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>vatuta</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/javascript</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/webapp</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<!-- Testing Jasmine -->
+			<plugin>
+				<groupId>com.github.searls</groupId>
+				<artifactId>jasmine-maven-plugin</artifactId>
+				<version>2.0-beta-02</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<jsSrcDir>src/main/javascript</jsSrcDir>
+					<jsTestSrcDir>src/test/javascript</jsTestSrcDir>
+					<preloadSources>
+						<preloadSource>lib/easeljs-0.8.1.min.js</preloadSource>
+					</preloadSources>
+
+					<systemPropertyVariables>
+						<phantomjs.binary.path>${phantomjs.binary.path}</phantomjs.binary.path>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<!-- Compression -->
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>yuicompressor-maven-plugin</artifactId>
+				<version>1.5.1</version>
+				<executions>
+					<execution>
+						<id>compress-js</id>
+						<goals>
+							<goal>compress</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<!-- Analysis -->
+			<plugin>
+				<groupId>gr.abiss.mvn.plugins</groupId>
+				<artifactId>maven-jstools-plugin</artifactId>
+				<version>0.7</version>
+				<configuration>
+					<jsDir>src/main/javascript</jsDir>
+					<includePrivate>true</includePrivate>
+					<includeUndocumented>true</includeUndocumented>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>jslint</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<!-- Docs -->
+			<plugin>
+				<groupId>com.phasebash.jsdoc</groupId>
+				<artifactId>jsdoc3-maven-plugin</artifactId>
+				<version>1.1.0</version>
+				<configuration>
+					<recursive>true</recursive>
+					<directoryRoots>
+						<directoryRoot>${basedir}/src/main/webapp</directoryRoot>
+						<directoryRoot>${basedir}/src/main/javascript</directoryRoot>
+					</directoryRoots>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>
