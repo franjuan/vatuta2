@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Vatuta</title>
-<script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
-<script src="https://code.jquery.com/jquery-2.1.4.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
 	data-dojo-config="async: true"></script>
