@@ -1,5 +1,5 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js" ],
-		function(declare, lang, Task) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/engine.js" ],
+		function(declare, lang, Task, Engine) {
 			return declare(null, {
 				constructor : function(/* Object */kwArgs) {
 					lang.mixin(this, kwArgs);
@@ -8,7 +8,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js" ],
 					this.task = new Task({
 						duration : 3
 					});
-					return '<em> Dojo!' + this.task.getDuration() + '</em>';
+					return '<em> Dojo!' + Engine.calculateEarlyStartLateEnding() + '</em>';
 				}
 			});
 		});
