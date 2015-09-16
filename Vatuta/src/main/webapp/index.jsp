@@ -23,7 +23,7 @@
 					console.log(pr);
 					domConstruct.place(pr.getHello(), greetingNode);
 					var task1 = new Task({_duration: 3});
-					var task2 = new Task({_duration: 5});
+					var task2 = new Task({_duration: 6});
 				});
 	</script>
 </body>
