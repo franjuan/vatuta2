@@ -16,12 +16,14 @@
 	<h2>Hello World!</h2>
 	<h1 id="greeting">Hello</h1>
 	<script>
-		require([ "dojo/dom", "dojo/dom-construct", "./vatuta/project.js", "./vatuta/engine.js" ],
-				function(dom, domConstruct, project, engine) {
+		require([ "dojo/dom", "dojo/dom-construct", "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js" ],
+				function(dom, domConstruct, Project, Task, Engine) {
 					var greetingNode = dom.byId('greeting');
-					var pr = new project();
+					var pr = new Project();
 					console.log(pr);
 					domConstruct.place(pr.getHello(), greetingNode);
+					var task1 = new Task({_duration: 3});
+					var task2 = new Task({_duration: 5});
 				});
 	</script>
 </body>
