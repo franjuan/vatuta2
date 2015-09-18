@@ -5,12 +5,19 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 	/**
      * @exports Restriction
      */
-	return declare("Restriction", null, {
+	var Restriction = declare("Vatuta.Restriction", null, {
 		/**
 		 * @constructs Restriction
 		 */
 		constructor : function(/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
 		}
+	});
+	
+	/**
+     * @exports Restriction
+     */
+	var EndToStartDependency = declare("Vatuta.EndToStartDependency", Restriction, {
+		
 	});
 });
