@@ -9,7 +9,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 		getRestrictions : function() {
 			if (!this._restrictions) {
 				this._restrictions = [];
-			};
+			}
 			return this._restrictions;
 		},
 		addRestriction : function(restriction) {
@@ -19,7 +19,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 		getDependencies: function() {
 			if (!this._dependencies) {
 				this._dependencies = [];
-			};
+			}
 			return this._dependencies;
 		},
 		addDependency : function(task) {
@@ -28,7 +28,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 		getDependants: function() {
 			if (!this._dependants) {
 				this._dependants = [];
-			};
+			}
 			return this._dependants;
 		},
 		addDependant : function(task) {
