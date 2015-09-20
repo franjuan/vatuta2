@@ -10,7 +10,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 		 * @constructs Restriction
 		 */
 		constructor : function(/* Object */kwArgs) {
+			this._enabled = false;
 			lang.mixin(this, kwArgs);
+		},
+		enable: function() {
+			this._enabled = true;
 		}
 	});
 	
@@ -23,6 +27,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 		},
 		getStartingTask: function() {
 			return this._startingTask;
+		},
+		enable: function() {
+			this.inherited(arguments);
+			this.getEndingTask().addDependant(this._startingTask);
+			this.getStartingTask().addDependency(this.endingtask);
 		}
 	});
 });

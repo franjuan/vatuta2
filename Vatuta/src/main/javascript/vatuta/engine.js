@@ -19,7 +19,7 @@ define(
 				 */
 				calculateEarlyStartLateEnding : function(project) {
 					// We clone the tasks array
-					var tasks = _.clone(project.getTasks);
+					var tasks = _.clone(project.getTasks());
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = 0;

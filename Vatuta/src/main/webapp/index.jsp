@@ -16,14 +16,16 @@
 	<h2>Hello World!</h2>
 	<h1 id="greeting">Hello</h1>
 	<script>
-		require([ "dojo/dom", "dojo/dom-construct", "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js" ],
-				function(dom, domConstruct, Project, Task, Engine) {
-					var greetingNode = dom.byId('greeting');
-					var pr = new Project();
-					console.log(pr);
-					domConstruct.place(pr.getHello(), greetingNode);
+		require([ "dojo/dom", "dojo/dom-construct", "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js", "./vatuta/restriction.js" ],
+				function(dom, domConstruct, Project, Task, Engine, Restriction) {
+					//var greetingNode = dom.byId('greeting');
+					//var pr = new Project();
+					//console.log(pr);
+					//domConstruct.place(pr.getHello(), greetingNode);
 					var task1 = new Task({_duration: 3});
 					var task2 = new Task({_duration: 6});
+					var restriction = new Vatuta.EndToStartDependency({_endingTask: task1, _startingTask: task2});
+					task2.addRestriction(restriction);
 				});
 	</script>
 </body>
