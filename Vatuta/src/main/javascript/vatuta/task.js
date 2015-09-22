@@ -1,7 +1,11 @@
-define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
+		lang, _) {
 	return declare(null, {
 		constructor : function(/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
+		},
+		getId : function() {
+			return this._id;
 		},
 		getDuration : function() {
 			return this._duration;
@@ -14,25 +18,30 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 		},
 		addRestriction : function(restriction) {
 			this.getRestrictions().push(restriction);
-			restriction.enable();
+			this._dependencies = null;
+			this._dependants = null;
 		},
-		getDependencies: function() {
+		getDependencies : function() {
 			if (!this._dependencies) {
 				this._dependencies = [];
+				_.forEach(this.getRestrictions(), function(restriction) {
+					_.forEach(restriction.getDependencies4Task(this), function(dependency) {
+						this._dependencies.push(dependency)
+					}, this);
+				}, this);
 			}
 			return this._dependencies;
 		},
-		addDependency : function(task) {
-			this.getDependencies().push(task);
-		},
-		getDependants: function() {
+		getDependants : function() {
 			if (!this._dependants) {
 				this._dependants = [];
+				_.forEach(this.getRestrictions(), function(restriction) {
+					_.forEach(restriction.getDependants4Task(this), function(dependant) {
+						this._dependants.push(dependant)
+					}, this);
+				}, this);
 			}
 			return this._dependants;
-		},
-		addDependant : function(task) {
-			this.getDependants().push(task);
 		}
 	});
 });

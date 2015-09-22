@@ -10,11 +10,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 		 * @constructs Restriction
 		 */
 		constructor : function(/* Object */kwArgs) {
-			this._enabled = false;
 			lang.mixin(this, kwArgs);
-		},
-		enable: function() {
-			this._enabled = true;
 		}
 	});
 	
@@ -22,16 +18,30 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
      * @exports Restriction
      */
 	var EndToStartDependency = declare("Vatuta.EndToStartDependency", Restriction, {
+		constructor: function(/* Object */kwArgs) {
+			this.inherited(arguments);
+			this.getEndingTask().addRestriction(this);
+			this.getStartingTask().addRestriction(this);
+		},
 		getEndingTask: function() {
 			return this._endingTask;
 		},
 		getStartingTask: function() {
 			return this._startingTask;
 		},
-		enable: function() {
-			this.inherited(arguments);
-			this.getEndingTask().addDependant(this._startingTask);
-			this.getStartingTask().addDependency(this.endingtask);
+		getDependants4Task: function(task) {
+			if (task.getId()===this.getEndingTask().getId()) {
+				return [this.getStartingTask()];
+			} else {
+				return [];
+			}
+		},
+		getDependencies4Task: function(task) {
+			if (task.getId()===this.getStartingTask().getId()) {
+				return [this.getEndingTask()];
+			} else {
+				return [];
+			}
 		}
 	});
 });

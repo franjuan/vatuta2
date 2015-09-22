@@ -7,7 +7,8 @@
 	src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
 	data-dojo-config="async: true,
 					  packages : [
-					  	{name : 'underscorejs',	location : 'http://underscorejs.org', main: 'underscore-min'}
+					  	{name : 'underscorejs',	location : 'http://underscorejs.org', main: 'underscore-min'},
+					  	{name : 'lodash', location: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1', main: 'lodash.min'}
 					  ], 
 					  baseUrl : '/'"></script>
 </head>
@@ -22,10 +23,13 @@
 					//var pr = new Project();
 					//console.log(pr);
 					//domConstruct.place(pr.getHello(), greetingNode);
-					var task1 = new Task({_duration: 3});
-					var task2 = new Task({_duration: 6});
+					var task1 = new Task({_id:"task1", _duration: 3});
+					var task2 = new Task({_id:"task2", _duration: 6});
 					var restriction = new Vatuta.EndToStartDependency({_endingTask: task1, _startingTask: task2});
-					task2.addRestriction(restriction);
+					task1.getDependencies();
+					task1.getDependants();
+					task2.getDependencies();
+					task2.getDependants();
 				});
 	</script>
 </body>
