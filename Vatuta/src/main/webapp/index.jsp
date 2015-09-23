@@ -23,17 +23,21 @@
 					//var pr = new Project();
 					//console.log(pr);
 					//domConstruct.place(pr.getHello(), greetingNode);
-					var task1 = new Task({_id:"task1", _duration: 3});
-					var task2 = new Task({_id:"task2", _duration: 6});
-					var restriction = new Vatuta.EndToStartDependency({_endingTask: task1, _startingTask: task2});
-					task1.getDependencies();
-					task1.getDependants();
-					task2.getDependencies();
-					task2.getDependants();
+					var taskA = new Task({_id:"taskA", _duration: 3});
+					var taskB = new Task({_id:"taskB", _duration: 5});
+					var taskC = new Task({_id:"taskC", _duration: 7});
+					var taskD = new Task({_id:"taskD", _duration: 2});
+					new Vatuta.EndToStartDependency({_endingTask: taskA, _startingTask: taskB});
+					new Vatuta.EndToStartDependency({_endingTask: taskA, _startingTask: taskC});
+					new Vatuta.EndToStartDependency({_endingTask: taskB, _startingTask: taskD});
+					new Vatuta.EndToStartDependency({_endingTask: taskC, _startingTask: taskD});
 					var project = new Project({});
-					project.addTask(task2);
-					project.addTask(task1);
+					project.addTask(taskA);
+					project.addTask(taskB);
+					project.addTask(taskC);
+					project.addTask(taskD);
 					Engine.calculateEarlyStartLateEnding(project);
+					Console.log("fin");
 				});
 	</script>
 </body>

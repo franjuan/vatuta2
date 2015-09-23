@@ -23,6 +23,7 @@ define(
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = -1;
+					var endOfProject = 0;
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						for (i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
@@ -33,6 +34,7 @@ define(
 							if (!isNaN(earlyStart)) {
 								task._earlyStart = earlyStart;
 								task._earlyEnd = earlyStart + task.getDuration();
+								endOfProject = Math.max(endOfProject, task._earlyEnd);
 								
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
@@ -49,7 +51,7 @@ define(
 					while (alreadyCalculatedIndex > 0) {
 						for (i = alreadyCalculatedIndex - 1; i >= 0; i--) {
 							var task = tasks[i];
-							var lateEnd = task.getEarlyEnd();
+							var lateEnd = endOfProject;
 							_.forEach(task.getRestrictions(), function(restriction) {
 								lateEnd = Math.min(lateEnd, restriction.getLateEnd(this));
 							}, task);
