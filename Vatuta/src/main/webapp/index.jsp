@@ -30,6 +30,10 @@
 					task1.getDependants();
 					task2.getDependencies();
 					task2.getDependants();
+					var project = new Project({});
+					project.addTask(task2);
+					project.addTask(task1);
+					Engine.calculateEarlyStartLateEnding(project);
 				});
 	</script>
 </body>

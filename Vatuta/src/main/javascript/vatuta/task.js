@@ -20,6 +20,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 			this.getRestrictions().push(restriction);
 			this._dependencies = null;
 			this._dependants = null;
+			return restriction;
 		},
 		getDependencies : function() {
 			if (!this._dependencies) {
@@ -42,6 +43,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 				}, this);
 			}
 			return this._dependants;
+		},
+		getEarlyStart: function() {
+			return this._earlyStart;
+		},
+		getEarlyEnd: function() {
+			return this._earlyEnd;
 		}
 	});
 });
