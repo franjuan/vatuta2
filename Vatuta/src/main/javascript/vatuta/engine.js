@@ -34,15 +34,39 @@ define(
 								task._earlyStart = earlyStart;
 								task._earlyEnd = earlyStart + task.getDuration();
 								
-								if (i!=alreadyCalculatedIndex+1) {
+								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
-									tasks[i] = tasks[alreadyCalculatedIndex+1];
-									tasks[alreadyCalculatedIndex+1] = aux;
+									tasks[i] = tasks[alreadyCalculatedIndex + 1];
+									tasks[alreadyCalculatedIndex + 1] = aux;
 								}
 								alreadyCalculatedIndex++;
 							}
 						}
 					}
+					
+					// Calculate late start and ending
+					var alreadyCalculatedIndex = tasks.length;
+					while (alreadyCalculatedIndex > 0) {
+						for (i = alreadyCalculatedIndex - 1; i >= 0; i--) {
+							var task = tasks[i];
+							var lateEnd = task.getEarlyEnd();
+							_.forEach(task.getRestrictions(), function(restriction) {
+								lateEnd = Math.min(lateEnd, restriction.getLateEnd(this));
+							}, task);
+							if (!isNaN(lateEnd)) {
+								task._lateEnd = lateEnd;
+								task._lateStart = lateEnd - task.getDuration();
+								
+								if (i != alreadyCalculatedIndex - 1) {
+									var aux = tasks[i];
+									tasks[i] = tasks[alreadyCalculatedIndex+1];
+									tasks[alreadyCalculatedIndex + 1] = aux;
+								}
+								alreadyCalculatedIndex--;
+							}
+						}
+					}
+					
 				}
 			};
 		});

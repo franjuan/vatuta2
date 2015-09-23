@@ -53,6 +53,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 			} else {
 				return 0;
 			}
+		},
+		getLateEnd: function(task) {
+			if (task.getId()===this.getEndingTask().getId()) {
+				if (this.getStartingTask().getLateStart()) {
+					return this.getStartingTask().getLateStart();
+				} else {
+					return NaN;
+				}
+			} else {
+				return this.getStartingTask().getEarlyEnd();
+			}
 		}
 	});
 });

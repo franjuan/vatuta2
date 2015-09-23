@@ -49,6 +49,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		},
 		getEarlyEnd: function() {
 			return this._earlyEnd;
+		},
+		getLateStart: function() {
+			return this._lateStart;
+		},
+		getLateEnd: function() {
+			return this._lateEnd;
 		}
 	});
 });
