@@ -47,7 +47,7 @@ define(
 					}
 					
 					// Calculate late start and ending
-					var alreadyCalculatedIndex = tasks.length;
+					alreadyCalculatedIndex = tasks.length;
 					while (alreadyCalculatedIndex > 0) {
 						for (i = alreadyCalculatedIndex - 1; i >= 0; i--) {
 							var task = tasks[i];
@@ -69,6 +69,8 @@ define(
 						}
 					}
 					
+					project._start = 0;
+					project._end = endOfProject;
 				}
 			};
 		});
