@@ -18,6 +18,16 @@
 <body>
 	<canvas id="gantt"></canvas>
 	<script>
+	var canvas;
+
+	window.onload = window.onresize = function() {
+
+	    canvas = document.getElementById('gantt');
+	    //canvas.width = window.innerWidth;
+	    //canvas.height = window.innerHeight;   
+	}
+	</script>
+	<script>
 		require([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js", "./vatuta/restriction.js" ],
 				function(Project, Task, Engine, Restriction) {
 					var taskA = new Task({_id:"taskA", _duration: 3});
@@ -40,6 +50,9 @@
 	<script>
 		require(['easeljs'],
 				function(){
+					var canvas = document.getElementById('gantt');
+				    canvas.width = window.innerWidth;
+				    canvas.height = window.innerHeight;
 					var stage = new createjs.Stage("gantt");
 					
 					var task = new createjs.Shape();
