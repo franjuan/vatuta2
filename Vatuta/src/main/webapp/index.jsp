@@ -19,22 +19,26 @@
 	<canvas id="gantt"></canvas>
 	<script>
 		require([ "./vatuta/project.js", "./vatuta/task.js",
-				"./vatuta/engine.js", "./vatuta/restriction.js" ], function(
-				Project, Task, Engine, Restriction) {
+				"./vatuta/engine.js", "./vatuta/restriction.js", "./vatuta/canvas.js" ], function(
+				Project, Task, Engine, Restriction, Canvas) {
 			var taskA = new Task({
 				_id : "taskA",
+				_name : "A",
 				_duration : 3
 			});
 			var taskB = new Task({
 				_id : "taskB",
+				_name : "B",
 				_duration : 5
 			});
 			var taskC = new Task({
 				_id : "taskC",
+				_name : "C",
 				_duration : 7
 			});
 			var taskD = new Task({
 				_id : "taskD",
+				_name : "D",
 				_duration : 2
 			});
 			new Vatuta.EndToStartDependency({
@@ -60,18 +64,21 @@
 			project.addTask(taskD);
 			Engine.calculateEarlyStartLateEnding(project);
 			console.log("fin");
-		});
-	</script>
-	<script>
-		require([ './vatuta/canvas.js' ], function(Canvas) {
+			
 			var canvas = new Canvas({
 				_canvasId : 'gantt',
 				_dayWidth : 30,
-				_ruleHeight : 30,
+				_rulerHeight : 30,
 				_dayFontSize : 15,
-				_dayFont : "Arial"
+				_dayFont : "Arial",
+				_taskFontSize : 15,
+				_taskFont : "Arial",
+				_taskTopHeight: 5,
+				_taskBottomHeight: 5,
+				_taskHeight: 25
 			});
-			canvas.drawTimeRule();
+			canvas.drawTimeRuler(project);
+			canvas.drawProject(project);
 		});
 	</script>
 </body>
