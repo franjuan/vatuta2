@@ -14,11 +14,14 @@
 					  ], 
 					  baseUrl : '/vatuta/'"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
 </head>
 
-<body>
-	<div>Nothing here {{'yet' + '!'}}</div>
-	<canvas id="gantt"></canvas>
+<body >
+	<div id="tableContainer" >Nothing here {{'yet' + '!'}}</div>
+	<div id="ganttContainer" >
+		<canvas id="gantt"></canvas>
+	</div>
 	<script>
 		require([ "./vatuta/project.js", "./vatuta/task.js",
 				"./vatuta/engine.js", "./vatuta/restriction.js", "./vatuta/canvas.js" ], function(

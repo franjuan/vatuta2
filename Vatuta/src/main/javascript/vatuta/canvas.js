@@ -12,10 +12,6 @@ define(
 					/* @member {Object} */
 					this._canvasId = 'canvas';
 					/* @member {Number} */
-					this._width = window.innerWidth;
-					/* @member {Number} */
-					this._height = window.innerHeight;
-					/* @member {Number} */
 					this._dayWidth = this._width/60;
 					/* @member {Number} */
 					this._rulerHeight = this._dayWidth;
@@ -35,6 +31,11 @@ define(
 					this._taskBottomHeight= this._taskHeight*0.15;
 						
 					lang.mixin(this, kwArgs);
+					
+					/* @member {Number} */
+					this._width = dom.byId(this._canvasId).parentElement.offsetWidth;
+					/* @member {Number} */
+					this._height = dom.byId(this._canvasId).parentElement.offsetHeight;
 					
 					this._taskRowHeight= this._taskTopHeight + this._taskHeight + this._taskBottomHeight;
 					

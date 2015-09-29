@@ -1,14 +1,26 @@
-#gantt {
-    border: solid 1px;
-    cursor: pointer;
-    position:fixed;
-    left:0;
-    top:0;
-}
+
 body, html {
     width: 100%;
     height: 100%;
     margin: 0;
     padding:0;
     overflow:hidden;
+    flex-direction: row;
+    display: flex;
+}
+#tableContainer {
+	
+	flex-basis: 33%;
+}
+#ganttContainer {
+	
+
+	flex-basis: 66%;
+}
+#gantt {
+	border: solid 1px;
+    /*cursor: pointer;
+    position:fixed;
+    left:0;
+    top:0;*/
 }
