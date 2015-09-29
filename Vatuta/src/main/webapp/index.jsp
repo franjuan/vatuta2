@@ -23,8 +23,8 @@
 <body ng-controller="projectCtrl">
 	<div id="tableContainer">
 		<ul>
-			<li ng-repeat="task in project._tasks"><span>{{task._name}}</span>
-				<p>{{task._duration}}</p></li>
+			<li ng-repeat="task in project.getTasks()"><span>{{task.getName()}}</span>
+				<p>{{task.getDuration()}}</p></li>
 		</ul>
 	</div>
 	<div id="ganttContainer">
