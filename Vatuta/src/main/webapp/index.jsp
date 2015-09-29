@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="vatutaApp">
 <head>
 <meta charset="UTF-8">
 <title>Vatuta</title>
@@ -13,78 +13,22 @@
 					  	{name : 'easeljs', location: 'https://code.createjs.com', main: 'easeljs-0.8.1.min'}
 					  ], 
 					  baseUrl : '/vatuta/'"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<link rel="stylesheet"
+	href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+<script src="vatuta/controllers.js"></script>
 </head>
 
-<body >
-	<div id="tableContainer" >Nothing here {{'yet' + '!'}}</div>
-	<div id="ganttContainer" >
+<body ng-controller="projectCtrl">
+	<div id="tableContainer">
+		<ul>
+			<li ng-repeat="task in project._tasks"><span>{{task._name}}</span>
+				<p>{{task._duration}}</p></li>
+		</ul>
+	</div>
+	<div id="ganttContainer">
 		<canvas id="gantt"></canvas>
 	</div>
-	<script>
-		require([ "./vatuta/project.js", "./vatuta/task.js",
-				"./vatuta/engine.js", "./vatuta/restriction.js", "./vatuta/canvas.js" ], function(
-				Project, Task, Engine, Restriction, Canvas) {
-			var taskA = new Task({
-				_id : "taskA",
-				_name : "A",
-				_duration : 3
-			});
-			var taskB = new Task({
-				_id : "taskB",
-				_name : "B",
-				_duration : 5
-			});
-			var taskC = new Task({
-				_id : "taskC",
-				_name : "C",
-				_duration : 7
-			});
-			var taskD = new Task({
-				_id : "taskD",
-				_name : "D",
-				_duration : 2
-			});
-			new Vatuta.EndToStartDependency({
-				_endingTask : taskA,
-				_startingTask : taskB
-			});
-			new Vatuta.EndToStartDependency({
-				_endingTask : taskA,
-				_startingTask : taskC
-			});
-			new Vatuta.EndToStartDependency({
-				_endingTask : taskB,
-				_startingTask : taskD
-			});
-			new Vatuta.EndToStartDependency({
-				_endingTask : taskC,
-				_startingTask : taskD
-			});
-			project = new Project({});
-			project.addTask(taskA);
-			project.addTask(taskB);
-			project.addTask(taskC);
-			project.addTask(taskD);
-			Engine.calculateEarlyStartLateEnding(project);
-			console.log("fin");
-			
-			var canvas = new Canvas({
-				_canvasId : 'gantt',
-				_dayWidth : 30,
-				_rulerHeight : 30,
-				_dayFontSize : 15,
-				_dayFont : "Arial",
-				_taskFontSize : 15,
-				_taskFont : "Arial",
-				_taskTopHeight: 5,
-				_taskBottomHeight: 5,
-				_taskHeight: 25
-			});
-			canvas.drawTimeRuler(project);
-			canvas.drawProject(project);
-		});
-	</script>
 </body>
 </html>
