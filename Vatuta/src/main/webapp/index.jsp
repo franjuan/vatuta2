@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
 <head>
 <meta charset="UTF-8">
 <title>Vatuta</title>
@@ -13,9 +13,11 @@
 					  	{name : 'easeljs', location: 'https://code.createjs.com', main: 'easeljs-0.8.1.min'}
 					  ], 
 					  baseUrl : '/vatuta/'"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 </head>
 
 <body>
+	<div>Nothing here {{'yet' + '!'}}</div>
 	<canvas id="gantt"></canvas>
 	<script>
 		require([ "./vatuta/project.js", "./vatuta/task.js",
