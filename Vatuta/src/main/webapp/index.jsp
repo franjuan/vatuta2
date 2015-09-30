@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Vatuta</title>
-<link rel="stylesheet" type="text/css" href="gantt.css">
+<link rel="stylesheet" type="text/css" href="vatuta.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
 	data-dojo-config="async: true,
@@ -17,15 +17,16 @@
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 <link rel="stylesheet"
 	href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+
+<link rel="styleSheet" href="js/ui-grid.css"/>
+<script src="js/ui-grid.js"></script>
+	
 <script src="vatuta/controllers.js"></script>
 </head>
 
 <body ng-controller="projectCtrl">
 	<div id="tableContainer">
-		<ul>
-			<li ng-repeat="task in project.getTasks()"><span>{{task.getName()}}</span>
-				<p>{{task.getDuration()}}</p></li>
-		</ul>
+		<div id="tasksGrid" ui-grid="tasksGridOptions" ></div>
 	</div>
 	<div id="ganttContainer">
 		<canvas id="gantt"></canvas>

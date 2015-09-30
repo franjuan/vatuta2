@@ -1,6 +1,17 @@
-var vatutaApp = angular.module('vatutaApp', []);
+var vatutaApp = angular.module('vatutaApp', ['ui.grid']);
 
 vatutaApp.controller('projectCtrl', function ($scope) {
+	$scope.tasksGridOptions = {
+		    enableSorting: false,
+		    rowHeight: 35,
+		    columnDefs: [{
+		      name: "Name",
+		      field: "getName()"
+		    }, {
+		      name: "Duration",
+		      field: "getDuration()"
+		    }]
+		  };
   require([ "./vatuta/project.js", "./vatuta/task.js",
 			"./vatuta/engine.js", "./vatuta/restriction.js", "./vatuta/canvas.js" ], function(
 			Project, Task, Engine, Restriction, Canvas) {
@@ -50,12 +61,13 @@ vatutaApp.controller('projectCtrl', function ($scope) {
 		
 		$scope.$apply(function () {
 			$scope.project = project;
+			$scope.tasksGridOptions.data = project.getTasks();
 		});
 		
 		var canvas = new Canvas({
 			_canvasId : 'gantt',
 			_dayWidth : 30,
-			_rulerHeight : 30,
+			_rulerHeight : 35,
 			_dayFontSize : 15,
 			_dayFont : "Arial",
 			_taskFontSize : 15,
@@ -67,6 +79,8 @@ vatutaApp.controller('projectCtrl', function ($scope) {
 		canvas.drawTimeRuler(project);
 		canvas.drawProject(project);
 	});
+  
+  
 
   console.log(!$scope.project);
 });
