@@ -15,8 +15,14 @@
 					  baseUrl : '/vatuta/'"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.min.js"></script>
+	<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-aria.min.js"></script>
 <link rel="stylesheet"
 	href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.1/angular-material.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.1/angular-material.min.js"></script>
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
 
