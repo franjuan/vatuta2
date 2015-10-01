@@ -28,6 +28,13 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				addTask : function(task) {
 					this._tasks.push(task);
 					return task;
+				},
+				/**
+				 * @function
+				 * @memberof Project
+				 */
+				name: function(newName) {
+				     return arguments.length ? (this._name = newName) : this._name;
 				}
 			});
 		});

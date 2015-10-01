@@ -54,7 +54,7 @@ vatutaApp.controller('projectCtrl',  ['$scope', '$mdSidenav', function($scope, $
 			_endingTask : taskC,
 			_startingTask : taskD
 		});
-		var project = new Project({});
+		var project = new Project({_name:"Example Project"});
 		project.addTask(taskA);
 		project.addTask(taskB);
 		project.addTask(taskC);

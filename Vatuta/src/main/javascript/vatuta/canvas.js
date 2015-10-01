@@ -16,13 +16,13 @@ define(
 					/* @member {Number} */
 					this._rulerHeight = this._dayWidth;
 					/* @member {Number} */
-					this._dayFont = "Arial";
+					this._dayFont = "RobotoDraft";
 					/* @member {Number} */
 					this._dayFontSize = this._rulerHeight/2;
 					/* @member {Number} */
 					this._taskHeight= this._dayWidth;
 					/* @member {Number} */
-					this._taskFont = "Arial";
+					this._taskFont = "RobotoDraft";
 					/* @member {Number} */
 					this._taskFontSize = this._taskHeight/2;
 					/* @member {Number} */
