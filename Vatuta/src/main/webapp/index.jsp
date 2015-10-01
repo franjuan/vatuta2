@@ -16,20 +16,38 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 <link rel="stylesheet"
-	href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+	href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.1/angular-material.min.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
 
-<link rel="styleSheet" href="js/ui-grid.css"/>
+<link rel="styleSheet" href="js/ui-grid.css" />
 <script src="js/ui-grid.js"></script>
-	
+
 <script src="vatuta/controllers.js"></script>
 </head>
 
 <body ng-controller="projectCtrl">
-	<div id="tableContainer">
-		<div id="tasksGrid" ui-grid="tasksGridOptions" ></div>
+	<md-toolbar layout="row">
+	<div class="md-toolbar-tools">
+		<md-button ng-click="toggleSidenav('left')" hide-gt-sm
+			class="md-icon-button"> <md-icon aria-label="Menu"
+			md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
+		</md-button>
+		<h1>Hello World</h1>
 	</div>
-	<div id="ganttContainer">
-		<canvas id="gantt"></canvas>
+	</md-toolbar>
+	<div layout="row" flex>
+		<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2"
+			md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+		<div id="tasksGrid" ui-grid="tasksGridOptions"></div>
+		</md-sidenav>
+		<div layout="column" flex id="content">
+			<md-content layout="column" flex class="md-padding">
+			<canvas id="gantt"></canvas>
+			</md-content>
+		</div>
+		<div id="tableContainer"></div>
+		<div id="ganttContainer"></div>
 	</div>
 </body>
 </html>

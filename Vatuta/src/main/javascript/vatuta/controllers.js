@@ -1,6 +1,6 @@
-var vatutaApp = angular.module('vatutaApp', ['ui.grid']);
+var vatutaApp = angular.module('vatutaApp', ['ui.grid', 'ngMaterial']);
 
-vatutaApp.controller('projectCtrl', function ($scope) {
+vatutaApp.controller('projectCtrl',  ['$scope', '$mdSidenav', function($scope, $mdSidenav){
 	$scope.tasksGridOptions = {
 		    enableSorting: false,
 		    rowHeight: 35,
@@ -12,6 +12,9 @@ vatutaApp.controller('projectCtrl', function ($scope) {
 		      field: "getDuration()"
 		    }]
 		  };
+	$scope.toggleSidenav = function(menuId) {
+	    $mdSidenav(menuId).toggle();
+	  };
   require([ "./vatuta/project.js", "./vatuta/task.js",
 			"./vatuta/engine.js", "./vatuta/restriction.js", "./vatuta/canvas.js" ], function(
 			Project, Task, Engine, Restriction, Canvas) {
@@ -83,4 +86,4 @@ vatutaApp.controller('projectCtrl', function ($scope) {
   
 
   console.log(!$scope.project);
-});
+}]);
