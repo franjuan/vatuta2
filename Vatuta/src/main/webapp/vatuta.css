@@ -8,20 +8,14 @@ body, html {
 	display: flex;
 }
 
-#tableContainer {
-	flex-basis: 33%;
-}
-
-#ganttContainer {
-	flex-basis: 66%;
-}
-
 #gantt {
-	border: solid 1px;
+	border: solid 0px;
 	/*cursor: pointer;
     position:fixed;
     left:0;
     top:0;*/
+    width: 100%;
+	height: 100%;
 }
 
 #tasksGrid {
@@ -37,4 +31,9 @@ body, html {
   font-size: inherit;
   font-weight: inherit;
   margin: inherit;
+}
+
+#vertical-container{
+	width: 100%;
+	height: 100%;
 }

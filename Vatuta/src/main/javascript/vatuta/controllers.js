@@ -84,6 +84,6 @@ vatutaApp.controller('projectCtrl',  ['$scope', '$mdSidenav', function($scope, $
 	});
   
   
-
+  this.project=$scope.project;
   console.log(!$scope.project);
 }]);
