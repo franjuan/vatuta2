@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="vatutaApp">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Vatuta</title>
