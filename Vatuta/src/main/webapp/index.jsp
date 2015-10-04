@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="vatuta.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
-	data-dojo-config="async: true,
+	data-dojo-config="async: false,
 					  packages : [
 					  	{name : 'underscorejs',	location : 'http://underscorejs.org', main: 'underscore-min'},
 					  	{name : 'lodash', location: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1', main: 'lodash.min'},
@@ -26,10 +26,8 @@
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
 
-<link rel="styleSheet" href="js/ui-grid.css" />
-<script src="js/ui-grid.js"></script>
-
 <script src="vatuta/controllers.js"></script>
+
 </head>
 
 <body ng-controller="projectCtrl" layout="column" ng-cloak>

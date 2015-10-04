@@ -1,21 +1,10 @@
-require([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
-		"./vatuta/restriction.js", "./vatuta/canvas.js" ], function(Project,
-		Task, Engine, Restriction, Canvas) {
-	var vatutaApp = angular.module('vatutaApp', [ 'ui.grid', 'ngMaterial' ]);
+require([ "./vatuta/vatuta.js"], function(
+		vatuta) {
+	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'vatuta' ]);
 
-	vatutaApp.controller('projectCtrl', [ '$scope', '$mdSidenav',
-			function($scope, $mdSidenav) {
-				$scope.tasksGridOptions = {
-					enableSorting : false,
-					rowHeight : 35,
-					columnDefs : [ {
-						name : "Name",
-						field : "getName()"
-					}, {
-						name : "Duration",
-						field : "getDuration()"
-					} ]
-				};
+	vatutaApp.controller('projectCtrl', [ '$scope', '$mdSidenav', 'Project', 'Task', 'Engine', 'Canvas', 'Restrictions',
+			function($scope, $mdSidenav, Project, Task, Engine, Canvas, Restrictions) {
+
 				$scope.toggleSidenav = function(menuId) {
 					$mdSidenav(menuId).toggle();
 				};
@@ -40,19 +29,19 @@ require([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 					_name : "D",
 					_duration : 2
 				});
-				new Vatuta.EndToStartDependency({
+				new Restrictions.EndToStart({
 					_endingTask : taskA,
 					_startingTask : taskB
 				});
-				new Vatuta.EndToStartDependency({
+				new Restrictions.EndToStart({
 					_endingTask : taskA,
 					_startingTask : taskC
 				});
-				new Vatuta.EndToStartDependency({
+				new Restrictions.EndToStart({
 					_endingTask : taskB,
 					_startingTask : taskD
 				});
-				new Vatuta.EndToStartDependency({
+				new Restrictions.EndToStart({
 					_endingTask : taskC,
 					_startingTask : taskD
 				});
@@ -67,7 +56,6 @@ require([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 				console.log("fin");
 
 				$scope.project = project;
-				$scope.tasksGridOptions.data = project.getTasks();
 
 				var canvas = new Canvas({
 					_canvasId : 'gantt',
@@ -84,8 +72,6 @@ require([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 				canvas.drawTimeRuler(project);
 				canvas.drawProject(project);
 
-				this.project = $scope.project;
-				console.log(!$scope.project);
 			} ]);
 	angular.bootstrap(document, [ 'vatutaApp' ]);
 });
