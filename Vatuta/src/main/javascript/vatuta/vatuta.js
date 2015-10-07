@@ -24,5 +24,16 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		return Restriction;
 	} ]);
 	
+	vatutaMod.directive('vatutaGantt', function() {
+		  return {
+			    restrict: 'EAC',
+			    scope: {
+			      project: '=projectData',
+			      canvasId: '@canvasId'
+			    },
+			    template: '<canvas id="gantt"></canvas>'
+			  };
+			});
+	
 	return vatutaMod;
 });

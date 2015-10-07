@@ -62,9 +62,9 @@ require([ "./vatuta/vatuta.js"], function(
 					_dayWidth : 30,
 					_rulerHeight : 35,
 					_dayFontSize : 15,
-					_dayFont : "Arial",
+					_dayFont : "Roboto, sans-serif",
 					_taskFontSize : 15,
-					_taskFont : "Arial",
+					_taskFont : "Roboto, sans-serif",
 					_taskTopHeight : 5,
 					_taskBottomHeight : 5,
 					_taskHeight : 25

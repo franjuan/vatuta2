@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="vatuta.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
-	data-dojo-config="async: false,
+	data-dojo-config="async: true,
 					  packages : [
 					  	{name : 'underscorejs',	location : 'http://underscorejs.org', main: 'underscore-min'},
 					  	{name : 'lodash', location: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1', main: 'lodash.min'},
@@ -24,7 +24,7 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.1/angular-material.js"></script>
 <link rel="stylesheet"
-	href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+	href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
 
 <script src="vatuta/controllers.js"></script>
 
@@ -87,7 +87,8 @@
 		</md-list-item> </md-sidenav>
 		<div layout="column" flex id="content">
 			<md-content layout="column" flex class="">
-			<canvas id="gantt"></canvas>
+			<vatuta-gantt project-data='project' canvas-id='gantt'></vatuta-gantt>
+			<!-- <canvas id="gantt"></canvas> -->
 			</md-content>
 		</div>
 	</div>
