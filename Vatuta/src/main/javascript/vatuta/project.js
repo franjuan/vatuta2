@@ -35,6 +35,27 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 */
 				name: function(newName) {
 				     return arguments.length ? (this._name = newName) : this._name;
+				},
+				
+				/**
+				 * @function
+				 * @memberof Project
+				 */
+				calculatedStart: function(newStart) {
+				     return arguments.length ? (this._start = newStart) : this._start;
+				},
+				
+				/**
+				 * @function
+				 * @memberof Project
+				 */
+				calculatedEnd: function(newEnd) {
+				     return arguments.length ? (this._end = newEnd) : this._end;
+				},
+				
+				calculatedLength: function() {
+					return this.calculatedEnd() - this.calculatedStart();
 				}
+
 			});
 		});

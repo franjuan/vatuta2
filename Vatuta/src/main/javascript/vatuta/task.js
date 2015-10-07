@@ -7,8 +7,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		getId : function() {
 			return this._id;
 		},
-		getName: function() {
-			return this._name;
+		name: function(newName) {
+		     return arguments.length ? (this._name = newName) : this._name;
 		},
 		getDuration : function() {
 			return this._duration;

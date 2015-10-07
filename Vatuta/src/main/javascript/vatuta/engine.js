@@ -69,8 +69,8 @@ define(
 						}
 					}
 					
-					project._start = 0;
-					project._end = endOfProject;
+					project.calculatedStart(0);
+					project.calculatedEnd(endOfProject);
 				}
 			};
 		});

@@ -39,9 +39,9 @@ define(
 					
 					this._taskRowHeight= this._taskTopHeight + this._taskHeight + this._taskBottomHeight;
 					
-					var canvas = dom.byId(this._canvasId);
-					canvas.width = this._width;
-					canvas.height = this._height;
+					this._canvas = dom.byId(this._canvasId);
+					this._canvas.width = this._width;
+					this._canvas.height = this._height;
 					
 				    /* @member {Object} */
 					this._stage = new createjs.Stage(this._canvasId);
@@ -51,7 +51,7 @@ define(
 					
 					for (i=0; i*this._dayWidth < this._width; i++) {
 						var element = new createjs.Shape();
-						element.graphics.beginFill("DeepSkyBlue").drawRoundRect(i*this._dayWidth, 0, this._dayWidth, this._rulerHeight, 5);
+						element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth, 0, this._dayWidth, this._rulerHeight, 5);
 
 						var text = new createjs.Text(i, "bold " + this._dayFontSize + "px " + this._dayFont);
 						text.color = "White";
@@ -70,6 +70,11 @@ define(
 					this._stage.update();
 				},
 				drawProject: function(project) {
+					this._width = project.calculatedLength() * this._dayWidth;
+					this._height = this._rulerHeight + this._taskRowHeight * project.getTasks().length;
+					this._canvas.width = this._width;
+					this._canvas.height = this._height;
+
 					for (i=0; i < project.getTasks().length; i++) {
 						var task = project.getTasks()[i];
 						var taskContainer = this.drawTask(task);
@@ -83,13 +88,13 @@ define(
 				drawTask: function(task) {
 					var taskContainer = new createjs.Container();
 					var element = new createjs.Shape();
-					element.graphics.beginFill("DeepSkyBlue").drawRect(
+					element.graphics.beginFill("#607D8B").drawRect(
 							task.getEarlyStart()*this._dayWidth,
 							this._taskTopHeight,
 							task.getDuration()*this._dayWidth,
 							this._taskHeight);
 					
-					var text = new createjs.Text(task.getName(), "bold " + this._taskFontSize + "px " + this._taskFont);
+					var text = new createjs.Text(task.name(), "bold " + this._taskFontSize + "px " + this._taskFont);
 					text.color = "White";
 					text.maxWidth = this._dayWidth*task.getDuration();
 					text.textBaseline = "middle";
@@ -98,6 +103,11 @@ define(
 					text.y = this._taskTopHeight + this._taskHeight/2;
 					
 					taskContainer.addChild(element, text);
+					
+					taskContainer.addEventListener("click", function() {
+						alert(task.name());
+					});
+					
 					return taskContainer;
 				}
 			});
