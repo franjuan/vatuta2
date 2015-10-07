@@ -29,9 +29,15 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			    restrict: 'EAC',
 			    scope: {
 			      project: '=projectData',
+			      options: '=canvasOptions',
 			      canvasId: '@canvasId'
 			    },
-			    template: '<canvas id="gantt"></canvas>'
+			    template: '<canvas id="gantt"></canvas>',
+			    link: function link(scope, element, attrs) {
+			    	var canvas = new Canvas(scope.options);
+					canvas.drawTimeRuler(scope.project);
+					canvas.drawProject(scope.project);
+			    }
 			  };
 			});
 	

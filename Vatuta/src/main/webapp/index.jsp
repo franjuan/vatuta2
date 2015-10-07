@@ -87,7 +87,7 @@
 		</md-list-item> </md-sidenav>
 		<div layout="column" flex id="content">
 			<md-content layout="column" flex class="">
-			<vatuta-gantt project-data='project' canvas-id='gantt'></vatuta-gantt>
+			<vatuta-gantt project-data='project' canvas-id='gantt' canvas-options='canvasOptions'></vatuta-gantt>
 			<!-- <canvas id="gantt"></canvas> -->
 			</md-content>
 		</div>

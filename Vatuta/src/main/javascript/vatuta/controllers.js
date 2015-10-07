@@ -56,21 +56,20 @@ require([ "./vatuta/vatuta.js"], function(
 				console.log("fin");
 
 				$scope.project = project;
+				$scope.canvasOptions = {
+						_canvasId : 'gantt',
+						_dayWidth : 30,
+						_rulerHeight : 35,
+						_dayFontSize : 15,
+						_dayFont : "Roboto, sans-serif",
+						_taskFontSize : 15,
+						_taskFont : "Roboto, sans-serif",
+						_taskTopHeight : 5,
+						_taskBottomHeight : 5,
+						_taskHeight : 25
+					};
 
-				var canvas = new Canvas({
-					_canvasId : 'gantt',
-					_dayWidth : 30,
-					_rulerHeight : 35,
-					_dayFontSize : 15,
-					_dayFont : "Roboto, sans-serif",
-					_taskFontSize : 15,
-					_taskFont : "Roboto, sans-serif",
-					_taskTopHeight : 5,
-					_taskBottomHeight : 5,
-					_taskHeight : 25
-				});
-				canvas.drawTimeRuler(project);
-				canvas.drawProject(project);
+				
 
 			} ]);
 	angular.bootstrap(document, [ 'vatutaApp' ]);
