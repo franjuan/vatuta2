@@ -1,6 +1,6 @@
 require([ "./vatuta/vatuta.js"], function(
 		vatuta) {
-	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'vatuta' ]);
+	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages', 'vatuta' ]);
 
 	vatutaApp.controller('projectCtrl', [ '$scope', '$mdSidenav', 'Project', 'Task', 'Engine', 'Canvas', 'Restrictions',
 			function($scope, $mdSidenav, Project, Task, Engine, Canvas, Restrictions) {

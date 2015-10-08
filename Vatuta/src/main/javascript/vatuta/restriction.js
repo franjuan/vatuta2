@@ -30,21 +30,21 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 			return this._startingTask;
 		},
 		getDependants4Task: function(task) {
-			if (task.getId()===this.getEndingTask().getId()) {
+			if (task.id()===this.getEndingTask().id()) {
 				return [this.getStartingTask()];
 			} else {
 				return [];
 			}
 		},
 		getDependencies4Task: function(task) {
-			if (task.getId()===this.getStartingTask().getId()) {
+			if (task.id()===this.getStartingTask().id()) {
 				return [this.getEndingTask()];
 			} else {
 				return [];
 			}
 		},
 		getEarlyStart: function(task) {
-			if (task.getId()===this.getStartingTask().getId()) {
+			if (task.id()===this.getStartingTask().id()) {
 				if (this.getEndingTask().getEarlyEnd()) {
 					return this.getEndingTask().getEarlyEnd();
 				} else {
@@ -55,7 +55,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 			}
 		},
 		getLateEnd: function(task) {
-			if (task.getId()===this.getEndingTask().getId()) {
+			if (task.id()===this.getEndingTask().id()) {
 				if (this.getStartingTask().getLateStart()) {
 					return this.getStartingTask().getLateStart();
 				} else {

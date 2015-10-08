@@ -4,14 +4,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		constructor : function(/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
 		},
-		getId : function() {
-			return this._id;
+		index: function(newIndex) {
+		     return arguments.length ? (this._index = newIndex) : this._index;
+		},
+		id: function(newId) {
+		     return arguments.length ? (this._id = newId) : this._id;
 		},
 		name: function(newName) {
 		     return arguments.length ? (this._name = newName) : this._name;
 		},
-		getDuration : function() {
-			return this._duration;
+		duration: function(newDuration) {
+		     return arguments.length ? (this._duration = newDuration) : this._duration;
 		},
 		getRestrictions : function() {
 			if (!this._restrictions) {

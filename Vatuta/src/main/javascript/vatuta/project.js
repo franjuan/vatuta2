@@ -1,8 +1,8 @@
 /**
  * @module Project
  */
-define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/engine.js" ],
-		function(declare, lang, Task, Engine) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/engine.js", "lodash" ],
+		function(declare, lang, Task, Engine, _) {
 			/**
 		     * @exports Project
 		     */
@@ -26,7 +26,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @memberof Project
 				 */
 				addTask : function(task) {
-					this._tasks.push(task);
+					this.getTasks().push(task);
+					task.index(this.getTasks().length);
 					return task;
 				},
 				/**
@@ -52,10 +53,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				calculatedEnd: function(newEnd) {
 				     return arguments.length ? (this._end = newEnd) : this._end;
 				},
-				
+				/**
+				 * @function
+				 * @memberof Project
+				 */
 				calculatedLength: function() {
 					return this.calculatedEnd() - this.calculatedStart();
+				},
+				/**
+				 * @function
+				 * @memberof Project
+				 */
+				findById: function(id) {
+					for (i = 0; i < this.getTasks().length; i++) {
+						if (this.getTasks()[i].id()==id) {
+							return this.getTasks()[i];
+						}
+					};
+					return null;
 				}
-
 			});
 		});

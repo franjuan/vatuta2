@@ -41,5 +41,21 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			  };
 			});
 	
+	vatutaMod.directive('uniqueId', function() {
+		  return {
+		    require: 'ngModel',
+		    link: function(scope, elm, attrs, ctrl) {
+		      ctrl.$validators.uniqueId = function(modelValue, viewValue) {
+		        var task = scope.project.findById(viewValue);
+		        if (task && task.index()!=1) {
+		        	return false;
+		        } else {
+		        	return true;
+		        }
+		      };
+		    }
+		  };
+		});
+	
 	return vatutaMod;
 });

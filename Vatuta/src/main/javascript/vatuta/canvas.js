@@ -91,15 +91,15 @@ define(
 					element.graphics.beginFill("#607D8B").drawRect(
 							task.getEarlyStart()*this._dayWidth,
 							this._taskTopHeight,
-							task.getDuration()*this._dayWidth,
+							task.duration()*this._dayWidth,
 							this._taskHeight);
 					
 					var text = new createjs.Text(task.name(), "bold " + this._taskFontSize + "px " + this._taskFont);
 					text.color = "White";
-					text.maxWidth = this._dayWidth*task.getDuration();
+					text.maxWidth = this._dayWidth*task.duration();
 					text.textBaseline = "middle";
 					text.textAlign = "center";
-					text.x = (task.getEarlyStart() + task.getDuration()/2)*this._dayWidth;
+					text.x = (task.getEarlyStart() + task.duration()/2)*this._dayWidth;
 					text.y = this._taskTopHeight + this._taskHeight/2;
 					
 					taskContainer.addChild(element, text);

@@ -33,7 +33,7 @@ define(
 							}, task);
 							if (!isNaN(earlyStart)) {
 								task._earlyStart = earlyStart;
-								task._earlyEnd = earlyStart + task.getDuration();
+								task._earlyEnd = earlyStart + task.duration();
 								endOfProject = Math.max(endOfProject, task._earlyEnd);
 								
 								if (i != alreadyCalculatedIndex + 1) {
@@ -57,7 +57,7 @@ define(
 							}, task);
 							if (!isNaN(lateEnd)) {
 								task._lateEnd = lateEnd;
-								task._lateStart = lateEnd - task.getDuration();
+								task._lateStart = lateEnd - task.duration();
 								
 								if (i != alreadyCalculatedIndex - 1) {
 									var aux = tasks[i];
