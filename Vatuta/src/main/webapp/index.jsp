@@ -88,6 +88,10 @@
 			          <div ng-message="required">Task must have a duration</div>
 			        </div>
 				</md-input-container>
+				<div layout="row" layout-align="space-between center">
+					<md-button class="md-raised md-primary">Cancel</md-button>
+					<md-button class="md-raised md-primary">Accept</md-button>
+				</div>
 			</form>
 		</div>
 		</md-sidenav>
