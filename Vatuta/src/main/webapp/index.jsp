@@ -65,7 +65,7 @@
 		<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2"
 			md-component-id="left"> <!-- <div id="tasksGrid" ui-grid="tasksGridOptions"></div> -->
 		<div layout="column">
-			<form name="taskForm">
+			<form name="taskForm" novalidate>
 				<md-input-container flex>
 					<label>Task id</label>
 					<input name="id" ng-model="project.getTasks()[0].id" ng-model-options="{ getterSetter: true }" unique-id> </input>
