@@ -4,7 +4,6 @@ require([ "./vatuta/vatuta.js"], function(
 
 	vatutaApp.controller('projectCtrl', [ '$scope', '$mdSidenav', 'Project', 'Task', 'Engine', 'Canvas', 'Restrictions',
 			function($scope, $mdSidenav, Project, Task, Engine, Canvas, Restrictions) {
-
 				$scope.toggleSidenav = function(menuId) {
 					$mdSidenav(menuId).toggle();
 				};
@@ -57,7 +56,6 @@ require([ "./vatuta/vatuta.js"], function(
 
 				$scope.project = project;
 				$scope.canvasOptions = {
-						_canvasId : 'gantt',
 						_dayWidth : 30,
 						_rulerHeight : 35,
 						_dayFontSize : 15,
@@ -68,9 +66,18 @@ require([ "./vatuta/vatuta.js"], function(
 						_taskBottomHeight : 5,
 						_taskHeight : 25
 					};
-
 				
-
+				$scope.ganttListener = {
+						onSelectedTaskChange: function (task) {
+							$scope.$apply(function () { 
+								$scope.selectedTask = task;
+								$scope.toggleSidenav('left');
+			                });
+						}
+				};
+				
+				$scope.selectedTask = project.getTasks()[0];
 			} ]);
+	
 	angular.bootstrap(document, [ 'vatutaApp' ]);
 });

@@ -2,15 +2,13 @@
  * @module Canvas
  */
 define(
-		[ 'dojo/_base/declare', 'dojo/_base/lang', 'dojo/dom', 'easeljs' ],
-		function(declare, lang, dom, easeljs) {
+		[ 'dojo/_base/declare', 'dojo/_base/lang', 'easeljs', 'lodash' ],
+		function(declare, lang, easeljs, _) {
 			return declare(null, {
 				/**
 				 * @constructs CanvasDrawer
 				 */
-				constructor : function(/* Object */kwArgs) {
-					/* @member {Object} */
-					this._canvasId = 'canvas';
+				constructor : function(element, /* Object */kwArgs) {
 					/* @member {Number} */
 					this._dayWidth = this._width/60;
 					/* @member {Number} */
@@ -33,18 +31,24 @@ define(
 					lang.mixin(this, kwArgs);
 					
 					/* @member {Number} */
-					this._width = dom.byId(this._canvasId).parentElement.offsetWidth;
+					var parent = angular.element(element)[0];
+					this._width = parent.offsetWidth;
 					/* @member {Number} */
-					this._height = dom.byId(this._canvasId).parentElement.offsetHeight;
+					this._height = parent.offsetHeight;
 					
 					this._taskRowHeight= this._taskTopHeight + this._taskHeight + this._taskBottomHeight;
 					
-					this._canvas = dom.byId(this._canvasId);
+					this._canvas = element.children()[0];
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
 					
 				    /* @member {Object} */
-					this._stage = new createjs.Stage(this._canvasId);
+					this._stage = new createjs.Stage(this._canvas);
+					
+					this._listener = null;
+				},
+				listener: function(newListener) {
+					return arguments.length ? (this._listener = newListener) : this._listener;
 				},
 				drawTimeRuler: function(project) {
 					var ruler = new createjs.Container();
@@ -104,9 +108,14 @@ define(
 					
 					taskContainer.addChild(element, text);
 					
-					taskContainer.addEventListener("click", function() {
-						alert(task.name());
-					});
+					taskContainer.addEventListener("click", 
+						_.bind(
+								function() {
+									if (this._listener) {
+										this._listener.onSelectedTaskChange(task);
+									};
+								}, this)
+					);
 					
 					return taskContainer;
 				}

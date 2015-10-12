@@ -64,7 +64,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @function
 				 * @memberof Project
 				 */
-				findById: function(id) {
+				findTaskById: function(id) {
 					for (i = 0; i < this.getTasks().length; i++) {
 						if (this.getTasks()[i].id()==id) {
 							return this.getTasks()[i];

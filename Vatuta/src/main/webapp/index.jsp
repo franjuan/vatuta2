@@ -65,40 +65,13 @@
 		<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2"
 			md-component-id="left"> <!-- <div id="tasksGrid" ui-grid="tasksGridOptions"></div> -->
 		<div layout="column">
-			<form name="taskForm" novalidate>
-				<md-input-container flex>
-					<label>Task id</label>
-					<input name="id" ng-model="project.getTasks()[0].id" ng-model-options="{ getterSetter: true }" unique-id> </input>
-					<div ng-messages="taskForm.id.$error" role="alert">
-			          <div ng-message="required">Task must have an unique Id</div>
-			          <div ng-message="uniqueId">A task with this Id already exists</div>
-			        </div>
-				</md-input-container>
-				<md-input-container flex>
-					<label>Name</label>
-					<input name="name" ng-model="project.getTasks()[0].name" ng-model-options="{ getterSetter: true }" required></input>
-					<div ng-messages="taskForm.name.$error" role="alert">
-			          <div ng-message="required">Task must have a name</div>
-			        </div>
-				</md-input-container>
-				<md-input-container flex>
-					<label>Duration</label>
-					<input name="duration" ng-model="project.getTasks()[0].duration" ng-model-options="{ getterSetter: true }" required></input>
-					<div ng-messages="taskForm.duration.$error" role="alert">
-			          <div ng-message="required">Task must have a duration</div>
-			        </div>
-				</md-input-container>
-				<div layout="row" layout-align="space-between center">
-					<md-button class="md-raised md-primary">Cancel</md-button>
-					<md-button class="md-raised md-primary">Accept</md-button>
-				</div>
-			</form>
+			<vatuta-task-editor project-data="project" selected-task="selectedTask"></vatuta-task-editor>
 		</div>
 		</md-sidenav>
 		<div layout="column" flex id="content">
 			<md-content layout="column" flex class=""> <vatuta-gantt
-				project-data='project' canvas-id='gantt'
-				canvas-options='canvasOptions'></vatuta-gantt> <!-- <canvas id="gantt"></canvas> -->
+				project-data='project' listener="ganttListener"
+				canvas-options='canvasOptions'></vatuta-gantt>
 			</md-content>
 		</div>
 	</div>

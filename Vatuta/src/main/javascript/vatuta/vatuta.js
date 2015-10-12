@@ -24,17 +24,31 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		return Restriction;
 	} ]);
 	
+
+	
+	vatutaMod.directive('vatutaTaskEditor', function() {
+		  return {
+			    restrict: 'EAC',
+			    scope: {
+			      project: '=projectData',
+			      selectedTask: '=selectedTask'
+			    },
+			    templateUrl: 'vatuta/taskEditor.html'
+			  };
+			});
+
 	vatutaMod.directive('vatutaGantt', function() {
 		  return {
 			    restrict: 'EAC',
 			    scope: {
 			      project: '=projectData',
 			      options: '=canvasOptions',
-			      canvasId: '@canvasId'
+			      listener: '='
 			    },
-			    template: '<canvas id="gantt"></canvas>',
+			    template: '<canvas></canvas>',
 			    link: function link(scope, element, attrs) {
-			    	var canvas = new Canvas(scope.options);
+			    	var canvas = new Canvas(element, scope.options);
+			    	canvas.listener(scope.listener);
 					canvas.drawTimeRuler(scope.project);
 					canvas.drawProject(scope.project);
 			    }
@@ -46,8 +60,8 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		    require: 'ngModel',
 		    link: function(scope, elm, attrs, ctrl) {
 		      ctrl.$validators.uniqueId = function(modelValue, viewValue) {
-		        var task = scope.project.findById(viewValue);
-		        if (task && task.index()!=1) {
+		        var task = scope.project.findTaskById(viewValue);
+		        if (task && task.index()!=scope.selectedTask.index()) {
 		        	return false;
 		        } else {
 		        	return true;
