@@ -18,6 +18,27 @@
 		<finalName>vatuta</finalName>
 
 		<plugins>
+			<!-- Google App Engine -->
+			<plugin>
+				<groupId>com.google.appengine</groupId>
+				<artifactId>appengine-maven-plugin</artifactId>
+				<version>1.9.27</version>
+				<configuration>
+					<enableJarClasses>false</enableJarClasses>
+					<port>8181</port>
+					<address>0.0.0.0</address>
+				</configuration>
+			</plugin>
+			<!-- Compiler -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<version>3.2</version>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>7</source>
+					<target>7</target>
+				</configuration>
+			</plugin>
 			<!-- Maven WAR Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
