@@ -2,7 +2,7 @@
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="https://googleappengine.googlecode.com/svn/trunk/java/src/main/com/google/appengine/tools/development/appengine-web.xsd appengine-web.xsd">
-	<application>vatuta-1097</application>
+	<application>vatuta-1099</application>
 	<version>alpha-001</version>
 	<threadsafe>true</threadsafe>
 	<static-files>
