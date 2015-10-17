@@ -17,6 +17,15 @@
 	<build>
 		<finalName>vatuta</finalName>
 
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/webapp</directory>
+			</resource>
+			<resource>
+				<directory>${basedir}/src/main/js</directory>
+			</resource>
+		</resources>
+
 		<plugins>
 			<!-- Google App Engine -->
 			<plugin>

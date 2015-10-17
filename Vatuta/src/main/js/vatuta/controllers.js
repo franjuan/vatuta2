@@ -1,9 +1,18 @@
-require([ "./vatuta/vatuta.js"], function(
-		vatuta) {
-	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages', 'vatuta' ]);
+require([ "./vatuta/vatuta.js" ], function(vatuta) {
+	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages',
+			'vatuta' ]);
 
-	vatutaApp.controller('projectCtrl', [ '$scope', '$mdSidenav', 'Project', 'Task', 'Engine', 'Canvas', 'Restrictions',
-			function($scope, $mdSidenav, Project, Task, Engine, Canvas, Restrictions) {
+	vatutaApp.controller('projectCtrl', [
+			'$scope',
+			'$mdSidenav',
+			'Project',
+			'Task',
+			'Engine',
+			'Canvas',
+			'Restrictions',
+			'$mdDialog',
+			function($scope, $mdSidenav, Project, Task, Engine, Canvas,
+					Restrictions, $mdDialog) {
 				$scope.toggleSidenav = function(menuId) {
 					$mdSidenav(menuId).toggle();
 				};
@@ -56,28 +65,36 @@ require([ "./vatuta/vatuta.js"], function(
 
 				$scope.project = project;
 				$scope.canvasOptions = {
-						_dayWidth : 30,
-						_rulerHeight : 35,
-						_dayFontSize : 15,
-						_dayFont : "Roboto, sans-serif",
-						_taskFontSize : 15,
-						_taskFont : "Roboto, sans-serif",
-						_taskTopHeight : 5,
-						_taskBottomHeight : 5,
-						_taskHeight : 25
-					};
-				
-				$scope.ganttListener = {
-						onSelectedTaskChange: function (task) {
-							$scope.$apply(function () { 
-								$scope.selectedTask = task;
-								$scope.toggleSidenav('left');
-			                });
-						}
+					_dayWidth : 30,
+					_rulerHeight : 35,
+					_dayFontSize : 15,
+					_dayFont : "Roboto, sans-serif",
+					_taskFontSize : 15,
+					_taskFont : "Roboto, sans-serif",
+					_taskTopHeight : 5,
+					_taskBottomHeight : 5,
+					_taskHeight : 25
 				};
-				
+
+				$scope.ganttListener = {
+					onSelectedTaskChange : function(task) {
+						$scope.$apply(function() {
+							$scope.selectedTask = task;
+							$scope.toggleSidenav('left');
+						});
+					}
+				};
+
 				$scope.selectedTask = project.getTasks()[0];
+
+				this.addTask = function(ev) {
+					var newTask = new Task();
+					project.addTask(newTask);
+					newTask.id(newTask.index());
+					$scope.selectedTask = newTask;
+					$scope.toggleSidenav('left');
+				};
 			} ]);
-	
+
 	angular.bootstrap(document, [ 'vatutaApp' ]);
 });

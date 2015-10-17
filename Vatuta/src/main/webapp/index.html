@@ -32,7 +32,7 @@
 
 </head>
 
-<body ng-controller="projectCtrl" layout="column" ng-cloak>
+<body ng-controller="projectCtrl as ctrl" layout="column" layout-align="space-between start" ng-cloak>
 	<md-toolbar class="md-menu-toolbar" layout="row" layout-align="space-between center">
 		<md-toolbar-filler layout layout-align="center center">
 			<md-button ng-click="toggleSidenav('left')" class="md-icon-button">
@@ -41,7 +41,7 @@
 		</md-toolbar-filler>
 		<md-menu-bar layout-align="start center" flex>
 			<md-menu>
-				<button ng-click="$mdOpenMenu()">Files</button>
+				<button ng-click="$mdOpenMenu()">File</button>
 				<md-menu-content>
 					<md-menu-item>
 						<md-button ng-click="ctrl.sampleAction('open', $event)"> Open... </md-button>
@@ -78,5 +78,23 @@
 			</md-content>
 		</div>
 	</div>
+	<div layout="row" flex>
+		<md-fab-speed-dial md-open="demo.isOpen" md-direction="{{demo.selectedDirection}}"
+                         ng-class="demo.selectedMode">
+	        <md-fab-trigger>
+		          <md-button aria-label="menu" class="md-fab md-primary">
+		            	<md-icon md-svg-src="icons/ic_more_horiz_black_48px.svg"></md-icon>
+		          </md-button>
+	        </md-fab-trigger>
+	        <md-fab-actions>
+	          	<md-button aria-label="Add task" class="md-fab md-raised md-mini" ng-click="ctrl.addTask($event)">
+	          		<md-tooltip>
+          				Add task
+        			</md-tooltip>
+	          		<md-icon md-svg-src="icons/ic_add_circle_black_48px.svg" aria-label="Add task"></md-icon>
+		         </md-button>
+	        </md-fab-actions>
+      </md-fab-speed-dial>
+	</div>	
 </body>
 </html>
