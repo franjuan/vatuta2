@@ -1,13 +1,5 @@
 <form name="taskForm" novalidate>
 	<md-input-container flex>
-		<label>Task id</label>
-		<input name="id" ng-model="selectedTask.id" ng-model-options="{ getterSetter: true }" unique-id> </input>
-		<div ng-messages="taskForm.id.$error" role="alert">
-          <div ng-message="required">Task must have an unique Id</div>
-          <div ng-message="uniqueId">A task with this Id already exists</div>
-        </div>
-	</md-input-container>
-	<md-input-container flex>
 		<label>Name</label>
 		<input name="name" ng-model="selectedTask.name" ng-model-options="{ getterSetter: true }" required></input>
 		<div ng-messages="taskForm.name.$error" role="alert">

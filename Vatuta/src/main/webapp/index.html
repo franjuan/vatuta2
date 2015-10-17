@@ -10,9 +10,10 @@
 					  packages : [
 					  	{name : 'underscorejs',	location : 'http://underscorejs.org', main: 'underscore-min'},
 					  	{name : 'lodash', location: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1', main: 'lodash.min'},
-					  	{name : 'easeljs', location: 'https://code.createjs.com', main: 'easeljs-0.8.1.min'}
+					  	{name : 'easeljs', location: 'https://code.createjs.com', main: 'easeljs-0.8.1.min'},
+					  	{name : 'resurrect', location: 'lib', main: 'resurrect'}
 					  ], 
-					  baseUrl : '/vatuta/'"></script>
+					  baseUrl : '/'"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
 <script
@@ -33,7 +34,7 @@
 </head>
 
 <body ng-controller="projectCtrl as ctrl" layout="column" layout-align="space-between start" ng-cloak>
-	<md-toolbar class="md-menu-toolbar" layout="row" layout-align="space-between center">
+	<md-toolbar class="md-menu-toolbar" layout="row" layout-align="space-between center" ng-controller="menuBarCtrl as ctrl">
 		<md-toolbar-filler layout layout-align="center center">
 			<md-button ng-click="toggleSidenav('left')" class="md-icon-button">
 				<md-icon aria-label="Menu" md-svg-icon="icons/ic_view_list_white_48px.svg"></md-icon>
@@ -44,11 +45,11 @@
 				<button ng-click="$mdOpenMenu()">File</button>
 				<md-menu-content>
 					<md-menu-item>
-						<md-button ng-click="ctrl.sampleAction('open', $event)"> Open... </md-button>
+						<md-button ng-click="fileOpen($event)"> Open... </md-button>
 					</md-menu-item>
 					<md-menu-divider></md-menu-divider>
 					<md-menu-item>
-						<md-button ng-click="ctrl.sampleAction('savee', $event)"> Save... </md-button>
+						<md-button ng-click="fileSave($event)"> Save... </md-button>
 					</md-menu-item>
 				</md-menu-content>
 			</md-menu>

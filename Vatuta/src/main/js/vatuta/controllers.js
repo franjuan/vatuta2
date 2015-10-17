@@ -1,4 +1,4 @@
-require([ "./vatuta/vatuta.js" ], function(vatuta) {
+require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages',
 			'vatuta' ]);
 
@@ -20,22 +20,18 @@ require([ "./vatuta/vatuta.js" ], function(vatuta) {
 				};
 
 				var taskA = new Task({
-					_id : "taskA",
 					_name : "A",
 					_duration : 3
 				});
 				var taskB = new Task({
-					_id : "taskB",
 					_name : "B",
 					_duration : 5
 				});
 				var taskC = new Task({
-					_id : "taskC",
 					_name : "C",
 					_duration : 7
 				});
 				var taskD = new Task({
-					_id : "taskD",
 					_name : "D",
 					_duration : 2
 				});
@@ -109,7 +105,6 @@ require([ "./vatuta/vatuta.js" ], function(vatuta) {
 		$scope.addTask = function() {
 			var newTask = new Task();
 			$scope.project.addTask(newTask);
-			newTask.id(newTask.index());
 			$scope.selectedTask = newTask;
 			$scope.toggleSidenav('left');
 			$mdBottomSheet.hide('New task added', true);
@@ -119,7 +114,26 @@ require([ "./vatuta/vatuta.js" ], function(vatuta) {
 			$mdBottomSheet.hide('Showing task info', false);
 		}
 	}]);
-	                                     
+	
+	vatutaApp.controller('menuBarCtrl', ['$scope', 'Task', function($scope, Task) {
+		$scope.fileOpen = function(event) {
+			
+		}
+		$scope.fileSave = function(event) {
+			var namespace = {};
+			namespace.Task = Task;
+			namespace.Task.name = "Task";
+			var necromancer = new Resurrect({
+			    resolver: new Resurrect.NamespaceResolver(namespace)
+			});
+			var task = new Task({
+				_name : "C",
+				_duration : 7
+			});
+			task.__proto__.constructor.name = "Task";
+			var json = necromancer.stringify(task);
+		}
+	}]);
 
 	angular.bootstrap(document, [ 'vatutaApp' ]);
 });

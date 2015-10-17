@@ -1,8 +1,14 @@
 define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		lang, _) {
-	return declare(null, {
-		constructor : function(/* Object */kwArgs) {
+	return declare("Task", null, {
+		constructor : function (/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
+			if (!this._id) {
+				this._id='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+				    return v.toString(16);
+				});
+			}
 		},
 		index: function(newIndex) {
 		     return arguments.length ? (this._index = newIndex) : this._index;
