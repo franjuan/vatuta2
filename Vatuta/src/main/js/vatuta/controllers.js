@@ -11,8 +11,10 @@ require([ "./vatuta/vatuta.js" ], function(vatuta) {
 			'Canvas',
 			'Restrictions',
 			'$mdDialog',
+			'$mdBottomSheet',
+			'$mdToast',
 			function($scope, $mdSidenav, Project, Task, Engine, Canvas,
-					Restrictions, $mdDialog) {
+					Restrictions, $mdDialog, $mdBottomSheet, $mdToast) {
 				$scope.toggleSidenav = function(menuId) {
 					$mdSidenav(menuId).toggle();
 				};
@@ -77,24 +79,47 @@ require([ "./vatuta/vatuta.js" ], function(vatuta) {
 				};
 
 				$scope.ganttListener = {
-					onSelectedTaskChange : function(task) {
+					onClickOnTask : function(event, task) {
 						$scope.$apply(function() {
 							$scope.selectedTask = task;
-							$scope.toggleSidenav('left');
+							$mdBottomSheet.show({
+							      templateUrl: 'vatuta/bottomSheetMenu.html',
+							      controller: 'bottomSheetMenuCtrl',
+							      clickOutsideToClose: true,
+							      escapeToClose: true,
+							      scope: $scope,
+							      preserveScope: true
+							    }).then(function(message, show) {
+							    	if (show)
+							        $mdToast.show(
+							                $mdToast.simple()
+							                  .content(message)
+							                  .position('top right')
+							                  .hideDelay(1500)
+							              );
+							        });
 						});
 					}
 				};
 
 				$scope.selectedTask = project.getTasks()[0];
-
-				this.addTask = function(ev) {
-					var newTask = new Task();
-					project.addTask(newTask);
-					newTask.id(newTask.index());
-					$scope.selectedTask = newTask;
-					$scope.toggleSidenav('left');
-				};
 			} ]);
+	
+	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', function($scope, $mdBottomSheet, Task) {
+		$scope.addTask = function() {
+			var newTask = new Task();
+			$scope.project.addTask(newTask);
+			newTask.id(newTask.index());
+			$scope.selectedTask = newTask;
+			$scope.toggleSidenav('left');
+			$mdBottomSheet.hide('New task added', true);
+		}
+		$scope.showTask = function() {
+			$scope.toggleSidenav('left');
+			$mdBottomSheet.hide('Showing task info', false);
+		}
+	}]);
+	                                     
 
 	angular.bootstrap(document, [ 'vatutaApp' ]);
 });

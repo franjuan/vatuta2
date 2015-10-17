@@ -108,15 +108,15 @@ define(
 					
 					taskContainer.addChild(element, text);
 					
-					taskContainer.addEventListener("click", 
+					element.addEventListener("click", 
 						_.bind(
-								function() {
+								function(event) {
 									if (this._listener) {
-										this._listener.onSelectedTaskChange(task);
+										this._listener.onClickOnTask(event, task);
 									};
 								}, this)
 					);
-					
+										
 					return taskContainer;
 				}
 			});

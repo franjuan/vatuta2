@@ -78,23 +78,5 @@
 			</md-content>
 		</div>
 	</div>
-	<div layout="row" flex>
-		<md-fab-speed-dial md-open="demo.isOpen" md-direction="{{demo.selectedDirection}}"
-                         ng-class="demo.selectedMode">
-	        <md-fab-trigger>
-		          <md-button aria-label="menu" class="md-fab md-primary">
-		            	<md-icon md-svg-src="icons/ic_more_horiz_black_48px.svg"></md-icon>
-		          </md-button>
-	        </md-fab-trigger>
-	        <md-fab-actions>
-	          	<md-button aria-label="Add task" class="md-fab md-raised md-mini" ng-click="ctrl.addTask($event)">
-	          		<md-tooltip>
-          				Add task
-        			</md-tooltip>
-	          		<md-icon md-svg-src="icons/ic_add_circle_black_48px.svg" aria-label="Add task"></md-icon>
-		         </md-button>
-	        </md-fab-actions>
-      </md-fab-speed-dial>
-	</div>	
 </body>
 </html>

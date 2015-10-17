@@ -1,0 +1,19 @@
+<md-bottom-sheet class="md-grid" layout="column" ng-cloak>
+  <div layout="row" layout-align="center center">
+    <h4>With clickOutsideToClose option, drag down or press ESC to close</h4>
+  </div>
+  <md-list flex layout="row" layout-align="center center">
+    <md-list-item>
+      <md-button class="md-grid-item-content" ng-click="addTask()">
+        <md-icon md-svg-src="icons/ic_add_circle_black_48px.svg"></md-icon>
+        <div class="md-grid-text">Add task</div>
+      </md-button>
+    </md-list-item>
+    <md-list-item>
+      <md-button class="md-grid-item-content" ng-click="showTask()">
+        <md-icon md-svg-src="icons/ic_info_black_48px.svg"></md-icon>
+        <div class="md-grid-text">Task info</div>
+      </md-button>
+    </md-list-item>
+  </md-list>
+</md-bottom-sheet>
