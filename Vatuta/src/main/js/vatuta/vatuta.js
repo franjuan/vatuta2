@@ -24,13 +24,28 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		return Restrictions;
 	} ]);
 	
-	vatutaMod.factory('Namespace', [ function() {
+	vatutaMod.factory('ProjectSerializer', [ function() {
 		var namespace = {};
 		namespace.Task = Task;
 		namespace.Project = Project;
 		namespace.EndToStartDependency = Restrictions.EndToStart;
 		namespace.Restriction = Restriction;
-		return namespace;
+		
+		var necromancer = new Resurrect(
+				{
+					resolver: new Resurrect.NamespaceResolver(namespace, 'declaredClass'),
+					exceptionKeys: ['_inherited']
+				}
+			);
+		
+		return {
+			serializeProject: function(project) {
+				return necromancer.stringify(project);
+			},
+			deserializeProject: function(json) {
+				return necromancer.resurrect(json);
+			}
+		};
 	} ]);
 	
 

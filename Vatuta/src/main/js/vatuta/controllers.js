@@ -13,8 +13,9 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 			'$mdDialog',
 			'$mdBottomSheet',
 			'$mdToast',
+			'ProjectSerializer',
 			function($scope, $mdSidenav, Project, Task, Engine, Canvas,
-					Restrictions, $mdDialog, $mdBottomSheet, $mdToast) {
+					Restrictions, $mdDialog, $mdBottomSheet, $mdToast, ProjectSerializer) {
 				$scope.toggleSidenav = function(menuId) {
 					$mdSidenav(menuId).toggle();
 				};
@@ -73,6 +74,8 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 					_taskBottomHeight : 5,
 					_taskHeight : 25
 				};
+				
+				$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
 
 				$scope.ganttListener = {
 					onClickOnTask : function(event, task) {
@@ -115,11 +118,11 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		}
 	}]);
 	
-	vatutaApp.controller('menuBarCtrl', ['$scope', '$mdDialog', '$mdToast' , 'Task', 'Project', 'Namespace', function($scope, $mdDialog, $mdToast, Task, Project, namespace) {
+	vatutaApp.controller('menuBarCtrl', ['$scope', '$mdDialog', '$mdToast' , 'Task', 'Project', 'ProjectSerializer', function($scope, $mdDialog, $mdToast, Task, Project, ProjectSerializer) {
 		$scope.fileOpen = function(event) {
 			if(typeof(Storage) !== "undefined") {
-				var json = JSON.parse(localStorage.getItem("project"));
-				$scope.project = Project.objectify(json, namespace);
+				$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
+				
 				$mdToast.show(
 		                $mdToast.simple()
 		                  .content("Project loaded from your local storage")
@@ -139,16 +142,10 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		};
 		$scope.fileSave = function(event) {
 			if(typeof(Storage) !== "undefined") {
-				var necromancer = new Resurrect(
-							{
-								resolver: new Resurrect.NamespaceResolver(namespace)
-							}
-						);
-				var json = necromancer.stringify($scope.$parent.project);
+				var project = ProjectSerializer.serializeProject($scope.$parent.project);
 				
-				//var json = JSON.stringify($scope.$parent.project.jsonify());
 				// Store
-				localStorage.setItem("project", json);
+				localStorage.setItem("project", project);
 				$mdToast.show(
 		                $mdToast.simple()
 		                  .content("Project saved on your local storage")

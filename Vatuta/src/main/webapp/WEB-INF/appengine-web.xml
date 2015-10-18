@@ -3,12 +3,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="https://googleappengine.googlecode.com/svn/trunk/java/src/main/com/google/appengine/tools/development/appengine-web.xsd appengine-web.xsd">
 	<application>vatuta-1099</application>
-	<version>alpha-003</version>
+	<version>1</version>
 	<threadsafe>true</threadsafe>
 	<static-files>
 		<include path="/**.html" />
 		<include path="/**.svg" />
 		<include path="/**.js" />
 		<include path="/**.css" />
+		<include path="/**.png" />
+		<include path="/**.ico" />
+		<include path="/browserconfig.xml" />
 	</static-files>
 </appengine-web-app>
