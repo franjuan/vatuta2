@@ -139,7 +139,14 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		};
 		$scope.fileSave = function(event) {
 			if(typeof(Storage) !== "undefined") {
-				var json = JSON.stringify($scope.$parent.project.jsonify());
+				var necromancer = new Resurrect(
+							{
+								resolver: new Resurrect.NamespaceResolver(namespace)
+							}
+						);
+				var json = necromancer.stringify($scope.$parent.project);
+				
+				//var json = JSON.stringify($scope.$parent.project.jsonify());
 				// Store
 				localStorage.setItem("project", json);
 				$mdToast.show(
