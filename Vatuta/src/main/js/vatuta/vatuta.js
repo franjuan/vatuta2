@@ -1,6 +1,6 @@
 define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		"./vatuta/restriction.js", "./vatuta/canvas.js" ], function(Project,
-		Task, Engine, Restriction, Canvas) {
+		Task, Engine, Restrictions, Canvas) {
 
 	var vatutaMod = angular.module('vatuta', []);
 
@@ -21,7 +21,16 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 	} ]);
 	
 	vatutaMod.factory('Restrictions', [ function() {
-		return Restriction;
+		return Restrictions;
+	} ]);
+	
+	vatutaMod.factory('Namespace', [ function() {
+		var namespace = {};
+		namespace.Task = Task;
+		namespace.Project = Project;
+		namespace.EndToStartDependency = Restrictions.EndToStart;
+		namespace.Restriction = Restriction;
+		return namespace;
 	} ]);
 	
 

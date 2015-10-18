@@ -5,7 +5,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 	/**
      * @exports Restriction
      */
-	var Restriction = declare("Vatuta.Restriction", null, {
+	var Restriction = declare("Restriction", null, {
 		/**
 		 * @constructs Restriction
 		 */
@@ -17,7 +17,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 	/**
      * @exports Restriction
      */
-	var EndToStartDependency = declare("Vatuta.EndToStartDependency", Restriction, {
+	var EndToStartDependency = declare("EndToStartDependency", Restriction, {
 		constructor: function(/* Object */kwArgs) {
 			this.inherited(arguments);
 			this.getEndingTask().addRestriction(this);
@@ -64,8 +64,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang" ], function(declare, lang) {
 			} else {
 				return Infinity;
 			}
+		},
+		jsonify: function () {
+			return {_startingTaskId: this._startingTask.id(), _endingTaskId: this._endingTask.id(), _class: this.__proto__.declaredClass};
+		},
+		prepareAfterLoading: function(project, namespace) {
 		}
 	});
+	EndToStartDependency.objectify = function(json, project, task, namespace) {
+		if (task.id() == json._endingTaskId) {
+			var _class = json._class;
+			delete json._class;
+			json._startingTask= project.findTaskById(json._startingTaskId);
+			json._endingTask= project.findTaskById(json._endingTaskId);
+			delete json._startingTaskId;
+			delete json._endingTaskId;
+			return new namespace[_class](json);
+		}
+	};
 	
 	return {EndToStart: EndToStartDependency};
 });

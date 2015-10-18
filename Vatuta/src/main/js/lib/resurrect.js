@@ -170,6 +170,12 @@ Resurrect.NamespaceResolver.prototype.getName = function(object) {
         var funcPattern = /^\s*function\s*([A-Za-z0-9_$]*)/;
         constructor = funcPattern.exec(object.constructor)[1];
     }
+    
+    if (constructor === '') {
+    	if (object.__proto__ && object.__proto__.declaredClass) {
+    		constructor = object.__proto__.declaredClass;
+    	}
+    }
 
     if (constructor === '') {
         var msg = "Can't serialize objects with anonymous constructors.";
@@ -517,7 +523,7 @@ Resurrect.prototype.resurrect = function(string) {
             }
         }
         /* Re-establish object references and construct atoms. */
-        for (i = 0; i < this.table.length; i++) {
+        for (var i = 0; i < this.table.length; i++) {
             var object = this.table[i];
             for (var key in object) {
                 if (object.hasOwnProperty(key)) {

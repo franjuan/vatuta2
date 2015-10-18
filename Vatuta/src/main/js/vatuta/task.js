@@ -1,6 +1,6 @@
 define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		lang, _) {
-	return declare("Task", null, {
+	var Task = declare("Task", null, {
 		constructor : function (/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
 			if (!this._id) {
@@ -67,6 +67,33 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		},
 		getLateEnd: function() {
 			return this._lateEnd;
+		},
+		jsonify: function () {
+			var o = {_id: this._id, _index: this._index, _name: this._name, _duration: this._duration, _class: this.__proto__.declaredClass, _taskRestrictions: []};
+			for (var i = 0; i < this.getRestrictions().length; i++) {
+				o._taskRestrictions.push(this.getRestrictions()[i].jsonify());
+			};
+			return o;
+		},
+		prepareAfterLoading: function(project, namespace) {
+			if (this._taskRestrictions && Array.isArray(this._taskRestrictions)) {
+				for (var i = 0; i < this._taskRestrictions.length; i++) {
+					var restriction = this._taskRestrictions[i];
+					var _class = restriction._class;
+					eval(_class + '.objectify(restriction, project, this, namespace)');
+				};
+			}
+			for (var i = 0; i < this.getRestrictions().length; i++) {
+				this.getRestrictions()[i].prepareAfterLoading(project);
+			};
+			delete this._taskRestrictions;
 		}
 	});
+	Task.objectify = function(json, project, namespace) {
+		var _class = json._class;
+		delete json._class;
+		var task = new namespace[_class](json);
+		return task;
+	};
+	return Task;
 });

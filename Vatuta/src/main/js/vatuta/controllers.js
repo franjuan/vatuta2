@@ -115,24 +115,51 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		}
 	}]);
 	
-	vatutaApp.controller('menuBarCtrl', ['$scope', 'Task', function($scope, Task) {
+	vatutaApp.controller('menuBarCtrl', ['$scope', '$mdDialog', '$mdToast' , 'Task', 'Project', 'Namespace', function($scope, $mdDialog, $mdToast, Task, Project, namespace) {
 		$scope.fileOpen = function(event) {
-			
-		}
+			if(typeof(Storage) !== "undefined") {
+				var json = JSON.parse(localStorage.getItem("project"));
+				$scope.project = Project.objectify(json, namespace);
+				$mdToast.show(
+		                $mdToast.simple()
+		                  .content("Project loaded from your local storage")
+		                  .position('top right')
+		                  .hideDelay(1500)
+		              );
+			} else {
+				$mdDialog.show(
+					      $mdDialog.alert()
+					        .clickOutsideToClose(true)
+					        .title('No local storage supported')
+					        .content('Your browser does not support local storage.')
+					        .ariaLabel('No local storage supported')
+					        .ok('Ok')
+					    );
+			};
+		};
 		$scope.fileSave = function(event) {
-			var namespace = {};
-			namespace.Task = Task;
-			namespace.Task.name = "Task";
-			var necromancer = new Resurrect({
-			    resolver: new Resurrect.NamespaceResolver(namespace)
-			});
-			var task = new Task({
-				_name : "C",
-				_duration : 7
-			});
-			task.__proto__.constructor.name = "Task";
-			var json = necromancer.stringify(task);
-		}
+			if(typeof(Storage) !== "undefined") {
+				var json = JSON.stringify($scope.$parent.project.jsonify());
+				// Store
+				localStorage.setItem("project", json);
+				$mdToast.show(
+		                $mdToast.simple()
+		                  .content("Project saved on your local storage")
+		                  .position('top right')
+		                  .hideDelay(1500)
+		              );
+			} else {
+				$mdDialog.show(
+					      $mdDialog.alert()
+					        .clickOutsideToClose(true)
+					        .title('No local storage supported')
+					        .content('Your browser does not support local storage.')
+					        .ariaLabel('No local storage supported')
+					        .ok('Ok')
+					    );
+			};
+			
+		};
 	}]);
 
 	angular.bootstrap(document, [ 'vatutaApp' ]);
