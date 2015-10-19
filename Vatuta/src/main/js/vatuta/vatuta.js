@@ -33,8 +33,21 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		
 		var necromancer = new Resurrect(
 				{
-					resolver: new Resurrect.NamespaceResolver(namespace, 'declaredClass'),
-					exceptionKeys: ['_inherited']
+					resolver: new Resurrect.NamespaceResolver(
+									namespace,
+									function(object, constructor){
+										if (constructor === '') {
+									    	if (this.constructorNameAtProto && object.__proto__ && object.__proto__.declaredClass) {
+									    		return constructor = object.__proto__.declaredClass;
+									    	}
+									    } else {
+									    	return constructor;
+									    }
+									}
+								),
+					propertiesFilter: function(key, value, root) {
+						return key !== '_inherited';
+					}
 				}
 			);
 		

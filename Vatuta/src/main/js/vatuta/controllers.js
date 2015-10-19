@@ -75,7 +75,9 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 					_taskHeight : 25
 				};
 				
-				$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
+				if(typeof(Storage) !== "undefined" && localStorage.getItem("project")) {
+					$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
+				}
 
 				$scope.ganttListener = {
 					onClickOnTask : function(event, task) {
