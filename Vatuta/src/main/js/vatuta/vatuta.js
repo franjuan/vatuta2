@@ -74,7 +74,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			  };
 			});
 
-	vatutaMod.directive('vatutaGantt', function() {
+	vatutaMod.directive('vatutaGantt', function($mdDialog) {
 		  return {
 			    restrict: 'EAC',
 			    scope: {
@@ -88,25 +88,23 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			    	canvas.listener(scope.listener);
 					canvas.drawTimeRuler(scope.project);
 					canvas.drawProject(scope.project);
+					
+					function taskChanged(newP, oldP, scope) {
+						console.log('changed');
+					}
+					
+					scope.$watch(watchTasks, taskChanged, true);
+	
+					function watchTasks() {
+						return scope.project.getTasks().map(taskValue);
+					}
+	
+					function taskValue(task, index) {
+						return task.duration() + task.name();
+					}
 			    }
 			  };
 			});
-	
-	vatutaMod.directive('uniqueId', function() {
-		  return {
-		    require: 'ngModel',
-		    link: function(scope, elm, attrs, ctrl) {
-		      ctrl.$validators.uniqueId = function(modelValue, viewValue) {
-		        var task = scope.project.findTaskById(viewValue);
-		        if (task && task.index()!=scope.selectedTask.index()) {
-		        	return false;
-		        } else {
-		        	return true;
-		        }
-		      };
-		    }
-		  };
-		});
 	
 	return vatutaMod;
 });
