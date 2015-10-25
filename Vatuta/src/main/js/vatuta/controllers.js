@@ -113,6 +113,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 			$scope.selectedTask = newTask;
 			$scope.toggleSidenav('left');
 			$mdBottomSheet.hide('New task added', true);
+			$scope.$root.$broadcast('addTask');
 		}
 		$scope.showTask = function() {
 			$scope.toggleSidenav('left');

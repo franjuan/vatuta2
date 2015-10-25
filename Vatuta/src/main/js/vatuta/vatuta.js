@@ -102,7 +102,12 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 					function taskValue(task, index) {
 						return task.duration() + task.name();
 					}
-			    }
+			    },
+			    controller: function($scope, $attrs) {
+		            $scope.$on('addTask', function() {
+		                console.log('addTask');
+		            });
+		        }
 			  };
 			});
 	
