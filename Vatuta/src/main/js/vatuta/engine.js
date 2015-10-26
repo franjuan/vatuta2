@@ -2,24 +2,34 @@
  * @module Engine
  */
 define(
-		[ "dojo/_base/declare", "./vatuta/project.js", "lodash" ],
-		function(declare, Project, _) {
+		[ "lodash" ],
+		function(_) {
 			/**
 			 * @constructor
 			 * @alias module:Engine
 			 */
 			return {
 				/**
+				 * Get the current project the Engine is working with
+				 * @returns {Project}
+				 *//**
+				 * Set the current project the Engine is working with
+				 * @param {Project} new project to be linked to Engine
+				 * @returns {Project}
+				 */
+				currentProject: function(newProject) {
+					return arguments.length ? (this._project = newProject) : this._project;
+				},
+				/**
 				 * Calculate early start and late end dates of every task of the
 				 * project
 				 * 
 				 * @function
-				 * @param {Project}
-				 *            project Project to be calculated
+				 * 
 				 */
-				calculateEarlyStartLateEnding : function(project) {
+				calculateEarlyStartLateEnding : function() {
 					// We clone the tasks array
-					var tasks = _.clone(project.getTasks());
+					var tasks = _.clone(this._project.getTasks());
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = -1;
@@ -69,8 +79,8 @@ define(
 						}
 					}
 					
-					project.calculatedStart(0);
-					project.calculatedEnd(endOfProject);
+					this._project.calculatedStart(0);
+					this._project.calculatedEnd(endOfProject);
 				}
 			};
 		});

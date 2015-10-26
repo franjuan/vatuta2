@@ -59,8 +59,6 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 				project.addTask(taskB);
 				project.addTask(taskC);
 				project.addTask(taskD);
-				Engine.calculateEarlyStartLateEnding(project);
-				console.log("fin");
 
 				$scope.project = project;
 				$scope.canvasOptions = {
@@ -78,6 +76,10 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 				if(typeof(Storage) !== "undefined" && localStorage.getItem("project")) {
 					$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
 				}
+				
+				Engine.currentProject($scope.project);
+				Engine.calculateEarlyStartLateEnding();
+				console.log("fin");
 
 				$scope.ganttListener = {
 					onClickOnTask : function(event, task) {
@@ -108,7 +110,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 
 				function taskChanged(newP, oldP, $scope) {
 					console.log('changed');
-					Engine.calculateEarlyStartLateEnding($scope.project);
+					Engine.calculateEarlyStartLateEnding();
 					$scope.$root.$broadcast('changeTask', $scope.selectedTask);
 				}
 				
@@ -127,7 +129,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		$scope.addTask = function() {
 			var newTask = new Task({_duration:1});
 			$scope.project.addTask(newTask);
-			Engine.calculateEarlyStartLateEnding($scope.project);
+			Engine.calculateEarlyStartLateEnding();
 			$scope.selectedTask = newTask;
 			$scope.toggleSidenav('left');
 			$mdBottomSheet.hide('New task added', true);
@@ -143,6 +145,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		$scope.fileOpen = function(event) {
 			if(typeof(Storage) !== "undefined") {
 				$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
+				Engine.currentProject($scope.project);
 				
 				$mdToast.show(
 		                $mdToast.simple()
