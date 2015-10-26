@@ -121,6 +121,8 @@ define(
 				},
 				clear: function() {
 					this._stage.clear();
+					this._stage.removeAllChildren();
+					this._stage.update();
 				}
 			});
 		}

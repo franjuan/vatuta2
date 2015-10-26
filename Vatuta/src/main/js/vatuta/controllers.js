@@ -104,6 +104,23 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 				};
 
 				$scope.selectedTask = project.getTasks()[0];
+				
+
+				function taskChanged(newP, oldP, $scope) {
+					console.log('changed');
+					Engine.calculateEarlyStartLateEnding($scope.project);
+					$scope.$root.$broadcast('changeTask', $scope.selectedTask);
+				}
+				
+				function taskHash(task) {
+					return task.duration() + task.name();
+				}
+				
+				function watchSelectedTask() {
+					return taskHash($scope.selectedTask);
+				}
+				
+				$scope.$watch(watchSelectedTask, taskChanged, true);
 			} ]);
 	
 	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', function($scope, $mdBottomSheet, Task, Engine) {
@@ -114,7 +131,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 			$scope.selectedTask = newTask;
 			$scope.toggleSidenav('left');
 			$mdBottomSheet.hide('New task added', true);
-			$scope.$root.$broadcast('addTask');
+			$scope.$root.$broadcast('addTask', newTask);
 		}
 		$scope.showTask = function() {
 			$scope.toggleSidenav('left');

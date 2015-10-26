@@ -76,7 +76,6 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 
 	vatutaMod.directive('vatutaGantt', function($mdDialog) {
 		  return {
-			    canvas: null,
 			    restrict: 'EAC',
 			    scope: {
 			      project: '=projectData',
@@ -84,32 +83,24 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			      listener: '='
 			    },
 			    template: '<canvas></canvas>',
-			    link: function link(scope, element, attrs) {
-			    	this.canvas = new Canvas(element, scope.options);
-			    	this.canvas.listener(scope.listener);
-			    	this.canvas.drawTimeRuler(scope.project);
-			    	this.canvas.drawProject(scope.project);
-					
-					function taskChanged(newP, oldP, scope) {
-						console.log('changed');
-					}
-					
-					scope.$watch(watchTasks, taskChanged, true);
-	
-					function watchTasks() {
-						return scope.project.getTasks().map(taskValue);
-					}
-	
-					function taskValue(task, index) {
-						return task.duration() + task.name();
-					}
+			    link: function link($scope, element, attrs) {
+			    	$scope.canvas = new Canvas(element, $scope.options);
+			    	$scope.canvas.listener($scope.listener);
+			    	$scope.canvas.drawTimeRuler($scope.project);
+			    	$scope.canvas.drawProject($scope.project);
 			    },
 			    controller: function($scope, $attrs) {
-		            $scope.$on('addTask', function() {
+		            $scope.$on('addTask', function(task) {
 		                console.log('addTask');
-		                this.canvas.clear();
-		                this.canvas.drawTimeRuler($scope.project);
-				    	this.canvas.drawProject($scope.project);
+		                $scope.canvas.clear();
+		                $scope.canvas.drawTimeRuler($scope.project);
+		                $scope.canvas.drawProject($scope.project);
+		            });
+		            $scope.$on('changeTask', function(task) {
+		                console.log('addTask');
+		                $scope.canvas.clear();
+		                $scope.canvas.drawTimeRuler($scope.project);
+		                $scope.canvas.drawProject($scope.project);
 		            });
 		        }
 			  };
