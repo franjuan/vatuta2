@@ -71,34 +71,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 						}
 					};
 					return null;
-				},
-				jsonify: function () {
-					var o = {_name: this._name, _class: this.__proto__.declaredClass, _tasks: []};
-					for (var i = 0; i < this.getTasks().length; i++) {
-						o._tasks.push(this.getTasks()[i].jsonify());
-					};
-					return o;
-				},
-				prepareAfterLoading: function(namespace) {
-					for (var i = 0; i < this.getTasks().length; i++) {
-						this.getTasks()[i].prepareAfterLoading(this, namespace);
-					};
 				}
 			});
-			Project.objectify = function(json, namespace) {
-				var _class = json._class;
-				delete json._class;
-				var project = new namespace[_class](json);
-				project._tasks = [];
-				if (json._tasks && Array.isArray(json._tasks)) {
-					for (var i = 0; i < json._tasks.length; i++) {
-						var task = json._tasks[i];
-						var _class = task._class;
-						project._tasks.push(eval(_class + '.objectify(task, project, namespace)'));
-					};
-				}
-				project.prepareAfterLoading(namespace);
-				return project;
-			};
+
 			return Project;
 		});
