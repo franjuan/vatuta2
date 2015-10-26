@@ -118,6 +118,9 @@ define(
 					);
 										
 					return taskContainer;
+				},
+				clear: function() {
+					this._stage.clear();
 				}
 			});
 		}

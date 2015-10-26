@@ -76,6 +76,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 
 	vatutaMod.directive('vatutaGantt', function($mdDialog) {
 		  return {
+			    canvas: null,
 			    restrict: 'EAC',
 			    scope: {
 			      project: '=projectData',
@@ -84,10 +85,10 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			    },
 			    template: '<canvas></canvas>',
 			    link: function link(scope, element, attrs) {
-			    	var canvas = new Canvas(element, scope.options);
-			    	canvas.listener(scope.listener);
-					canvas.drawTimeRuler(scope.project);
-					canvas.drawProject(scope.project);
+			    	this.canvas = new Canvas(element, scope.options);
+			    	this.canvas.listener(scope.listener);
+			    	this.canvas.drawTimeRuler(scope.project);
+			    	this.canvas.drawProject(scope.project);
 					
 					function taskChanged(newP, oldP, scope) {
 						console.log('changed');
@@ -106,6 +107,9 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			    controller: function($scope, $attrs) {
 		            $scope.$on('addTask', function() {
 		                console.log('addTask');
+		                this.canvas.clear();
+		                this.canvas.drawTimeRuler($scope.project);
+				    	this.canvas.drawProject($scope.project);
 		            });
 		        }
 			  };

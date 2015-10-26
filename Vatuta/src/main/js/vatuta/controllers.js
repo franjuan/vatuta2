@@ -106,10 +106,11 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 				$scope.selectedTask = project.getTasks()[0];
 			} ]);
 	
-	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', function($scope, $mdBottomSheet, Task) {
+	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', function($scope, $mdBottomSheet, Task, Engine) {
 		$scope.addTask = function() {
-			var newTask = new Task();
+			var newTask = new Task({_duration:1});
 			$scope.project.addTask(newTask);
+			Engine.calculateEarlyStartLateEnding($scope.project);
 			$scope.selectedTask = newTask;
 			$scope.toggleSidenav('left');
 			$mdBottomSheet.hide('New task added', true);
