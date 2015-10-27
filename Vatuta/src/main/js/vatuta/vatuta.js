@@ -46,7 +46,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 									}
 								),
 					propertiesFilter: function(key, value, root) {
-						return key !== '_inherited';
+						return key !== '_inherited' && key.indexOf('_$') !== 0;
 					}
 				}
 			);

@@ -21,12 +21,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				getTasks : function() {
 					return this._tasks;
 				},
+				_tasksIndex: function() {
+					if (!this._$taskIndex) {
+						this._$taskIndex = {};
+						for (var i = 0; i < this.getTasks().length; i++) {
+							this._$taskIndex[this.getTasks()[i].id()] = this.getTasks()[i];
+						};
+					}
+					return this._$taskIndex;
+				}
+				,
 				/**
 				 * @function
 				 * @memberof Project
 				 */
 				addTask : function(task) {
 					this.getTasks().push(task);
+					this._tasksIndex[task.id()] = task;
 					task.index(this.getTasks().length);
 					return task;
 				},
@@ -65,12 +76,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @memberof Project
 				 */
 				findTaskById: function(id) {
-					for (var i = 0; i < this.getTasks().length; i++) {
-						if (this.getTasks()[i].id()==id) {
-							return this.getTasks()[i];
-						}
-					};
-					return null;
+					return this._tasksIndex()[id];
 				}
 			});
 		});
