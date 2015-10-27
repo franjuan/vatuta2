@@ -1,6 +1,6 @@
 define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		lang, _) {
-	var Task = declare("Task", null, {
+	return declare("Task", null, {
 		constructor : function (/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
 			if (!this._id) {
@@ -69,6 +69,4 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 			return this._lateEnd;
 		}
 	});
-
-	return Task;
 });

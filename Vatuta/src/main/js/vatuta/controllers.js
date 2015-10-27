@@ -20,22 +20,35 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 					$mdSidenav(menuId).toggle();
 				};
 
+				var project = new Project({
+					_name : "Example Project"
+				});
+				Engine.currentProject(project);
+				
 				var taskA = new Task({
 					_name : "A",
 					_duration : 3
 				});
+				project.addTask(taskA);
+				
 				var taskB = new Task({
 					_name : "B",
 					_duration : 5
 				});
+				project.addTask(taskB);
+				
 				var taskC = new Task({
 					_name : "C",
 					_duration : 7
 				});
+				project.addTask(taskC);
+				
 				var taskD = new Task({
 					_name : "D",
 					_duration : 2
 				});
+				project.addTask(taskD);
+				
 				new Restrictions.EndToStart({
 					_endingTask : taskA,
 					_startingTask : taskB
@@ -52,13 +65,6 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 					_endingTask : taskC,
 					_startingTask : taskD
 				});
-				var project = new Project({
-					_name : "Example Project"
-				});
-				project.addTask(taskA);
-				project.addTask(taskB);
-				project.addTask(taskC);
-				project.addTask(taskD);
 
 				$scope.project = project;
 				$scope.canvasOptions = {
@@ -75,9 +81,10 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 				
 				if(typeof(Storage) !== "undefined" && localStorage.getItem("project")) {
 					$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
+					Engine.currentProject($scope.project);
 				}
 				
-				Engine.currentProject($scope.project);
+				
 				Engine.calculateEarlyStartLateEnding();
 				console.log("fin");
 
@@ -141,7 +148,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		}
 	}]);
 	
-	vatutaApp.controller('menuBarCtrl', ['$scope', '$mdDialog', '$mdToast' , 'Task', 'Project', 'ProjectSerializer', function($scope, $mdDialog, $mdToast, Task, Project, ProjectSerializer) {
+	vatutaApp.controller('menuBarCtrl', ['$scope', '$mdDialog', '$mdToast' , 'Task', 'Project', 'ProjectSerializer', 'Engine', function($scope, $mdDialog, $mdToast, Task, Project, ProjectSerializer, Engine) {
 		$scope.fileOpen = function(event) {
 			if(typeof(Storage) !== "undefined") {
 				$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));

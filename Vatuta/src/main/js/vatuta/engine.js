@@ -21,6 +21,16 @@ define(
 					return arguments.length ? (this._project = newProject) : this._project;
 				},
 				/**
+				 * Find task in current project by its id
+				 * @param {id} task id
+				 * @returns {Task}
+				 * @function
+				 * 
+				 */
+				taskById: function(id) {
+					return this._project.findTaskById(id);
+				},
+				/**
 				 * Calculate early start and late end dates of every task of the
 				 * project
 				 * 
