@@ -38,6 +38,16 @@ define(
 				 * 
 				 */
 				calculateEarlyStartLateEnding : function() {
+					// Remove old values
+					delete this._project._start;
+					delete this._project._end;
+					_.forEach(this._project.getTasks(), function(task) {
+						delete task._earlyStart;
+						delete task._earlyEnd;
+						delete task._lateStart;
+						delete task._lateEnd;
+					});
+					
 					// We clone the tasks array
 					var tasks = _.clone(this._project.getTasks());
 

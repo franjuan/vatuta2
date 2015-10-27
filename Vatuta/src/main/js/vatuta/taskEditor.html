@@ -8,10 +8,10 @@
 	</md-input-container>
 	<md-input-container flex>
 		<label>Duration</label>
-		<input name="duration" ng-model="selectedTask.duration" ng-model-options="{ getterSetter: true }" required></input>
+		<input type="number" name="duration" ng-model="selectedTask.duration" ng-model-options="{ getterSetter: true }" required></input>
 		<div ng-messages="taskForm.duration.$error" role="alert">
           <div ng-message="required">Task must have a duration</div>
-        </div>
+       </div>
 	</md-input-container>
 	<div layout="row" layout-align="space-between center">
 		<md-button class="md-raised md-primary">Cancel</md-button>
