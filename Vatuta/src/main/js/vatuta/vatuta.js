@@ -37,7 +37,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 									namespace,
 									function(object, constructor){
 										if (constructor === '') {
-									    	if (this.constructorNameAtProto && object.__proto__ && object.__proto__.declaredClass) {
+									    	if (object.__proto__ && object.__proto__.declaredClass) {
 									    		return constructor = object.__proto__.declaredClass;
 									    	}
 									    } else {
