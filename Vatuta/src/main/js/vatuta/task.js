@@ -19,6 +19,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		name: function(newName) {
 		     return arguments.length ? (this._name = newName) : this._name;
 		},
+		description: function(newDescription) {
+		     return arguments.length ? (this._description = newDescription) : this._description;
+		},
 		duration: function(newDuration) {
 		     return arguments.length ? (this._duration = newDuration) : this._duration;
 		},
@@ -28,8 +31,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 			}
 			return this._restrictions;
 		},
+		restrictionsFromDependants : function() {
+			if (!this._restrictionsFromDependants) {
+				this._restrictionsFromDependants = [];
+			}
+			return this._restrictionsFromDependants;
+		},
 		addRestriction : function(restriction) {
 			this.restrictions().push(restriction);
+			this._dependencies = null;
+			this._dependants = null;
+			return restriction;
+		},
+		addRestrictionFromDependants : function(restriction) {
+			this.restrictionsFromDependants().push(restriction);
 			this._dependencies = null;
 			this._dependants = null;
 			return restriction;
@@ -48,7 +63,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		getDependants : function() {
 			if (!this._dependants) {
 				this._dependants = [];
-				_.forEach(this.restrictions(), function(restriction) {
+				_.forEach(this.restrictionsFromDependants(), function(restriction) {
 					_.forEach(restriction.getDependants4Task(this), function(dependant) {
 						this._dependants.push(dependant);
 					}, this);

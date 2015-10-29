@@ -28,7 +28,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 				delete kwArgs._endingTask;
 			}
 			this.inherited(arguments);
-			this.endingTask().addRestriction(this);
+			this.endingTask().addRestrictionFromDependants(this);
 			this.startingTask().addRestriction(this);
 		},
 		endingTask: function() {
@@ -38,21 +38,21 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 			return Engine.taskById(this._startingTaskId);
 		},
 		getDependants4Task: function(task) {
-			if (task.id()===this.endingTask().id()) {
+			if (!task || task.id()===this.endingTask().id()) {
 				return [this.startingTask()];
 			} else {
 				return [];
 			}
 		},
 		getDependencies4Task: function(task) {
-			if (task.id()===this.startingTask().id()) {
+			if (!task || task.id()===this.startingTask().id()) {
 				return [this.endingTask()];
 			} else {
 				return [];
 			}
 		},
 		getEarlyStart: function(task) {
-			if (task.id()===this.startingTask().id()) {
+			if (!task || task.id()===this.startingTask().id()) {
 				if (this.endingTask().getEarlyEnd()) {
 					return this.endingTask().getEarlyEnd();
 				} else {
@@ -63,7 +63,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 			}
 		},
 		getLateEnd: function(task) {
-			if (task.id()===this.endingTask().id()) {
+			if (!task || task.id()===this.endingTask().id()) {
 				if (this.startingTask().getLateStart()) {
 					return this.startingTask().getLateStart();
 				} else {

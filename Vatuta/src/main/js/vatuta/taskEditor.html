@@ -9,6 +9,12 @@
 				<div ng-message="required">Task must have a name</div>
 			</div>
 			</md-input-container>
+			<md-input-container flex> <label>Description</label> <textarea
+				name="description" column="1" ng-model="selectedTask.description"
+				ng-model-options="{ getterSetter: true }"></textarea>
+			<div ng-messages="taskForm.name.$error" role="alert">
+			</div>
+			</md-input-container>
 			<md-input-container flex> <label>Duration</label>
 			<input type="number" name="duration" ng-model="selectedTask.duration"
 				ng-model-options="{ getterSetter: true }" required></input>

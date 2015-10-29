@@ -61,6 +61,9 @@ define(
 							_.forEach(task.restrictions(), function(restriction) {
 								earlyStart = Math.max(earlyStart, restriction.getEarlyStart(this));
 							}, task);
+							_.forEach(task.restrictionsFromDependants(), function(restriction) {
+								earlyStart = Math.max(earlyStart, restriction.getEarlyStart(this));
+							}, task);
 							if (!isNaN(earlyStart)) {
 								task._earlyStart = earlyStart;
 								task._earlyEnd = earlyStart + task.duration();
@@ -83,6 +86,9 @@ define(
 							var task = tasks[i];
 							var lateEnd = endOfProject;
 							_.forEach(task.restrictions(), function(restriction) {
+								lateEnd = Math.min(lateEnd, restriction.getLateEnd(this));
+							}, task);
+							_.forEach(task.restrictionsFromDependants(), function(restriction) {
 								lateEnd = Math.min(lateEnd, restriction.getLateEnd(this));
 							}, task);
 							if (!isNaN(lateEnd)) {
