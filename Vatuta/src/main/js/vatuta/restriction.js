@@ -28,33 +28,33 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 				delete kwArgs._endingTask;
 			}
 			this.inherited(arguments);
-			this.getEndingTask().addRestriction(this);
-			this.getStartingTask().addRestriction(this);
+			this.endingTask().addRestriction(this);
+			this.startingTask().addRestriction(this);
 		},
-		getEndingTask: function() {
+		endingTask: function() {
 			return Engine.taskById(this._endingTaskId);
 		},
-		getStartingTask: function() {
+		startingTask: function() {
 			return Engine.taskById(this._startingTaskId);
 		},
 		getDependants4Task: function(task) {
-			if (task.id()===this.getEndingTask().id()) {
-				return [this.getStartingTask()];
+			if (task.id()===this.endingTask().id()) {
+				return [this.startingTask()];
 			} else {
 				return [];
 			}
 		},
 		getDependencies4Task: function(task) {
-			if (task.id()===this.getStartingTask().id()) {
-				return [this.getEndingTask()];
+			if (task.id()===this.startingTask().id()) {
+				return [this.endingTask()];
 			} else {
 				return [];
 			}
 		},
 		getEarlyStart: function(task) {
-			if (task.id()===this.getStartingTask().id()) {
-				if (this.getEndingTask().getEarlyEnd()) {
-					return this.getEndingTask().getEarlyEnd();
+			if (task.id()===this.startingTask().id()) {
+				if (this.endingTask().getEarlyEnd()) {
+					return this.endingTask().getEarlyEnd();
 				} else {
 					return NaN;
 				}
@@ -63,15 +63,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 			}
 		},
 		getLateEnd: function(task) {
-			if (task.id()===this.getEndingTask().id()) {
-				if (this.getStartingTask().getLateStart()) {
-					return this.getStartingTask().getLateStart();
+			if (task.id()===this.endingTask().id()) {
+				if (this.startingTask().getLateStart()) {
+					return this.startingTask().getLateStart();
 				} else {
 					return NaN;
 				}
 			} else {
 				return Infinity;
 			}
+		},
+		arial: function() {
+			return "Finish to Start condition";
+		},
+		title: function() {
+			return this.endingTask().index() + "FS";
+		},
+		description: function() {
+			return "This task starts after <b>" + this.endingTask().index() + ".- " + this.endingTask().name() + "</b> finishes. ";
 		}
 	});
 	

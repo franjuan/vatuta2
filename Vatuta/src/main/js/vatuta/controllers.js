@@ -1,5 +1,5 @@
 require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
-	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages',
+	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages','ngSanitize',
 			'vatuta' ]);
 
 	vatutaApp.controller('projectCtrl', [

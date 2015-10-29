@@ -22,14 +22,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		duration: function(newDuration) {
 		     return arguments.length ? (this._duration = newDuration) : this._duration;
 		},
-		getRestrictions : function() {
+		restrictions : function() {
 			if (!this._restrictions) {
 				this._restrictions = [];
 			}
 			return this._restrictions;
 		},
 		addRestriction : function(restriction) {
-			this.getRestrictions().push(restriction);
+			this.restrictions().push(restriction);
 			this._dependencies = null;
 			this._dependants = null;
 			return restriction;
@@ -37,7 +37,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		getDependencies : function() {
 			if (!this._dependencies) {
 				this._dependencies = [];
-				_.forEach(this.getRestrictions(), function(restriction) {
+				_.forEach(this.restrictions(), function(restriction) {
 					_.forEach(restriction.getDependencies4Task(this), function(dependency) {
 						this._dependencies.push(dependency);
 					}, this);
@@ -48,7 +48,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		getDependants : function() {
 			if (!this._dependants) {
 				this._dependants = [];
-				_.forEach(this.getRestrictions(), function(restriction) {
+				_.forEach(this.restrictions(), function(restriction) {
 					_.forEach(restriction.getDependants4Task(this), function(dependant) {
 						this._dependants.push(dependant);
 					}, this);
