@@ -70,7 +70,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			      project: '=projectData',
 			      selectedTask: '=selectedTask'
 			    },
-			    templateUrl: 'vatuta/taskEditor.html'
+			    templateUrl: 'vatuta/templates/vatutaTaskEditor.html'
 			  };
 			});
 

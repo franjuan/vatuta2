@@ -93,7 +93,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 						$scope.$apply(function() {
 							$scope.selectedTask = task;
 							$mdBottomSheet.show({
-							      templateUrl: 'vatuta/bottomSheetMenu.html',
+							      templateUrl: 'vatuta/templates/bottomSheetMenu.html',
 							      controller: 'bottomSheetMenuCtrl',
 							      clickOutsideToClose: true,
 							      escapeToClose: true,
