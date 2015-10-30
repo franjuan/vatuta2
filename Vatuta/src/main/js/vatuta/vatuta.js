@@ -106,5 +106,21 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			  };
 			});
 	
+	vatutaMod.directive('restrictionListItem', function() {
+		  return {
+			    restrict: 'EAC',
+			    scope: {
+			      restriction: '='
+			    },
+			    template: '<div ng-include="getTemplateUrl()"></div>',
+			    controller: function($scope) {
+			        //function used on the ng-include to resolve the template
+			        $scope.getTemplateUrl = function() {
+			        	return 'vatuta/templates/' + $scope.restriction.template;
+			        }
+			    }
+			  };
+			});
+	
 	return vatutaMod;
 });

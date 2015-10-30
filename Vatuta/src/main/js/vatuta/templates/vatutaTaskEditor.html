@@ -31,16 +31,27 @@
 	<section>
       <md-subheader class="md-primary">Restrictions</md-subheader>
       <md-list>
-	      <md-list-item class="md-2-line" ng-repeat="restriction in selectedTask.restrictions()">
-	        <md-icon aria-label="{{restriction.arial()}}" md-svg-icon="icons/ic_keyboard_tab_black_48px.svg" class="md-avatar-icon"></md-icon>
-	        <div class="md-list-item-text" layout="column">
-	          <h3>{{restriction.title()}}</h3>
-	          <p ng-bind-html="restriction.description()"></p>
-	        </div>
-	        <md-icon aria-label="Edit" md-svg-icon="icons/ic_mode_edit_black_48px.svg" class="md-avatar-icon"></md-icon>
-	        <md-icon aria-label="Remove" md-svg-icon="icons/ic_delete_black_48px.svg" class="md-avatar-icon"></md-icon>
-	        <md-divider ng-if="!$last"></md-divider>
-	      </md-list-item>
+	      <restriction-list-item restriction="restriction" ng-repeat="restriction in selectedTask.restrictions()"/>
       </md-list>
+      <div layout="row" layout-align="end center">
+      	<md-fab-speed-dial md-direction="left" ng-class="md-fling">
+      		<md-fab-trigger>
+	        	<md-button aria-label="menu" class="md-fab md-mini md-warn">
+	        		<md-tooltip md-direction="top">Add restriction</md-tooltip>
+	            	<md-icon md-svg-src="/icons/ic_add_black_48px.svg"></md-icon>
+          		</md-button>
+        	</md-fab-trigger>
+        	<md-fab-actions>
+	          <md-button aria-label="Task dependencies" class="md-fab md-raised md-mini">
+	          	<md-tooltip md-direction="top">Task dependency</md-tooltip>
+	            <md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
+	          </md-button>
+	          <md-button aria-label="Time constraints" class="md-fab md-raised md-mini">
+	          	<md-tooltip md-direction="top">Time constraint</md-tooltip>
+	            <md-icon md-svg-src="icons/ic_event_black_48px.svg" aria-label="Time constraint"></md-icon>
+	          </md-button>
+	        </md-fab-actions>
+      	</md-fab-speed-dial>
+      </div>
     </section>
 </md-content>

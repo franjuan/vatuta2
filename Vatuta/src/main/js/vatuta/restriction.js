@@ -73,15 +73,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 				return Infinity;
 			}
 		},
-		arial: function() {
-			return "Finish to Start condition";
-		},
-		title: function() {
-			return this.endingTask().index() + "FS";
-		},
-		description: function() {
-			return "This task starts after <b>" + this.endingTask().index() + ".- " + this.endingTask().name() + "</b> finishes. ";
-		}
+		template: 'EndToStartDependencyItem.html'
 	});
 	
 	return {EndToStart: EndToStartDependency};
