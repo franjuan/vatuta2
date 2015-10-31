@@ -82,6 +82,16 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 		},
 		getLateEnd: function() {
 			return this._lateEnd;
+		},
+		watchHash: function() {
+			return this.id() + this.index() + this.name() + this.description() + this.duration() +
+				_.reduce(
+						_.map(this.restrictions(), function(restriction) {
+														return restriction.watchHash();
+													}), function(total, value) {
+															return total + value;
+														}
+						);
 		}
 	});
 });

@@ -73,7 +73,10 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 				return Infinity;
 			}
 		},
-		template: 'EndToStartDependencyItem.html'
+		template: 'EndToStartDependencyItem.html',
+		watchHash: function() {
+			return this._endingTaskId + 'FS' + this._startingTaskId;
+		}
 	});
 	
 	return {EndToStart: EndToStartDependency};

@@ -37,7 +37,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 */
 				addTask : function(task) {
 					this.getTasks().push(task);
-					this._tasksIndex[task.id()] = task;
+					this._tasksIndex()[task.id()] = task;
 					task.index(this.getTasks().length);
 					return task;
 				},
