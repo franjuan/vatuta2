@@ -97,8 +97,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 							      controller: 'bottomSheetMenuCtrl',
 							      clickOutsideToClose: true,
 							      escapeToClose: true,
-							      scope: $scope,
-							      preserveScope: true
+							      scope: $scope.$new(false, $scope)
 							    }).then(function(message, show) {
 							    	if (show)
 							        $mdToast.show(
@@ -122,14 +121,19 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 				}
 				
 				function taskHash(task) {
-					return task.duration() + task.name();
+					return task.duration() + task.name() + task.description() + restrictionsHash(task.restrictions());
+				}
+				
+				function restrictionsHash(restrictions) {
+					return restrictions.map();
 				}
 				
 				function watchSelectedTask() {
 					return taskHash($scope.selectedTask);
 				}
 				
-				$scope.$watch(watchSelectedTask, taskChanged, true);
+				//$scope.$watch(watchSelectedTask, taskChanged, true);
+				$scope.$watch($scope.selectedTask, taskChanged, true);
 			} ]);
 	
 	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', function($scope, $mdBottomSheet, Task, Engine) {
@@ -197,7 +201,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		};
 	}]);
 
-	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', function($scope,  $mdDialog) {
+	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', 'Restrictions', function($scope,  $mdDialog, Restrictions) {
 		$scope.showTaskDependency = function(ev) {
 		    $mdDialog.show({
 		      controller: DialogController,
@@ -205,12 +209,16 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		      parent: angular.element(document.body),
 		      targetEvent: ev,
 		      clickOutsideToClose:false,
-		      scope: $scope
+		      scope: $scope.$new(false, $scope)
 		    })
-		    .then(function(type, task) {
-		      console.log('You said the information was "' + type + '".');
+		    .then(function(restriction) {
+		    	console.log(restriction.task.index() + restriction.type + ' created for task ' + $scope.selectedTask.index() + '.- ' + $scope.selectedTask.name());
+		    	new Restrictions.EndToStart({
+					_endingTask : restriction.task,
+					_startingTask : $scope.selectedTask
+				});
 		    }, function() {
-		    	console.log('You cancelled the dialog.');
+		    	console.log('You cancelled the TaskDependency dialog.');
 		    });
 		 };
 		 
@@ -238,7 +246,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		    $mdDialog.cancel();
 		  };
 		  $scope.answer = function(type, task) {
-		    $mdDialog.hide(type, task);
+		    $mdDialog.hide({type: type, task: task});
 		  };
 		}
 });

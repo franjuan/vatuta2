@@ -2,7 +2,7 @@
   <form name="taskDependencyForm" novalidate>
   <md-toolbar>
     <div class="md-toolbar-tools">
-      <h2>Create new task dependency</h2>
+      <h2>Create new task dependency on {{selectedTask.index()}}.- {{selectedTask.name()}}</h2>
       <span flex></span>
       <md-button class="md-icon-button" ng-click="cancel()">
         <md-icon md-svg-src="icons/ic_close_white_48px.svg" aria-label="Close dialog"></md-icon>
@@ -14,7 +14,7 @@
      <md-input-container>
         <label>Dependency type</label>
         <md-select ng-model="ctrl.type">
-          <md-option ng-value="FS">
+          <md-option value="FS">
           	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
             <span style="padding-left: 1em">Finish-Start</span>
             <md-tooltip>This task should start after referred one is finished.</md-tooltip>
