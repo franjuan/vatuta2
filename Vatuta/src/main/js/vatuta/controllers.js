@@ -98,11 +98,11 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 							      clickOutsideToClose: true,
 							      escapeToClose: true,
 							      scope: $scope.$new(false, $scope)
-							    }).then(function(message, show) {
-							    	if (show)
+							    }).then(function(promise) {
+							    	if (promise.show)
 							        $mdToast.show(
 							                $mdToast.simple()
-							                  .content(message)
+							                  .content(promise.message)
 							                  .position('top right')
 							                  .hideDelay(1500)
 							              );
@@ -143,12 +143,12 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 			Engine.calculateEarlyStartLateEnding();
 			$scope.selectedTask = newTask;
 			$scope.toggleSidenav('left');
-			$mdBottomSheet.hide('New task added', true);
+			$mdBottomSheet.hide({message: 'New task added', show: true});
 			$scope.$root.$broadcast('addTask', newTask);
 		}
 		$scope.showTask = function() {
 			$scope.toggleSidenav('left');
-			$mdBottomSheet.hide('Showing task info', false);
+			$mdBottomSheet.hide({message: 'Showing task info', show: false});
 		}
 	}]);
 	

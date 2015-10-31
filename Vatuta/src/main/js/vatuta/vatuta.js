@@ -97,7 +97,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		                $scope.canvas.drawProject($scope.project);
 		            });
 		            $scope.$on('changeTask', function(task) {
-		                console.log('addTask');
+		                console.log('changeTask');
 		                $scope.canvas.clear();
 		                $scope.canvas.drawTimeRuler($scope.project);
 		                $scope.canvas.drawProject($scope.project);
