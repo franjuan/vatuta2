@@ -197,5 +197,34 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		};
 	}]);
 
+	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', function($scope,  $mdDialog) {
+		$scope.showTaskDependency = function(ev) {
+		    $mdDialog.show({
+		      controller: DialogController,
+		      templateUrl: 'vatuta/templates/TaskDependencyDialog.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:false
+		    })
+		    .then(function(answer) {
+		      $scope.status = 'You said the information was "' + answer + '".';
+		    }, function() {
+		      $scope.status = 'You cancelled the dialog.';
+		    });
+		  };
+	}]);
+	
 	angular.bootstrap(document, [ 'vatutaApp' ]);
+	
+	function DialogController($scope, $mdDialog) {
+		  $scope.hide = function() {
+		    $mdDialog.hide();
+		  };
+		  $scope.cancel = function() {
+		    $mdDialog.cancel();
+		  };
+		  $scope.answer = function(answer) {
+		    $mdDialog.hide(answer);
+		  };
+		}
 });
