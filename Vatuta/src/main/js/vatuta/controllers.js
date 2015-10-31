@@ -204,14 +204,28 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		      templateUrl: 'vatuta/templates/TaskDependencyDialog.html',
 		      parent: angular.element(document.body),
 		      targetEvent: ev,
-		      clickOutsideToClose:false
+		      clickOutsideToClose:false,
+		      scope: $scope
 		    })
-		    .then(function(answer) {
-		      $scope.status = 'You said the information was "' + answer + '".';
+		    .then(function(type, task) {
+		      console.log('You said the information was "' + type + '".');
 		    }, function() {
-		      $scope.status = 'You cancelled the dialog.';
+		    	console.log('You cancelled the dialog.');
 		    });
-		  };
+		 };
+		 
+
+		 this.querySearch = function(query) {
+			var results = query ? $scope.project.getTasks().filter(filter(query)) : $scope.project.getTasks();
+			return results;
+		 }
+	
+		 function filter(query){
+		      var lowercaseQuery = angular.lowercase(query);
+		      return function filterFn(task) {
+		        return (task.index() === parseInt(query) || angular.lowercase(task.name()).indexOf(lowercaseQuery) !== -1);
+		      };
+		 }
 	}]);
 	
 	angular.bootstrap(document, [ 'vatutaApp' ]);
@@ -223,8 +237,8 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		  $scope.cancel = function() {
 		    $mdDialog.cancel();
 		  };
-		  $scope.answer = function(answer) {
-		    $mdDialog.hide(answer);
+		  $scope.answer = function(type, task) {
+		    $mdDialog.hide(type, task);
 		  };
 		}
 });
