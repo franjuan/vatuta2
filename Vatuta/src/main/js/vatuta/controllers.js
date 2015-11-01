@@ -118,7 +118,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 					}
 				};
 
-				$scope.selectedTask = project.getTasks()[0];
+				$scope.selectedTask = project.tasks()[0];
 				
 
 				function taskChanged(newP, oldP, $scope) {
@@ -238,7 +238,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		 };
 
 		 this.querySearch = function(query) {
-			var results = query ? _.filter($scope.project.getTasks(),filter(query)) : _.filter($scope.project.getTasks(),function(task){return task.id()!==$scope.$parent.selectedTask.id();});
+			var results = query ? _.filter($scope.project.tasks(),filter(query)) : _.filter($scope.project.tasks(),function(task){return task.id()!==$scope.$parent.selectedTask.id();});
 			return results;
 		 }
 	

@@ -12,21 +12,21 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 */
 				constructor : function(/* Object */kwArgs) {
 					this._tasks = [];
-					this._start = moment();
+					this.start(moment());
 					lang.mixin(this, kwArgs);
 				},
 				/**
 				 * @function
 				 * @memberof Project
 				 */
-				getTasks : function() {
+				tasks : function() {
 					return this._tasks;
 				},
 				_tasksIndex: function() {
 					if (!this._$taskIndex) {
 						this._$taskIndex = {};
-						for (var i = 0; i < this.getTasks().length; i++) {
-							this._$taskIndex[this.getTasks()[i].id()] = this.getTasks()[i];
+						for (var i = 0; i < this.tasks().length; i++) {
+							this._$taskIndex[this.tasks()[i].id()] = this.tasks()[i];
 						};
 					}
 					return this._$taskIndex;
@@ -37,9 +37,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @memberof Project
 				 */
 				addTask : function(task) {
-					this.getTasks().push(task);
+					this.tasks().push(task);
 					this._tasksIndex()[task.id()] = task;
-					task.index(this.getTasks().length);
+					task.index(this.tasks().length);
 					return task;
 				},
 				/**
@@ -55,7 +55,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @memberof Project
 				 */
 				start: function(newStart) {
-				     return arguments.length ? (this._start = newStart) : this._start;
+				     return arguments.length ? (this._start = newStart.toDate()) : this._start?moment(this._start):null;
 				},
 				
 				/**
@@ -63,14 +63,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @memberof Project
 				 */
 				end: function(newEnd) {
-				     return arguments.length ? (this._end = newEnd) : this._end;
+				     return arguments.length ? (this._end = newEnd.toDate()) : this._end?moment(this._end):null;
 				},
 				/**
 				 * @function
 				 * @memberof Project
 				 */
 				calculatedLength: function() {
-					return this.end() - this.start();
+					return moment.duration(this.end().diff(this.start()));
 				},
 				/**
 				 * @function

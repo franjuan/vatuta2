@@ -2,8 +2,8 @@
  * @module Canvas
  */
 define(
-		[ 'dojo/_base/declare', 'dojo/_base/lang', 'easeljs', 'lodash' ],
-		function(declare, lang, easeljs, _) {
+		[ 'dojo/_base/declare', 'dojo/_base/lang', 'easeljs', 'lodash', 'moment' ],
+		function(declare, lang, easeljs, _, moment) {
 			return declare(null, {
 				/**
 				 * @constructs CanvasDrawer
@@ -67,11 +67,12 @@ define(
 				drawTimeRuler: function(project) {
 					var ruler = new createjs.Container();
 					
+					var dayCounter = moment(project.start());
 					for (i=0; i*this._dayWidth < this._width; i++) {
 						var element = new createjs.Shape();
 						element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth, 0, this._dayWidth, this._rulerHeight, 5);
 
-						var text = new createjs.Text(i, "bold " + this._dayFontSize + "px " + this._dayFont);
+						var text = new createjs.Text(dayCounter.date(), "bold " + this._dayFontSize + "px " + this._dayFont);
 						text.color = "White";
 						text.maxWidth = this._dayWidth;
 						text.textBaseline = "middle";
@@ -80,6 +81,7 @@ define(
 						text.y = this._rulerHeight/2;
 						
 						ruler.addChild(element, text);
+						dayCounter.add(1,"day");
 					}
 					ruler.x = 0;
 					ruler.y = 0;
@@ -88,26 +90,27 @@ define(
 					this._stage.update();
 				},
 				drawProject: function(project) {
-					this._width = project.calculatedLength() * this._dayWidth;
-					this._height = this._rulerHeight + this._taskRowHeight * project.getTasks().length;
+					this._width = project.calculatedLength().asDays() * this._dayWidth;
+					this._height = this._rulerHeight + this._taskRowHeight * project.tasks().length;
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
 
-					_.forEach(project.getTasks(),function(task) {
-						var taskContainer = this.drawTask(task);
+					_.forEach(project.tasks(),function(task) {
+						var taskContainer = this.drawTask(task, project);
 						this._stage.addChild(taskContainer);
 						_.forEach(task.restrictions(),function(restriction) {
-							var restrictionContainer = this.drawRestriction(restriction);
+							var restrictionContainer = this.drawRestriction(restriction, task, project);
 							this._stage.addChild(restrictionContainer);
 						}, this);
 					}, this);
 					this._stage.update();
 				},
-				drawTask: function(task) {
+				drawTask: function(task, project) {
 					var taskContainer = new createjs.Container();
 					var element = new createjs.Shape();
+					var daysFromStart = this.daysFromProjectStart(task.earlyStart(), project);
 					element.graphics.beginFill(this._taskBgColor).drawRect(
-							task.getEarlyStart()*this._dayWidth,
+							daysFromStart*this._dayWidth,
 							this._taskTopHeight,
 							task.duration()*this._dayWidth,
 							this._taskHeight);
@@ -117,7 +120,7 @@ define(
 					text.maxWidth = this._dayWidth*task.duration();
 					text.textBaseline = "middle";
 					text.textAlign = "center";
-					text.x = (task.getEarlyStart() + task.duration()/2)*this._dayWidth;
+					text.x = (daysFromStart + task.duration()/2)*this._dayWidth;
 					text.y = this._taskTopHeight + this._taskHeight/2;
 					
 					taskContainer.addChild(element, text);
@@ -136,13 +139,13 @@ define(
 					
 					return taskContainer;
 				},
-				drawRestriction: function(restriction) {
+				drawRestriction: function(restriction, task, project) {
 					var container = new createjs.Container();
 					
-					var xf = (restriction.endingTask().getEarlyStart() + restriction.endingTask().duration())*this._dayWidth;
+					var xf = (this.daysFromProjectStart(restriction.endingTask().earlyStart(), project) + restriction.endingTask().duration())*this._dayWidth;
 					var yf = this._taskRowHeight * (restriction.endingTask().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
 					
-					var xs = restriction.startingTask().getEarlyStart()*this._dayWidth + this._arrowInTaskXOffset;
+					var xs = this.daysFromProjectStart(restriction.startingTask().earlyStart(), project)*this._dayWidth + this._arrowInTaskXOffset;
 					var downwards = restriction.startingTask().index()>restriction.endingTask().index();
 					if (downwards) {
 						var ys = this._taskRowHeight * (restriction.startingTask().index() - 1) + this._rulerHeight + this._taskTopHeight;
@@ -179,6 +182,9 @@ define(
 					this._stage.clear();
 					this._stage.removeAllChildren();
 					this._stage.update();
+				},
+				daysFromProjectStart: function(moment, project) {
+					return moment.diff(project.start(), 'days', true);
 				}
 			});
 		}

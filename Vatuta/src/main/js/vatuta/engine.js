@@ -40,7 +40,7 @@ define(
 				calculateEarlyStartLateEnding : function() {
 					// Remove old values
 					delete this._project._end;
-					_.forEach(this._project.getTasks(), function(task) {
+					_.forEach(this._project.tasks(), function(task) {
 						delete task._earlyStart;
 						delete task._earlyEnd;
 						delete task._lateStart;
@@ -48,25 +48,35 @@ define(
 					});
 					
 					// We clone the tasks array
-					var tasks = _.clone(this._project.getTasks());
+					var tasks = _.clone(this._project.tasks());
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = -1;
-					var endOfProject = this._project.start();
+					var endOfProject = moment(this._project.start());
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						for (i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
-							var earlyStart = this._project.start();
+							var earlyStart = moment(this._project.start());
 							_.forEach(task.restrictions(), function(restriction) {
-								earlyStart = moment.max(earlyStart, restriction.getEarlyStart(this));
+								var restrictionValue = restriction.getEarlyStart(this);
+								if (isNaN(restrictionValue)) {
+									earlyStart = NaN
+								} else if (restrictionValue != 0) {
+									earlyStart = moment.max(earlyStart, restrictionValue);
+								}
 							}, task);
 							_.forEach(task.restrictionsFromDependants(), function(restriction) {
-								earlyStart = moment.max(earlyStart, restriction.getEarlyStart(this));
+								var restrictionValue = restriction.getEarlyStart(this);
+								if (isNaN(restrictionValue)) {
+									earlyStart = NaN
+								} else if (restrictionValue != 0) {
+									earlyStart = moment.max(earlyStart, restrictionValue);
+								}
 							}, task);
 							if (!isNaN(earlyStart)) {
-								task._earlyStart = earlyStart;
-								task._earlyEnd = earlyStart.add(task.duration(),'days');
-								endOfProject = moment.max(endOfProject, task._earlyEnd);
+								task.earlyStart(earlyStart);
+								task.earlyEnd(moment(earlyStart).add(task.duration(),'days'));
+								endOfProject = moment.max(endOfProject, task.earlyEnd());
 								
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
@@ -83,16 +93,26 @@ define(
 					while (alreadyCalculatedIndex > 0) {
 						for (i = alreadyCalculatedIndex - 1; i >= 0; i--) {
 							var task = tasks[i];
-							var lateEnd = endOfProject;
+							var lateEnd = moment(endOfProject);
 							_.forEach(task.restrictions(), function(restriction) {
-								lateEnd = moment.min(lateEnd, restriction.getLateEnd(this));
+								var restrictionValue = restriction.getLateEnd(this);
+								if (isNaN(restrictionValue)) {
+									lateEnd = NaN
+								} else if (isFinite(restrictionValue)) {
+									lateEnd = moment.min(lateEnd, restrictionValue);
+								}
 							}, task);
 							_.forEach(task.restrictionsFromDependants(), function(restriction) {
-								lateEnd = moment.min(lateEnd, restriction.getLateEnd(this));
+								var restrictionValue = restriction.getLateEnd(this);
+								if (isNaN(restrictionValue)) {
+									lateEnd = NaN
+								} else if (isFinite(restrictionValue)) {
+									lateEnd = moment.min(lateEnd, restrictionValue);
+								}
 							}, task);
 							if (!isNaN(lateEnd)) {
-								task._lateEnd = lateEnd;
-								task._lateStart = lateEnd.subtract(task.duration(), "days");
+								task.lateEnd(lateEnd);
+								task.lateStart(moment(lateEnd).subtract(task.duration(), "days"));
 								
 								if (i != alreadyCalculatedIndex - 1) {
 									var aux = tasks[i];

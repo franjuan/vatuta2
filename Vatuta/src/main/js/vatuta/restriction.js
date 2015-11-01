@@ -53,8 +53,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 		},
 		getEarlyStart: function(task) {
 			if (!task || task.id()===this.startingTask().id()) {
-				if (this.endingTask().getEarlyEnd()) {
-					return this.endingTask().getEarlyEnd();
+				if (this.endingTask().earlyEnd()) {
+					return this.endingTask().earlyEnd();
 				} else {
 					return NaN;
 				}
@@ -64,8 +64,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js"], functio
 		},
 		getLateEnd: function(task) {
 			if (!task || task.id()===this.endingTask().id()) {
-				if (this.startingTask().getLateStart()) {
-					return this.startingTask().getLateStart();
+				if (this.startingTask().lateStart()) {
+					return this.startingTask().lateStart();
 				} else {
 					return NaN;
 				}

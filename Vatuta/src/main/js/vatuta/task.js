@@ -1,5 +1,5 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
-		lang, _) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function(declare,
+		lang, _, moment) {
 	return declare("Task", null, {
 		constructor : function (/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
@@ -71,17 +71,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash" ], function(declare,
 			}
 			return this._dependants;
 		},
-		getEarlyStart: function() {
-			return this._earlyStart;
+		earlyStart: function(newEarlyStart) {
+			return arguments.length ? (this._earlyStart = newEarlyStart.toDate()) : this._earlyStart?moment(this._earlyStart):null;
 		},
-		getEarlyEnd: function() {
-			return this._earlyEnd;
+		earlyEnd: function(newEarlyEnd) {
+			return arguments.length ? (this._earlyEnd = newEarlyEnd.toDate()) : this._earlyEnd?moment(this._earlyEnd):null;
 		},
-		getLateStart: function() {
-			return this._lateStart;
+		lateStart: function(newLateStart) {
+			return arguments.length ? (this._lateStart = newLateStart.toDate()) : this._lateStart?moment(this._lateStart):null;
 		},
-		getLateEnd: function() {
-			return this._lateEnd;
+		lateEnd: function(newLateEnd) {
+			return arguments.length ? (this._lateEnd = newLateEnd.toDate()) : this._lateEnd?moment(this._lateEnd):null;
 		},
 		watchHash: function() {
 			return this.id() + this.index() + this.name() + this.description() + this.duration() +
