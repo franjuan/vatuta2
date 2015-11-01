@@ -221,7 +221,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		 };
 
 		 this.querySearch = function(query) {
-			var results = query ? $scope.project.getTasks().filter(filter(query)) : $scope.project.getTasks();
+			var results = query ? _.filter($scope.project.getTasks(),filter(query)) : _.filter($scope.project.getTasks(),function(task){return task.id()!==$scope.$parent.selectedTask.id();});
 			return results;
 		 }
 	
