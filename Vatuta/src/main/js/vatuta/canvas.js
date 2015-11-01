@@ -27,6 +27,20 @@ define(
 					this._taskTopHeight= this._taskHeight*0.15;
 					/* @member {Number} */
 					this._taskBottomHeight= this._taskHeight*0.15;
+					/* @member {Number} */
+					this._arrowHeight= this._taskTopHeight;
+					/* @member {Number} */
+					this._arrowWidth= this._arrowHeight*2/3;
+					/* @member {String} */
+					this._arrowColor = "#000000";
+					/* @member {String} */
+					this._taskBgColor = "#607D8B";
+					/* @member {String} */
+					this._taskNameColor = "White";
+					/* @member {Number} */
+					this._arrowInTaskXOffset = 0.5 * this._dayWidth;
+					/* @member {Number} */
+					this._arrowCornerR = 10;
 						
 					lang.mixin(this, kwArgs);
 					
@@ -79,27 +93,27 @@ define(
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
 
-					for (i=0; i < project.getTasks().length; i++) {
-						var task = project.getTasks()[i];
+					_.forEach(project.getTasks(),function(task) {
 						var taskContainer = this.drawTask(task);
-						taskContainer.x = 0;
-						taskContainer.y = this._taskRowHeight * i + this._rulerHeight;
 						this._stage.addChild(taskContainer);
-						
-					};
+						_.forEach(task.restrictions(),function(restriction) {
+							var restrictionContainer = this.drawRestriction(restriction);
+							this._stage.addChild(restrictionContainer);
+						}, this);
+					}, this);
 					this._stage.update();
 				},
 				drawTask: function(task) {
 					var taskContainer = new createjs.Container();
 					var element = new createjs.Shape();
-					element.graphics.beginFill("#607D8B").drawRect(
+					element.graphics.beginFill(this._taskBgColor).drawRect(
 							task.getEarlyStart()*this._dayWidth,
 							this._taskTopHeight,
 							task.duration()*this._dayWidth,
 							this._taskHeight);
 					
 					var text = new createjs.Text(task.name(), "bold " + this._taskFontSize + "px " + this._taskFont);
-					text.color = "White";
+					text.color = this._taskNameColor;
 					text.maxWidth = this._dayWidth*task.duration();
 					text.textBaseline = "middle";
 					text.textAlign = "center";
@@ -116,8 +130,50 @@ define(
 									};
 								}, this)
 					);
-										
+					
+					taskContainer.x = 0;
+					taskContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeight;
+					
 					return taskContainer;
+				},
+				drawRestriction: function(restriction) {
+					var container = new createjs.Container();
+					
+					var xf = (restriction.endingTask().getEarlyStart() + restriction.endingTask().duration())*this._dayWidth;
+					var yf = this._taskRowHeight * (restriction.endingTask().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
+					
+					var xs = restriction.startingTask().getEarlyStart()*this._dayWidth + this._arrowInTaskXOffset;
+					var downwards = restriction.startingTask().index()>restriction.endingTask().index();
+					if (downwards) {
+						var ys = this._taskRowHeight * (restriction.startingTask().index() - 1) + this._rulerHeight + this._taskTopHeight;
+					} else {
+						var ys = this._taskRowHeight * (restriction.startingTask().index()) + this._rulerHeight - this._taskBottomHeight;
+					}
+					
+					var arrow = new createjs.Shape();
+					arrow.graphics
+						.setStrokeStyle(2,"round","round")
+						.beginStroke(this._arrowColor)
+						.moveTo(xf,yf)
+						.lineTo(xs-this._arrowCornerR,yf)
+						.arcTo(xs, yf, xs, yf + this._arrowCornerR * (downwards?1:-1), this._arrowCornerR)
+						.lineTo(xs,ys);
+					
+					var head = new createjs.Shape();
+					head.graphics
+						.setStrokeStyle(1,"butt","miter")
+						.beginStroke(this._arrowColor)
+						.beginFill(this._arrowColor)
+						.moveTo(xs,ys)
+						.lineTo(xs + this._arrowWidth/2, ys - this._arrowHeight * (ys > yf ? 1 : -1))
+						.lineTo(xs - this._arrowWidth/2, ys - this._arrowHeight * (ys > yf ? 1 : -1))
+						.closePath()
+						.endFill();
+					
+					container.addChild(arrow, head);
+					
+					return container;
+					
 				},
 				clear: function() {
 					this._stage.clear();

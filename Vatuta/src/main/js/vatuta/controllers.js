@@ -76,7 +76,14 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 					_taskFont : "Roboto, sans-serif",
 					_taskTopHeight : 5,
 					_taskBottomHeight : 5,
-					_taskHeight : 25
+					_taskHeight : 25,
+					_arrowHeight : 8,
+					_arrowWidth : 5,
+					_arrowColor : "#CFD8DC",
+					_taskBgColor : "#607D8B",
+					_taskNameColor : "White",
+					_arrowInTaskXOffset : 6,
+					_arrowCornerR : 6
 				};
 				
 				if(typeof(Storage) !== "undefined" && localStorage.getItem("project")) {
@@ -212,7 +219,6 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		    	console.log('You cancelled the TaskDependency dialog.');
 		    });
 		 };
-		 
 
 		 this.querySearch = function(query) {
 			var results = query ? $scope.project.getTasks().filter(filter(query)) : $scope.project.getTasks();
@@ -222,7 +228,7 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 		 function filter(query){
 		      var lowercaseQuery = angular.lowercase(query);
 		      return function filterFn(task) {
-		        return (task.index() === parseInt(query) || angular.lowercase(task.name()).indexOf(lowercaseQuery) !== -1);
+		        return task.id()!==$scope.$parent.selectedTask.id() && (task.index() === parseInt(query) || angular.lowercase(task.name()).indexOf(lowercaseQuery) !== -1);
 		      };
 		 }
 	}]);
