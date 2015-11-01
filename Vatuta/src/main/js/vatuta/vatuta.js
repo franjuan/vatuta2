@@ -2,7 +2,13 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		"./vatuta/restriction.js", "./vatuta/canvas.js" ], function(Project,
 		Task, Engine, Restrictions, Canvas) {
 
-	var vatutaMod = angular.module('vatuta', []);
+	var vatutaMod = angular.module('vatuta', [])
+		.config( ['$compileProvider', function( $compileProvider )
+			    {
+					// To allow download gantt
+			        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|file|mailto):|data:image\//);
+			    }
+	]);
 
 	vatutaMod.service('Project', [ function() {
 		return Project;
@@ -82,7 +88,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			      options: '=canvasOptions',
 			      listener: '='
 			    },
-			    template: '<canvas></canvas>',
+			    template: '<canvas id="ganttCanvas"></canvas>',
 			    link: function link($scope, element, attrs) {
 			    	$scope.canvas = new Canvas(element, $scope.options);
 			    	$scope.canvas.listener($scope.listener);

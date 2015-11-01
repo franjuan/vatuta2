@@ -197,7 +197,24 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 			};
 			
 		};
-	}]);
+		$scope.asImage = function($event) {
+		      var parentEl = angular.element(document.body);
+		       $mdDialog.show({
+		         parent: parentEl,
+		         targetEvent: $event,
+		         templateUrl:  'vatuta/templates/downloadAsImage.html',
+		         controller: function DialogController($scope, $mdDialog) {
+				        $scope.closeDialog = function() {
+				          $mdDialog.hide();
+				        }
+				        $scope.imageContents = function() {
+							return document.getElementById("ganttCanvas").toDataURL();
+						}
+		         }
+		      });   
+		};
+		
+		}]);
 
 	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', 'Restrictions', function($scope,  $mdDialog, Restrictions) {
 		$scope.showTaskDependency = function(ev) {

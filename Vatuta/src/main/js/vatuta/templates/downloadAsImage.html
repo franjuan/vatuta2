@@ -1,0 +1,21 @@
+<md-dialog aria-label="List dialog">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>Download Gantt chart as PNG image</h2>
+			<span flex></span>
+			<md-button class="md-icon-button" ng-click="closeDialog()"> <md-icon
+				md-svg-src="icons/ic_close_white_48px.svg" aria-label="Close dialog"></md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+	<md-dialog-content layout="row" layout-align="center center">
+		<a ng-href="{{imageContents()}}" download="project.png" />
+			<md-button ng-click="cancel()" class="md-raised md-primary">
+				<md-icon md-svg-src="icons/ic_file_download_black_48px.svg"	aria-label="Download" />
+			</md-button>
+		</a>
+	</md-dialog-content>
+	<div class="md-actions">
+		<md-button ng-click="closeDialog()" class="md-primary">Close</md-button>
+	</div>
+</md-dialog>
