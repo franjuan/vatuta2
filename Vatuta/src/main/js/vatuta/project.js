@@ -1,8 +1,8 @@
 /**
  * @module Project
  */
-define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/engine.js", "lodash" ],
-		function(declare, lang, Task, Engine, _) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/engine.js", "lodash", "moment" ],
+		function(declare, lang, Task, Engine, _, moment) {
 			/**
 		     * @exports Project
 		     */
@@ -12,6 +12,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 */
 				constructor : function(/* Object */kwArgs) {
 					this._tasks = [];
+					this._start = moment();
 					lang.mixin(this, kwArgs);
 				},
 				/**
@@ -53,7 +54,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @function
 				 * @memberof Project
 				 */
-				calculatedStart: function(newStart) {
+				start: function(newStart) {
 				     return arguments.length ? (this._start = newStart) : this._start;
 				},
 				
@@ -61,7 +62,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @function
 				 * @memberof Project
 				 */
-				calculatedEnd: function(newEnd) {
+				end: function(newEnd) {
 				     return arguments.length ? (this._end = newEnd) : this._end;
 				},
 				/**
@@ -69,7 +70,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @memberof Project
 				 */
 				calculatedLength: function() {
-					return this.calculatedEnd() - this.calculatedStart();
+					return this.end() - this.start();
 				},
 				/**
 				 * @function

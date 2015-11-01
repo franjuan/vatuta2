@@ -2,8 +2,8 @@
  * @module Engine
  */
 define(
-		[ "lodash" ],
-		function(_) {
+		[ "lodash", "moment" ],
+		function(_, moment) {
 			/**
 			 * @constructor
 			 * @alias module:Engine
@@ -39,7 +39,6 @@ define(
 				 */
 				calculateEarlyStartLateEnding : function() {
 					// Remove old values
-					delete this._project._start;
 					delete this._project._end;
 					_.forEach(this._project.getTasks(), function(task) {
 						delete task._earlyStart;
@@ -53,21 +52,21 @@ define(
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = -1;
-					var endOfProject = 0;
+					var endOfProject = this._project.start();
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						for (i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
-							var earlyStart = 0;
+							var earlyStart = this._project.start();
 							_.forEach(task.restrictions(), function(restriction) {
-								earlyStart = Math.max(earlyStart, restriction.getEarlyStart(this));
+								earlyStart = moment.max(earlyStart, restriction.getEarlyStart(this));
 							}, task);
 							_.forEach(task.restrictionsFromDependants(), function(restriction) {
-								earlyStart = Math.max(earlyStart, restriction.getEarlyStart(this));
+								earlyStart = moment.max(earlyStart, restriction.getEarlyStart(this));
 							}, task);
 							if (!isNaN(earlyStart)) {
 								task._earlyStart = earlyStart;
-								task._earlyEnd = earlyStart + task.duration();
-								endOfProject = Math.max(endOfProject, task._earlyEnd);
+								task._earlyEnd = earlyStart.add(task.duration(),'days');
+								endOfProject = moment.max(endOfProject, task._earlyEnd);
 								
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
@@ -86,14 +85,14 @@ define(
 							var task = tasks[i];
 							var lateEnd = endOfProject;
 							_.forEach(task.restrictions(), function(restriction) {
-								lateEnd = Math.min(lateEnd, restriction.getLateEnd(this));
+								lateEnd = moment.min(lateEnd, restriction.getLateEnd(this));
 							}, task);
 							_.forEach(task.restrictionsFromDependants(), function(restriction) {
-								lateEnd = Math.min(lateEnd, restriction.getLateEnd(this));
+								lateEnd = moment.min(lateEnd, restriction.getLateEnd(this));
 							}, task);
 							if (!isNaN(lateEnd)) {
 								task._lateEnd = lateEnd;
-								task._lateStart = lateEnd - task.duration();
+								task._lateStart = lateEnd.subtract(task.duration(), "days");
 								
 								if (i != alreadyCalculatedIndex - 1) {
 									var aux = tasks[i];
@@ -105,8 +104,7 @@ define(
 						}
 					}
 					
-					this._project.calculatedStart(0);
-					this._project.calculatedEnd(endOfProject);
+					this._project.end(endOfProject);
 				}
 			};
 		});
