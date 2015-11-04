@@ -1,4 +1,4 @@
-require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
+require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurrect, moment) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages','ngSanitize',
 			'vatuta' ]);
 
@@ -27,25 +27,25 @@ require([ "./vatuta/vatuta.js", "resurrect" ], function(vatuta, resurrect) {
 				
 				var taskA = new Task({
 					_name : "A",
-					_duration : 3
+					_duration : moment.duration(3,"days")
 				});
 				project.addTask(taskA);
 				
 				var taskB = new Task({
 					_name : "B",
-					_duration : 5
+					_duration : moment.duration(5,"days")
 				});
 				project.addTask(taskB);
 				
 				var taskC = new Task({
 					_name : "C",
-					_duration : 7
+					_duration : moment.duration(7,"days")
 				});
 				project.addTask(taskC);
 				
 				var taskD = new Task({
 					_name : "D",
-					_duration : 2
+					_duration : moment.duration(2,"days")
 				});
 				project.addTask(taskD);
 				

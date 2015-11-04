@@ -55,7 +55,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @memberof Project
 				 */
 				start: function(newStart) {
-				     return arguments.length ? (this._start = newStart.toDate()) : this._start?moment(this._start):null;
+					return arguments.length ? (this._start = newStart) : this._start;
 				},
 				
 				/**
@@ -63,7 +63,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @memberof Project
 				 */
 				end: function(newEnd) {
-				     return arguments.length ? (this._end = newEnd.toDate()) : this._end?moment(this._end):null;
+					return arguments.length ? (this._end = newEnd) : this._end;
 				},
 				/**
 				 * @function
@@ -78,6 +78,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 */
 				findTaskById: function(id) {
 					return this._tasksIndex()[id];
+				},
+				/**
+				 * @function
+				 * @memberof Project
+				 */
+				afterDeserialize: function() {
+					if (this._start) this._start = moment(this._start);
+					if (this._end) this._end = moment(this._end);
 				}
 			});
 		});

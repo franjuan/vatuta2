@@ -16,7 +16,7 @@
 			</div>
 			</md-input-container>
 			<md-input-container flex> <label>Duration</label>
-			<input type="number" name="duration" ng-model="selectedTask.duration"
+			<input type="number" name="duration" ng-model="selectedTask.durationAsDays"
 				ng-model-options="{ getterSetter: true }" required></input>
 			<div ng-messages="taskForm.duration.$error" role="alert">
 				<div ng-message="required">Task must have a duration</div>

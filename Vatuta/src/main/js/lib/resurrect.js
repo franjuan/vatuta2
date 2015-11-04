@@ -57,21 +57,12 @@
  *     constructors are not stored in global variables. The resolver
  *     has two methods: getName(object) and getPrototype(string).
  *
- * 	 propertiesFilter (null): Function returning true when the property
- *     should be serialized, false when doesn't. It allows to choose what
- *     properties serialize or ignore depending on attribute value and name
- *     and the element that contains it. The function is evaluated for every
- *     attribute ant takes three parameters: property name or key, property
- *     value and the root element that contains the property.
  *
  * For example,
  *
  * var necromancer = new Resurrect({
  *     prefix: '__#',
- *     cleanup: true,
- *     propertiesFilter:	function(key, value, root) {
- *								return key !== '_inherited';
- *							}
+ *     cleanup: true
  * });
  *
  * ## Caveats
@@ -326,18 +317,22 @@ Resurrect.prototype.builder = function(name, value) {
  * @see http://nullprogram.com/blog/2013/03/24/
  */
 Resurrect.prototype.build = function(ref) {
-    var type = ref[this.buildcode].split(/\./).reduce(function(object, name) {
-        return object[name];
-    }, Resurrect.GLOBAL);
-    /* Brilliant hack by kybernetikos: */
-    var args = [null].concat(ref[this.valuecode]);
-    var factory = type.bind.apply(type, args);
-    var result = new factory();
-    if (Resurrect.isPrimitive(result)) {
-        return result.valueOf(); // unwrap
-    } else {
-        return result;
-    }
+	if (ref[this.buildcode] in this.serializers) {
+		return this.serializers[ref[this.buildcode]].deserialize(ref[this.valuecode]);
+	} else {
+	    var type = ref[this.buildcode].split(/\./).reduce(function(object, name) {
+	        return object[name];
+	    }, Resurrect.GLOBAL);
+	    /* Brilliant hack by kybernetikos: */
+	    var args = [null].concat(ref[this.valuecode]);
+	    var factory = type.bind.apply(type, args);
+	    var result = new factory();
+	    if (Resurrect.isPrimitive(result)) {
+	        return result.valueOf(); // unwrap
+	    } else {
+	        return result;
+	    }
+	};
 };
 
 /**
@@ -384,22 +379,26 @@ Resurrect.prototype.visit = function(root, f, replacer) {
             for (var i = 0; i < root.length; i++) {
                 copy.push(this.visit(root[i], f, replacer));
             }
-        } else { /* Object */
-            copy = Object.create(Object.getPrototypeOf(root));
-            root[this.refcode] = this.tag(copy);
-            for (var key in root) {
-                var value = root[key];
-                if (root.hasOwnProperty(key) && (!this.propertiesFilter || this.propertiesFilter(key, value, root))) {
-                    if (replacer && value !== undefined) {
-                        // Call replacer like JSON.stringify's replacer
-                        value = replacer.call(root, key, root[key]);
-                        if (value === undefined) {
-                            continue; // Omit from result
-                        }
-                    }
-                    copy[key] = this.visit(value, f, replacer);
-                }
-            }
+        } else { /* Custom serializer */
+        	if (root.constructor.name in this.serializers) {
+        		return this.serializers[root.constructor.name].serialize(root);
+        	} else { /* Object */
+	            copy = Object.create(Object.getPrototypeOf(root));
+	            root[this.refcode] = this.tag(copy);
+	            for (var key in root) {
+	                var value = root[key];
+	                if (root.hasOwnProperty(key)) {
+	                    if (replacer && value !== undefined) {
+	                        // Call replacer like JSON.stringify's replacer
+	                        value = replacer.call(root, key, root[key]);
+	                        if (value === undefined) {
+	                            continue; // Omit from result
+	                        }
+	                    }
+	                    copy[key] = this.visit(value, f, replacer);
+	                }
+	            }
+        	}
         }
         copy[this.origcode] = root;
         return this.ref(copy);

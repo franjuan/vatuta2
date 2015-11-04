@@ -1,6 +1,6 @@
 define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
-		"./vatuta/restriction.js", "./vatuta/canvas.js" ], function(Project,
-		Task, Engine, Restrictions, Canvas) {
+		"./vatuta/restriction.js", "./vatuta/canvas.js", "moment" ], function(Project,
+		Task, Engine, Restrictions, Canvas, moment) {
 
 	var vatutaMod = angular.module('vatuta', [])
 		.config( ['$compileProvider', function( $compileProvider )
@@ -37,6 +37,23 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		namespace.EndToStartDependency = Restrictions.EndToStart;
 		namespace.Restriction = Restriction;
 		
+		var serializers = {};
+		serializers["Moment"]= {
+				serialize: function(object) {
+					return Resurrect.prototype.builder.bind(necromancer)("Moment", object.toISOString());
+				},
+				deserialize: function(value) {
+					return moment(value);
+				}
+		};
+		serializers["Duration"]= {
+				serialize: function(object) {
+					return Resurrect.prototype.builder.bind(necromancer)("Duration", object.toISOString());
+				},
+				deserialize: function(value) {
+					return moment.duration(value);
+				}
+		};
 		var necromancer = new Resurrect(
 				{
 					resolver: new Resurrect.NamespaceResolver(
@@ -51,15 +68,21 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 									    }
 									}
 								),
-					propertiesFilter: function(key, value, root) {
-						return key !== '_inherited' && key.indexOf('_$') !== 0;
-					}
+					serializers: serializers
 				}
 			);
 		
 		return {
 			serializeProject: function(project) {
-				return necromancer.stringify(project);
+				return necromancer.stringify(project, function(key, value){
+					if (key==='_inherited') {
+						return undefined;
+					} else if (key.indexOf('_$') === 0){
+						return undefined;
+					} else {
+						return value;
+					}
+				});
 			},
 			deserializeProject: function(json) {
 				return necromancer.resurrect(json);

@@ -9,6 +9,18 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 				    return v.toString(16);
 				});
 			}
+			if (this._earlyStart && !moment.isMoment(this._earlyStart)) {
+				this._earlyStart = moment(this._earlyStart);
+			}
+			if (this._earlyEnd && !moment.isMoment(this._earlyEnd)) {
+				this._earlyEnd = moment(this._earlyEnd);
+			}
+			if (this._lateStart && !moment.isMoment(this._lateStart)) {
+				this._lateStart = moment(this._lateStart);
+			}
+			if (this._lateEnd && !moment.isMoment(this._lateEnd)) {
+				this._lateEnd = moment(this._lateEnd);
+			}
 		},
 		index: function(newIndex) {
 		     return arguments.length ? (this._index = newIndex) : this._index;
@@ -24,6 +36,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 		},
 		duration: function(newDuration) {
 		     return arguments.length ? (this._duration = newDuration) : this._duration;
+		},
+		durationAsDays: function(newDuration) {
+		     return arguments.length ? (this._duration = moment.duration(newDuration, "days")) : this._duration.asDays();
 		},
 		restrictions : function() {
 			if (!this._restrictions) {
@@ -72,16 +87,16 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 			return this._dependants;
 		},
 		earlyStart: function(newEarlyStart) {
-			return arguments.length ? (this._earlyStart = newEarlyStart.toDate()) : this._earlyStart?moment(this._earlyStart):null;
+			return arguments.length ? this._earlyStart = newEarlyStart : this._earlyStart;
 		},
 		earlyEnd: function(newEarlyEnd) {
-			return arguments.length ? (this._earlyEnd = newEarlyEnd.toDate()) : this._earlyEnd?moment(this._earlyEnd):null;
+			return arguments.length ? this._earlyEnd = newEarlyEnd : this._earlyEnd;
 		},
 		lateStart: function(newLateStart) {
-			return arguments.length ? (this._lateStart = newLateStart.toDate()) : this._lateStart?moment(this._lateStart):null;
+			return arguments.length ? this._lateStart = newLateStart : this._lateStart;
 		},
 		lateEnd: function(newLateEnd) {
-			return arguments.length ? (this._lateEnd = newLateEnd.toDate()) : this._lateEnd?moment(this._lateEnd):null;
+			return arguments.length ? this._lateEnd = newLateEnd : this._lateEnd;
 		},
 		watchHash: function() {
 			return this.id() + this.index() + this.name() + this.description() + this.duration() +
@@ -92,6 +107,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 															return total + value;
 														}
 						);
+		},
+		/**
+		 * @function
+		 * @memberof Project
+		 */
+		afterDeserialize: function() {
+			if (this._earlyStart) this._earlyStart = moment(this._earlyStart);
+			if (this._earlyEnd) this._earlyEnd = moment(this._earlyEnd);
+			if (this._lateStart) this._lateStart = moment(this._lateStart);
+			if (this._lateEnd) this._lateEnd = moment(this._lateEnd);
+			if (this._duration) this._duration = moment(this._duration);
 		}
 	});
 });
