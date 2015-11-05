@@ -241,6 +241,16 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurre
 			var results = query ? _.filter($scope.project.tasks(),filter(query)) : _.filter($scope.project.tasks(),function(task){return task.id()!==$scope.$parent.selectedTask.id();});
 			return results;
 		 }
+		 
+		 var _durationAsDays = $scope.selectedTask.duration().asDays();
+		 this.durationAsDays= function(newDuration) {
+			     if (arguments.length) {
+			    	 _durationAsDays = newDuration;
+		    		 $scope.selectedTask.duration(moment.duration(newDuration, "days"));
+			     } else {
+			    	 return _durationAsDays;
+			     }
+		 }
 	
 		 function filter(query){
 		      var lowercaseQuery = angular.lowercase(query);
@@ -249,6 +259,17 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurre
 		      };
 		 }
 	}]);
+	
+	vatutaApp.directive('duration', function() {
+		  return {
+		    require: 'ngModel',
+		    link: function(scope, elm, attrs, ctrl) {
+		      ctrl.$validators.duration = function(modelValue, viewValue) {
+		        return true;
+		      };
+		    }
+		  };
+		});
 	
 	angular.bootstrap(document, [ 'vatutaApp' ]);
 	

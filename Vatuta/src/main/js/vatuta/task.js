@@ -37,9 +37,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 		duration: function(newDuration) {
 		     return arguments.length ? (this._duration = newDuration) : this._duration;
 		},
-		durationAsDays: function(newDuration) {
-		     return arguments.length ? (this._duration = moment.duration(newDuration, "days")) : this._duration.asDays();
-		},
 		restrictions : function() {
 			if (!this._restrictions) {
 				this._restrictions = [];
