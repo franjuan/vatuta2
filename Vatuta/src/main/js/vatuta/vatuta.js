@@ -30,6 +30,45 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		return Restrictions;
 	} ]);
 	
+	vatutaMod.factory('DurationUtils', [ function() {
+		return {
+			validator: function(s) {
+							var re = /(\d+[\.\,]?\d*)\s*([a-zA-Z]+)\s*/gi; 
+							var units = {};
+							var match;
+							while (match = re.exec(s)) {
+								var unit = moment.normalizeUnits(match[2]);
+								var value = parseFloat(match[1]);
+								if (!unit) {
+									return match[2] + " is not a valid time unit (y, M, w, d, h, m, s, ms)"; 
+								} else {
+									units[unit+'s'] = value;
+								}
+							    console.log(value + "=" + match[2] + " - " + unit);
+							}
+							return moment.duration(units);
+						},
+			formatter: function(duration) {
+							var units = ['years','months','days','hours','minutes','seconds','milliseconds'];
+							var s = "";
+							for (var i=0; i<units.length; i++) {
+								var value = duration._data[units[i]];
+							    if (value>0) {
+							    	if (s) s+= " ";
+							    	s+=value + " ";
+							    	if (value == 1) {
+							    		s+=units[i].substr(0, units[i].length - 1);
+							    	} else {
+							    		s+=units[i];
+							    	}
+							    	
+							    }
+							}
+							return s;
+						}
+		};
+	}]);
+	
 	vatutaMod.factory('ProjectSerializer', [ function() {
 		var namespace = {};
 		namespace.Task = Task;

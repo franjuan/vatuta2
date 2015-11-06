@@ -16,11 +16,11 @@
 			</div>
 			</md-input-container>
 			<md-input-container flex> <label>Duration</label>
-			<input type="number" name="duration" ng-model="ctrl.durationAsDays"
+			<input name="duration" ng-model="ctrl.durationString"
 				ng-model-options="{ getterSetter: true }" required duration></input>
 			<div ng-messages="taskForm.duration.$error" role="alert">
 				<div ng-message="required">Task must have a duration</div>
-				<div ng-message="duration">Duration does not have a valid value</div>
+				<div ng-message="duration">Duration does not have a valid value, please check time units and values</div>
 			</div>
 			</md-input-container>
 			<!-- <div layout="row" layout-align="space-between center">
