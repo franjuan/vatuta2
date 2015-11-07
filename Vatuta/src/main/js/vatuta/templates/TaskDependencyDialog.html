@@ -1,4 +1,4 @@
-<md-dialog aria-label="Create new task dependency" ng-controller="taskEditorCtrl as ctrl" ng-cloak>
+<md-dialog aria-label="Create new task dependency" ng-cloak>
   <form name="taskDependencyForm" novalidate>
   <md-toolbar>
     <div class="md-toolbar-tools">
@@ -30,15 +30,21 @@
           md-item-text="task.index() + '.-' + task.name()"
           md-min-length="0"
           placeholder="Task for dependency" required>
-        <md-item-template>
-          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{task.index()}}.- {{task.name()}}</span>
-        </md-item-template>
-        <md-not-found>
-          No tasks matching "{{ctrl.searchText}}" were found.
-        </md-not-found>
-      </md-autocomplete>
+	        <md-item-template>
+	          <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{task.index()}}.- {{task.name()}}</span>
+	        </md-item-template>
+	        <md-not-found>
+	          No tasks matching "{{ctrl.searchText}}" were found.
+	        </md-not-found>
+        </md-autocomplete>
       </md-input-container>
-    </div>
+      <md-input-container> <label>Delay</label>
+		<input name="delay" ng-model="delayString"
+			ng-model-options="{ getterSetter: true }" duration></input>
+		<div ng-messages="taskDependencyForm.delay.$error" role="alert">
+			<div ng-message="duration">Delay does not have a valid value, please check time units and values</div>
+		</div>
+		</md-input-container>
   </md-dialog-content>
   <div class="md-actions" layout="row" layout-align="space-between center">
     <md-button ng-click="cancel()" class="md-raised md-primary">Cancel</md-button>

@@ -1,5 +1,5 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function(declare,
-		lang, _, moment) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/Duration.js" ], function(declare,
+		lang, _, moment, DurationUtils) {
 	return declare("Task", null, {
 		constructor : function (/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
@@ -96,7 +96,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 			return arguments.length ? this._lateEnd = newLateEnd : this._lateEnd;
 		},
 		watchHash: function() {
-			return this.id() + this.index() + this.name() + this.description() + this.duration() +
+			return this.id() + this.index() + this.name() + this.description() + DurationUtils.formatter(this.duration()) +
 				_.reduce(
 						_.map(this.restrictions(), function(restriction) {
 														return restriction.watchHash();

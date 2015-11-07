@@ -8,6 +8,7 @@ define(["moment"], function(moment) {
 	 * @alias module:Duration
 	 */
 	var units = ['years', 'quarters', 'months', 'weeks', 'days', 'hours', 'minutes', 'milliseconds'];
+	var aliases = {'years':'y', 'quarters':'q', 'months':'M', 'weeks':'w', 'days':'d', 'hours':'h', 'minutes':'m', 'milliseconds':'ms'};
 	return {
 		/**
 		 * Validates a string and returns a Duration object
@@ -36,6 +37,7 @@ define(["moment"], function(moment) {
 							}
 						    console.log(value + "=" + match[2] + " - " + unit);
 						}
+						if (!re.test(s)) return "It is not a valid duration";
 						return duration;
 					},
 		/**
@@ -56,6 +58,21 @@ define(["moment"], function(moment) {
 						    		s+=units[i];
 						    	}
 						    	
+						    }
+						}
+						return s;
+					},
+		/**
+		 * Formats duration for display
+		 * @param {Duration) Duration to print
+		 * @returns String formatted
+		 */
+		shortFormatter: function(duration) {
+						var s = "";
+						for (var i=0; i<units.length; i++) {
+							var value = duration[units[i]];
+						    if (value>0) {
+						    	s+=value + aliases[units[i]];
 						    }
 						}
 						return s;

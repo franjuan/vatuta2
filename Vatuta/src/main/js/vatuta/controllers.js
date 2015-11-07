@@ -231,7 +231,8 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		    	console.log(restriction.task.index() + restriction.type + ' created for task ' + $scope.selectedTask.index() + '.- ' + $scope.selectedTask.name());
 		    	new Restrictions.EndToStart({
 					_endingTask : restriction.task,
-					_startingTask : $scope.selectedTask
+					_startingTask : $scope.selectedTask,
+					_duration: restriction.delay
 				});
 		    }, function() {
 		    	console.log('You cancelled the TaskDependency dialog.');
@@ -271,6 +272,10 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		    require: 'ngModel',
 		    link: function(scope, elm, attrs, ctrl) {
 		      ctrl.$validators.duration = function(modelValue, viewValue) {
+		    	if (ctrl.$isEmpty(modelValue)) {
+		            // consider empty models to be valid
+		            return true;
+		        }
 		        return typeof DurationUtils.validator(modelValue) == "object";
 		      };
 		    }
@@ -287,7 +292,19 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		    $mdDialog.cancel();
 		  };
 		  $scope.answer = function(type, task) {
-		    $mdDialog.hide({type: type, task: task});
+		    $mdDialog.hide({type: type, task: task, delay: $scope.delay});
 		  };
+		  
+		  $scope._delayString="";
+		  $scope.delayString= function(newDuration) {
+			     if (arguments.length) {
+			    	 $scope._delayString = newDuration;
+			    	 var duration = DurationUtils.validator(newDuration);
+			    	 if (typeof duration == "object")
+			    		 $scope.delay = duration;
+			     } else {
+			    	 return $scope._delayString;
+			     }
+		 };
 		}
 });
