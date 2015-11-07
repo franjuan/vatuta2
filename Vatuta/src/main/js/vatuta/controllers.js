@@ -1,4 +1,4 @@
-require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurrect, moment) {
+require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], function(vatuta, resurrect, moment, DurationUtils) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages','ngSanitize',
 			'vatuta' ]);
 
@@ -14,9 +14,8 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurre
 			'$mdBottomSheet',
 			'$mdToast',
 			'ProjectSerializer',
-			'DurationUtils',
 			function($scope, $mdSidenav, Project, Task, Engine, Canvas,
-					Restrictions, $mdDialog, $mdBottomSheet, $mdToast, ProjectSerializer, durationUtils) {
+					Restrictions, $mdDialog, $mdBottomSheet, $mdToast, ProjectSerializer) {
 				
 				$scope.toggleSidenav = function(menuId) {
 					$mdSidenav(menuId).toggle();
@@ -29,25 +28,25 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurre
 				
 				var taskA = new Task({
 					_name : "A",
-					_duration : moment.duration(3,"days")
+					_duration : {days: 3}
 				});
 				project.addTask(taskA);
 				
 				var taskB = new Task({
 					_name : "B",
-					_duration : moment.duration(5,"days")
+					_duration :{days: 5}
 				});
 				project.addTask(taskB);
 				
 				var taskC = new Task({
 					_name : "C",
-					_duration : moment.duration(7,"days")
+					_duration : {days: 7}
 				});
 				project.addTask(taskC);
 				
 				var taskD = new Task({
 					_name : "D",
-					_duration : moment.duration(2,"days")
+					_duration : {days: 2}
 				});
 				project.addTask(taskD);
 				
@@ -218,7 +217,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurre
 		
 		}]);
 
-	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', 'Restrictions', 'DurationUtils', function($scope,  $mdDialog, Restrictions, DurationUtils) {
+	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', 'Restrictions', function($scope,  $mdDialog, Restrictions) {
 		$scope.showTaskDependency = function(ev) {
 		    $mdDialog.show({
 		      controller: DialogController,
@@ -248,7 +247,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurre
 			     if (arguments.length) {
 			    	 $scope._durationString = newDuration;
 			    	 var duration = DurationUtils.validator(newDuration);
-			    	 if (moment.isDuration(duration))
+			    	 if (typeof duration == "object")
 			    		 $scope.selectedTask.duration(duration);
 			     } else {
 			    	 return $scope._durationString;
@@ -267,12 +266,12 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment"], function(vatuta, resurre
 		 }
 	}]);
 	
-	vatutaApp.directive('duration', ['DurationUtils', function(DurationUtils) {
+	vatutaApp.directive('duration', [function() {
 		  return {
 		    require: 'ngModel',
 		    link: function(scope, elm, attrs, ctrl) {
 		      ctrl.$validators.duration = function(modelValue, viewValue) {
-		        return moment.isDuration(DurationUtils.validator(modelValue));
+		        return typeof DurationUtils.validator(modelValue) == "object";
 		      };
 		    }
 		  };
