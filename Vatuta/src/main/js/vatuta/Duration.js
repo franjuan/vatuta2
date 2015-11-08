@@ -1,107 +1,126 @@
 /**
  * @module Duration
  */
-define(["moment"], function(moment) {
-	
-	/**
-	 * @constructor
-	 * @alias module:Duration
-	 */
-	var units = ['years', 'quarters', 'months', 'weeks', 'days', 'hours', 'minutes', 'milliseconds'];
-	var aliases = {'years':'y', 'quarters':'q', 'months':'M', 'weeks':'w', 'days':'d', 'hours':'h', 'minutes':'m', 'milliseconds':'ms'};
-	return {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function(declare,
+		lang, _, moment) {
+	var Duration = declare("Duration", null, {
 		/**
-		 * Validates a string and returns a Duration object
-		 * @param s String to validate
-		 * @returns Duration object or string if error while validating
+		 * @constructor
+		 * @alias module:Duration
 		 */
-		validator: function(s) {
-						var re = /(\d+)\s*([a-zA-Z]+)\s*/gi; 
-						var duration = {};
-						var match;
-						while (match = re.exec(s)) {
-							var unit = _.find(units, function(unit) {
-								return unit.indexOf(match[2].toLowerCase()) == 0;
-							})
-							if (match[2].toLowerCase() == 'm' && (duration['months'] || duration['weeks'] || duration['days'] || duration['hours'])) {
-								unit = 'minutes';
-							}
-							if ((match[2].toLowerCase() == 'm' || match[2].toLowerCase() == 'mi') && (duration['minutes'])) {
-								unit = 'milliseconds';
-							}
-							var value = parseInt(match[1]);
-							if (!unit) {
-								return match[2] + " is not a valid time unit (y, M, w, d, h, m, s, ms)"; 
-							} else {
-								duration[unit] = value;
-							}
-						    console.log(value + "=" + match[2] + " - " + unit);
-						}
-						if (!re.test(s)) return "It is not a valid duration";
-						return duration;
-					},
+		constructor : function (/* Object */kwArgs) {
+			lang.mixin(this, kwArgs);
+		},
 		/**
 		 * Formats duration for display
-		 * @param {Duration) Duration to print
 		 * @returns String formatted
 		 */
-		formatter: function(duration) {
-						var s = "";
-						for (var i=0; i<units.length; i++) {
-							var value = duration[units[i]];
-						    if (value>0) {
-						    	if (s) s+= " ";
-						    	s+=value + " ";
-						    	if (value == 1) {
-						    		s+=units[i].substr(0, units[i].length - 1);
-						    	} else {
-						    		s+=units[i];
-						    	}
-						    	
-						    }
-						}
-						return s;
-					},
+		formatter: function() {
+			var s = "";
+			for (var i=0; i<Duration.units.length; i++) {
+				var value = this[Duration.units[i]];
+			    if (value>0) {
+			    	if (s) s+= " ";
+			    	s+=value + " ";
+			    	if (value == 1) {
+			    		s+=Duration.units[i].substr(0, Duration.units[i].length - 1);
+			    	} else {
+			    		s+=Duration.units[i];
+			    	}
+			    	
+			    }
+			}
+			return s;
+		},
 		/**
 		 * Formats duration for display
-		 * @param {Duration) Duration to print
 		 * @returns String formatted
 		 */
-		shortFormatter: function(duration) {
-						var s = "";
-						for (var i=0; i<units.length; i++) {
-							var value = duration[units[i]];
-						    if (value>0) {
-						    	s+=value + aliases[units[i]];
-						    }
-						}
-						return s;
-					},
+		shortFormatter: function() {
+			var s = "";
+			for (var i=0; i<Duration.units.length; i++) {
+				var value = this[Duration.units[i]];
+			    if (value>0) {
+			    	s+=value + Duration.aliases[Duration.units[i]];
+			    }
+			}
+			return s;
+		},
 		/**
 		 * Adds duration to {Moment} date
 		 * @param {Moment) as date base
 		 * @param {Duration) Duration to add
 		 * @returns {Moment} date
 		 */			
-		add:		function(date, duration) {
-						var m = moment(date);
-						_.forEach(duration, function(value, key) {
-							m.add(value, key);
-						});
-						return m;
-					},
+		addTo: function(date) {
+			var m = moment(date);
+			_.forEach(Duration.units, function(unit) {
+				if (this[unit] && this[unit] != 0) {
+					m.add(this[unit], unit);
+				}
+			}, this);
+			return m;
+		},
 		/**
 		 * Subtracts duration to {Moment} date
 		 * @param {Moment) as date base
 		 * @param {Duration) Duration to subtracts
 		 * @returns {Moment} date
 		 */
-		subtract:	function(date, duration) {
-						var m = moment(date);
-						_.forEach(duration, function(value, key) {
-							m.subtract(value, key);
-						});
-						return m;
+		subtractFrom: function(date) {
+			var m = moment(date);
+			_.forEach(Duration.units, function(unit) {
+				if (this[unit] && this[unit] != 0) {
+					m.subtract(this[unit], unit);
+				}
+			}, this);
+			return m;
+		},
+		/**
+		 * Returns true if duration has 0 length
+		 * @returns if 0, false otherwise
+		 */
+		isZero: function() {
+			_.forEach(Duration.units, function(unit) {
+				if (this[unit] && this[unit] != 0) {
+					return false;
+				}
+			}, this);
+			return true;
 		}
-	}
+	});
+	
+	/**
+	 * Validates a string and returns a Duration object
+	 * @param s String to validate
+	 * @returns Duration object or string if error while validating
+	 */
+	Duration.validator= function(s) {
+		var re = /(\-?\d+)\s*([a-zA-Z]+)\s*/gi; 
+		var duration = new Duration();
+		var match;
+		while (match = re.exec(s)) {
+			var unit = _.find(Duration.units, function(unit) {
+				return unit.indexOf(match[2].toLowerCase()) == 0;
+			})
+			if (match[2].toLowerCase() == 'm' && (duration['months'] || duration['weeks'] || duration['days'] || duration['hours'])) {
+				unit = 'minutes';
+			}
+			if ((match[2].toLowerCase() == 'm' || match[2].toLowerCase() == 'mi') && (duration['minutes'])) {
+				unit = 'milliseconds';
+			}
+			var value = parseInt(match[1]);
+			if (!unit) {
+				return match[2] + " is not a valid time unit (y, M, w, d, h, m, s, ms)"; 
+			} else {
+				duration[unit] = value;
+			}
+		}
+		if (!re.test(s)) return "It is not a valid duration";
+		return duration;
+	};
+	Duration.units= ['years', 'quarters', 'months', 'weeks', 'days', 'hours', 'minutes', 'milliseconds'];
+	Duration.aliases= {'years':'y', 'quarters':'q', 'months':'M', 'weeks':'w', 'days':'d', 'hours':'h', 'minutes':'m', 'milliseconds':'ms'};
+	
+	return Duration;
 });

@@ -3,7 +3,7 @@
  */
 define(
 		[ "lodash", "moment", "./vatuta/Duration.js"],
-		function(_, moment, DurationUtils) {
+		function(_, moment, Duration) {
 			/**
 			 * @constructor
 			 * @alias module:Engine
@@ -75,7 +75,7 @@ define(
 							}, task);
 							if (!isNaN(earlyStart)) {
 								task.earlyStart(earlyStart);
-								task.earlyEnd(DurationUtils.add(earlyStart,task.duration()));
+								task.earlyEnd(task.duration().addTo(earlyStart));
 								endOfProject = moment.max(endOfProject, task.earlyEnd());
 								
 								if (i != alreadyCalculatedIndex + 1) {
@@ -112,7 +112,7 @@ define(
 							}, task);
 							if (!isNaN(lateEnd)) {
 								task.lateEnd(lateEnd);
-								task.lateStart(DurationUtils.subtract(lateEnd,task.duration()));
+								task.lateStart(task.duration().subtractFrom(lateEnd));
 								
 								if (i != alreadyCalculatedIndex - 1) {
 									var aux = tasks[i];

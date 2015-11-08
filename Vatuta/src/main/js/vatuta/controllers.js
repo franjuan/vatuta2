@@ -28,25 +28,25 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				
 				var taskA = new Task({
 					_name : "A",
-					_duration : {days: 3}
+					_duration : new Duration({days: 3})
 				});
 				project.addTask(taskA);
 				
 				var taskB = new Task({
 					_name : "B",
-					_duration :{days: 5}
+					_duration :new Duration({days: 5})
 				});
 				project.addTask(taskB);
 				
 				var taskC = new Task({
 					_name : "C",
-					_duration : {days: 7}
+					_duration : new Duration({days: 7})
 				});
 				project.addTask(taskC);
 				
 				var taskD = new Task({
 					_name : "D",
-					_duration : {days: 2}
+					_duration : new Duration({days: 2})
 				});
 				project.addTask(taskD);
 				
@@ -256,7 +256,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		 }
 		 
 		 $scope.$watch('selectedTask', function(newP, oldP, $scope){
-			 $scope._durationString = DurationUtils.formatter(newP.duration());
+			 $scope._durationString = newP.duration().formatter();
 		 });
 	
 		 function filter(query){

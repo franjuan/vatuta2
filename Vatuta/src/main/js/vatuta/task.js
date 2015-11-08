@@ -96,7 +96,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 			return arguments.length ? this._lateEnd = newLateEnd : this._lateEnd;
 		},
 		watchHash: function() {
-			return this.id() + this.index() + this.name() + this.description() + DurationUtils.formatter(this.duration()) +
+			return this.id() + this.index() + this.name() + this.description() + this.duration().shortFormatter() +
 				_.reduce(
 						_.map(this.restrictions(), function(restriction) {
 														return restriction.watchHash();

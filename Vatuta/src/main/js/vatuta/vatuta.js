@@ -1,6 +1,6 @@
 define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
-		"./vatuta/restriction.js", "./vatuta/canvas.js", "moment" ], function(Project,
-		Task, Engine, Restrictions, Canvas, moment) {
+		"./vatuta/restriction.js", "./vatuta/canvas.js", "moment", "./vatuta/Duration.js" ], function(Project,
+		Task, Engine, Restrictions, Canvas, moment, Duration) {
 
 	var vatutaMod = angular.module('vatuta', [])
 		.config( ['$compileProvider', function( $compileProvider )
@@ -36,6 +36,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		namespace.Project = Project;
 		namespace.EndToStartDependency = Restrictions.EndToStart;
 		namespace.Restriction = Restriction;
+		namespace.Duration = Duration;
 		
 		var serializers = {};
 		serializers["Moment"]= {
@@ -44,14 +45,6 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 				},
 				deserialize: function(value) {
 					return moment(value);
-				}
-		};
-		serializers["Duration"]= {
-				serialize: function(object) {
-					return Resurrect.prototype.builder.bind(necromancer)("Duration", object.toISOString());
-				},
-				deserialize: function(value) {
-					return moment.duration(value);
 				}
 		};
 		var necromancer = new Resurrect(
