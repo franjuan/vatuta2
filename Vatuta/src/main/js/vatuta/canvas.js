@@ -95,14 +95,20 @@ define(
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
 
+					// Draw in Z order, biggest first, from top to bottom
+					// Dependencies
 					_.forEach(project.tasks(),function(task) {
-						var taskContainer = this.drawTask(task, project);
-						this._stage.addChild(taskContainer);
 						_.forEach(task.restrictions(),function(restriction) {
 							var restrictionContainer = this.drawRestriction(restriction, task, project);
-							this._stage.addChild(restrictionContainer);
+							this._stage.addChildAt(restrictionContainer); // Arrows secondlevel
 						}, this);
+					}, this);	
+					// Tasks
+					_.forEach(project.tasks(),function(task) {
+						var taskContainer = this.drawTask(task, project);
+						this._stage.addChildAt(taskContainer); // Tasks firstlevel
 					}, this);
+					
 					this._stage.update();
 				},
 				drawTask: function(task, project) {
@@ -155,12 +161,19 @@ define(
 						var ys = this._taskRowHeight * (restriction.startingTask().index()) + this._rulerHeight - this._taskBottomHeight;
 					}
 					
+					var base = new createjs.Shape();
+					base.graphics
+						.beginStroke(this._arrowColor)
+						.beginFill(this._arrowColor)
+						.drawCircle(xf, yf, this._arrowWidth  / 3)
+						.endFill();
+					
 					var arrow = new createjs.Shape();
 					arrow.graphics
 						.setStrokeStyle(2,"round","round")
 						.beginStroke(this._arrowColor)
 						.moveTo(xf,yf)
-						.lineTo(xs-this._arrowCornerR,yf)
+						.lineTo(xf < xs ? xs-this._arrowCornerR : xs+this._arrowCornerR,yf)
 						.arcTo(xs, yf, xs, yf + this._arrowCornerR * (downwards?1:-1), this._arrowCornerR)
 						.lineTo(xs,ys);
 					
@@ -175,7 +188,7 @@ define(
 						.closePath()
 						.endFill();
 					
-					container.addChild(arrow, head);
+					container.addChild(arrow, base, head);
 					
 					return container;
 					

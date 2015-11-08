@@ -17,19 +17,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 		 */
 		formatter: function() {
 			var s = "";
-			for (var i=0; i<Duration.units.length; i++) {
-				var value = this[Duration.units[i]];
-			    if (value>0) {
-			    	if (s) s+= " ";
-			    	s+=value + " ";
-			    	if (value == 1) {
-			    		s+=Duration.units[i].substr(0, Duration.units[i].length - 1);
+			_.forEach(Duration.units, function(unit) {
+				if (this[unit] && this[unit] != 0) {
+					if (s) s+= " ";
+			    	s+= this[unit] + " ";
+			    	if (this[unit] == 1) {
+			    		s+=unit.substr(0, unit.length - 1);
 			    	} else {
-			    		s+=Duration.units[i];
+			    		s+=unit;
 			    	}
-			    	
-			    }
-			}
+				}
+			}, this);
 			return s;
 		},
 		/**
@@ -38,12 +36,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 		 */
 		shortFormatter: function() {
 			var s = "";
-			for (var i=0; i<Duration.units.length; i++) {
-				var value = this[Duration.units[i]];
-			    if (value>0) {
-			    	s+=value + Duration.aliases[Duration.units[i]];
-			    }
-			}
+			_.forEach(Duration.units, function(unit) {
+				if (this[unit] && this[unit] != 0) {
+					s+= this[unit] + Duration.aliases[unit];
+				}
+			}, this);
 			return s;
 		},
 		/**
@@ -81,12 +78,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 		 * @returns if 0, false otherwise
 		 */
 		isZero: function() {
+			var zero = true;
 			_.forEach(Duration.units, function(unit) {
 				if (this[unit] && this[unit] != 0) {
+					zero = false;
 					return false;
 				}
 			}, this);
-			return true;
+			return zero;
 		}
 	});
 	

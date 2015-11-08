@@ -61,7 +61,8 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 									    }
 									}
 								),
-					serializers: serializers
+					serializers: serializers,
+					cleanup: true
 				}
 			);
 		

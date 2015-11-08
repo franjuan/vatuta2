@@ -1,7 +1,7 @@
 <md-list-item class="md-2-line">
 	<md-icon aria-label="Finish to Start condition" md-svg-icon="icons/ic_keyboard_tab_black_48px.svg" class="md-avatar-icon"></md-icon>
 	<div class="md-list-item-text" layout="column">
-		<h3>{{restriction.endingTask().index()+'FS'+(restriction.delay().isZero()?'':' + '+restriction.delay().shortFormatter());}}</h3>
+		<h3>{{restriction.endingTask().index()+'FS'+(restriction.delay().isZero()?'':(' + '+restriction.delay().shortFormatter()))}}</h3>
 		<p>This task starts after <b>{{restriction.endingTask().index()}}.- {{restriction.endingTask().name()}}</b> finishes.</p>
 	</div>
 	<md-icon aria-label="Edit" md-svg-icon="icons/ic_mode_edit_black_48px.svg" class="md-avatar-icon"></md-icon>
