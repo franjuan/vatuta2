@@ -142,7 +142,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 	
 	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', function($scope, $mdBottomSheet, Task, Engine) {
 		$scope.addTask = function() {
-			var newTask = new Task({_duration:1});
+			var newTask = new Task({_duration: new Duration({days: 1})});
 			$scope.project.addTask(newTask);
 			Engine.calculateEarlyStartLateEnding();
 			$scope.$parent.selectedTask = newTask;
