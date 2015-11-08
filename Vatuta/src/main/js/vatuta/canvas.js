@@ -90,6 +90,7 @@ define(
 					this._stage.update();
 				},
 				drawProject: function(project) {
+					
 					this._width = project.calculatedLength().asDays() * this._dayWidth;
 					this._height = this._rulerHeight + this._taskRowHeight * project.tasks().length;
 					this._canvas.width = this._width;
@@ -113,11 +114,16 @@ define(
 				},
 				drawTask: function(task, project) {
 					var taskContainer = new createjs.Container();
+					
 					var element = new createjs.Shape();
+					element.graphics.beginFill("#FFF").drawRect(0,0, this._canvas.width, this._taskRowHeight);
+					
+					var taskShape = new createjs.Shape();
+					taskShape.mouseChildren = false;
 					var daysFromStart = this.daysFromProjectStart(task.earlyStart(), project);
 					var daysFromEnd = this.daysFromProjectStart(task.earlyEnd(), project);
 					var durationInDays = daysFromEnd - daysFromStart;
-					element.graphics.beginFill(this._taskBgColor).drawRect(
+					taskShape.graphics.beginFill(this._taskBgColor).drawRect(
 							daysFromStart*this._dayWidth,
 							this._taskTopHeight,
 							durationInDays*this._dayWidth,
@@ -131,9 +137,9 @@ define(
 					text.x = (daysFromStart + durationInDays/2)*this._dayWidth;
 					text.y = this._taskTopHeight + this._taskHeight/2;
 					
-					taskContainer.addChild(element, text);
+					taskContainer.addChild(element, taskShape, text);
 					
-					element.addEventListener("click", 
+					taskShape.on("click", 
 						_.bind(
 								function(event) {
 									if (this._listener) {
@@ -141,6 +147,14 @@ define(
 									};
 								}, this)
 					);
+					element.on("click", 
+							_.bind(
+									function(event) {
+										if (this._listener) {
+											this._listener.onClickOnTaskContainer(event, task);
+										};
+									}, this)
+						);
 					
 					taskContainer.x = 0;
 					taskContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeight;

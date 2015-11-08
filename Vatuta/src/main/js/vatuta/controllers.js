@@ -100,6 +100,11 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					onClickOnTask : function(event, task) {
 						$scope.$apply(function() {
 							$scope.selectedTask = task;
+							$scope.toggleSidenav('left');
+						});
+					},
+					onClickOnTaskContainer : function(event, task) {
+						$scope.$apply(function() {
 							$mdBottomSheet.show({
 							      templateUrl: 'vatuta/templates/bottomSheetMenu.html',
 							      controller: 'bottomSheetMenuCtrl',
