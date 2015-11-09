@@ -237,7 +237,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		    	new Restrictions.EndToStart({
 					_endingTask : restriction.task,
 					_startingTask : $scope.selectedTask,
-					_duration: restriction.delay
+					_duration: restriction.delay?restriction.delay:new Duration()
 				});
 		    }, function() {
 		    	console.log('You cancelled the TaskDependency dialog.');
