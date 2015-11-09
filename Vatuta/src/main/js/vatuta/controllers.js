@@ -223,7 +223,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		}]);
 
 	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', 'Restrictions', function($scope,  $mdDialog, Restrictions) {
-		$scope.showTaskDependency = function(ev) {
+		this.showTaskDependency = function(ev) {
 		    $mdDialog.show({
 		      controller: DialogController,
 		      templateUrl: 'vatuta/templates/TaskDependencyDialog.html',

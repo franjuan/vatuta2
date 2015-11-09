@@ -80,6 +80,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		template: 'EndToStartDependencyItem.html',
 		watchHash: function() {
 			return this._endingTaskId + 'FS' + this._startingTaskId;
+		},
+		shortDescription: function() {
+			return this.endingTask().index()+'FS'+(this.delay().isZero()?'':(' + '+this.delay().shortFormatter()));
+		},
+		longDescription: function() {
+			return this.type() + " restriction between the task " + this.startingTask().index() + ".- " + this.startingTask().name() + " that starts when " + this.endingTask().index() + ".- " + this.endingTask().name()+ " finishes.";
+		},
+		type: function() {
+			return "Finish-Start";
+		},
+		remove: function() {
+			this.startingTask().removeRestriction(this);
+			this.endingTask().removeRestrictionFromDependants(this);
+		},
+		equals: function(other) {
+			if (other.isInstanceOf && other.isInstanceOf(this.constructor) && this._startingTaskId == other._startingTaskId && this._endingTaskId == other._endingTaskId) {
+				return true;
+			} else return false; 
 		}
 	});
 	

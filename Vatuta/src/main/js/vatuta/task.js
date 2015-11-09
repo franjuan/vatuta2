@@ -52,14 +52,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 		addRestriction : function(restriction) {
 			this.restrictions().push(restriction);
 			this._dependencies = null;
-			this._dependants = null;
 			return restriction;
 		},
 		addRestrictionFromDependants : function(restriction) {
 			this.restrictionsFromDependants().push(restriction);
-			this._dependencies = null;
 			this._dependants = null;
 			return restriction;
+		},
+		removeRestriction: function (restriction) {
+			_.remove(this._restrictions, function(n) {return this.equals(n)}, restriction);
+			this._dependencies = null;
+		},
+		removeRestrictionFromDependants: function (restriction) {
+			_.remove(this._restrictionsFromDependants, function(n) {return this.equals(n)}, restriction);
+			this._dependants = null;
 		},
 		getDependencies : function() {
 			if (!this._dependencies) {

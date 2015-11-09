@@ -33,13 +33,13 @@
       <div layout="row" layout-align="end center">
       	<md-fab-speed-dial md-direction="left" ng-class="md-fling">
       		<md-fab-trigger>
-	        	<md-button aria-label="menu" class="md-fab md-mini md-primary">
+	        	<md-button aria-label="menu" class="md-fab md-mini md-raised md-primary">
 	        		<md-tooltip md-direction="top">Add restriction</md-tooltip>
 	            	<md-icon md-svg-src="/icons/ic_add_white_48px.svg"></md-icon>
           		</md-button>
         	</md-fab-trigger>
         	<md-fab-actions>
-	          <md-button aria-label="Task dependencies" class="md-fab md-raised md-mini" ng-click="showTaskDependency($event)">
+	          <md-button aria-label="Task dependencies" class="md-fab md-raised md-mini" ng-click="ctrl.showTaskDependency($event)">
 	          	<md-tooltip md-direction="top">Task dependency</md-tooltip>
 	            <md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
 	          </md-button>

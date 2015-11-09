@@ -47,3 +47,8 @@ md-sidenav, md-sidenav.md-locked-open, md-sidenav.md-closed.md-locked-open-add-a
 vatuta-task-editor form {
 	padding: 0px 16px 0px 16px;
 }
+
+vatuta-task-editor .dependencyIcon {
+	padding-left: 16px;
+    padding-right: 16px;
+}
