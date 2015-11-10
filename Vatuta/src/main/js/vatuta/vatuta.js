@@ -113,18 +113,14 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			    	$scope.canvas.drawProject($scope.project);
 			    },
 			    controller: function($scope, $attrs) {
-//		            $scope.$on('addTask', function(task) {
-//		                console.log('addTask');
-//		                $scope.canvas.clear();
-//		                $scope.canvas.drawProject($scope.project);
-//		                $scope.canvas.drawTimeRuler($scope.project);
-//		            });
-		            $scope.$on('changeTask', function(task) {
+			    	var onTaskChange = function(task) {
 		                console.log('changeTask');
 		                $scope.canvas.clear();
 		                $scope.canvas.drawProject($scope.project);
 		                $scope.canvas.drawTimeRuler($scope.project);
-		            });
+		            };
+		            $scope.$on('deleteTask', onTaskChange);
+		            $scope.$on('changeTask', onTaskChange);
 		        }
 			  };
 			});

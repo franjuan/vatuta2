@@ -124,9 +124,6 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					}
 				};
 
-				$scope.selectedTask = project.tasks()[0]; // TODO Quitar esto de coger la primera tarea
-				
-
 				function taskChanged(newP, oldP, $scope) {
 					console.log('changed');
 					Engine.calculateEarlyStartLateEnding();
@@ -134,7 +131,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				}
 				
 				function watchSelectedTask() {
-					return $scope.selectedTask.watchHash();
+					return $scope.selectedTask?$scope.selectedTask.watchHash():"null";
 				}
 				
 				$scope.$watch(watchSelectedTask, taskChanged, true);
@@ -254,9 +251,9 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 	          .ok('Confirm removal')
 	          .cancel("Don't do it!");
 		    $mdDialog.show(confirm).then(function() {
-		    	$scope.selectedTask = $scope.project.tasks()[0]; // TODO Quitar esto de coger la primera tarea
-		    	$scope.project.removeTask(task);
 		    	$mdSidenav('left').toggle();
+		    	$scope.project.removeTask(task);
+		    	$scope.$root.$broadcast('deleteTask', task);
 		    	$mdToast.show(
 		                $mdToast.simple()
 		                  .content("Task " + name + " has been removed")
@@ -285,7 +282,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		 }
 		 
 		 $scope.$watch('selectedTask', function(newP, oldP, $scope){
-			 $scope._durationString = newP.duration().formatter();
+			 $scope._durationString = newP?newP.duration().formatter():"";
 		 });
 	
 		 function filter(query){

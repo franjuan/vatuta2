@@ -87,7 +87,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 					delete this._tasksIndex()[task.id()];
 					// Update ordinal indexes
 					for (var i = task.index() - 1; i < this.tasks().length; i++) { 
-					    this.tasks()[i].index(i);
+					    this.tasks()[i].index(i + 1);
 					}
 				}
 			});
