@@ -124,7 +124,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					}
 				};
 
-				$scope.selectedTask = project.tasks()[0];
+				$scope.selectedTask = project.tasks()[0]; // TODO Quitar esto de coger la primera tarea
 				
 
 				function taskChanged(newP, oldP, $scope) {
@@ -222,7 +222,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		
 		}]);
 
-	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', 'Restrictions', function($scope,  $mdDialog, Restrictions) {
+	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav','Restrictions', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions) {
 		this.showTaskDependency = function(ev) {
 		    $mdDialog.show({
 		      controller: DialogController,
@@ -243,6 +243,30 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		    	console.log('You cancelled the TaskDependency dialog.');
 		    });
 		 };
+		 
+		 this.deleteTask  = function(task, event) {
+			 var name = task.name();
+			 var confirm = $mdDialog.confirm()
+	          .title('Would you like to delete task ' + name + '?')
+	          .content('Confirm you want to remove the task ' + task.index() + '.- ' + name)
+	          .ariaLabel('Remove ' + name)
+	          .targetEvent(event)
+	          .ok('Confirm removal')
+	          .cancel("Don't do it!");
+		    $mdDialog.show(confirm).then(function() {
+		    	$scope.selectedTask = $scope.project.tasks()[0]; // TODO Quitar esto de coger la primera tarea
+		    	$scope.project.removeTask(task);
+		    	$mdSidenav('left').toggle();
+		    	$mdToast.show(
+		                $mdToast.simple()
+		                  .content("Task " + name + " has been removed")
+		                  .position('top right')
+		                  .hideDelay(1500)
+		              );
+		    }, function() {
+		        console.log('Removal of task ' + name + ' cancelled');
+		    });
+		 }
 
 		 this.querySearch = function(query) {
 			var results = query ? _.filter($scope.project.tasks(),filter(query)) : _.filter($scope.project.tasks(),function(task){return task.id()!==$scope.$parent.selectedTask.id();});

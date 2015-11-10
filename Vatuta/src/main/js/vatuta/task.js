@@ -22,6 +22,15 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 				this._lateEnd = moment(this._lateEnd);
 			}
 		},
+		remove: function() {
+			// Hay que hacerlo así porque el remove lo quita de la misma lista
+			while(this.restrictions().length >0) {
+				this.restrictions()[0].remove();
+			};
+			while(this.restrictionsFromDependants().length >0) {
+				this.restrictionsFromDependants()[0].remove();
+			};
+		},
 		index: function(newIndex) {
 		     return arguments.length ? (this._index = newIndex) : this._index;
 		},
@@ -110,17 +119,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 															return total + value;
 														}
 						);
-		},
-		/**
-		 * @function
-		 * @memberof Project
-		 */
-		afterDeserialize: function() {
-			if (this._earlyStart) this._earlyStart = moment(this._earlyStart);
-			if (this._earlyEnd) this._earlyEnd = moment(this._earlyEnd);
-			if (this._lateStart) this._lateStart = moment(this._lateStart);
-			if (this._lateEnd) this._lateEnd = moment(this._lateEnd);
-			if (this._duration) this._duration = moment(this._duration);
 		}
 	});
 });

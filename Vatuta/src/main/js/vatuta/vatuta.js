@@ -165,7 +165,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 					                  .hideDelay(1500)
 					              );
 					    }, function() {
-					      $scope.status = 'You decided to cancel.';
+					        console.log('Removal of ' + description + ' cancelled');
 					    });
 					}
 			    }

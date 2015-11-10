@@ -79,13 +79,16 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				findTaskById: function(id) {
 					return this._tasksIndex()[id];
 				},
-				/**
-				 * @function
-				 * @memberof Project
-				 */
-				afterDeserialize: function() {
-					if (this._start) this._start = moment(this._start);
-					if (this._end) this._end = moment(this._end);
+				removeTask: function(task) {
+					task.remove();
+					// Remove task from project
+					_.remove(this.tasks(), "_id", task.id());
+					// Remove index
+					delete this._tasksIndex()[task.id()];
+					// Update ordinal indexes
+					for (var i = task.index() - 1; i < this.tasks().length; i++) { 
+					    this.tasks()[i].index(i);
+					}
 				}
 			});
 		});
