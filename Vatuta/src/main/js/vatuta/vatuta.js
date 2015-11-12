@@ -160,6 +160,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 					                  .position('top right')
 					                  .hideDelay(1500)
 					              );
+					    ga('send', 'event', 'gantt', 'delete', 'restriction');
 					    }, function() {
 					        console.log('Removal of ' + description + ' cancelled');
 					    });

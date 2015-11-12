@@ -146,6 +146,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 			$scope.toggleSidenav('left');
 			$mdBottomSheet.hide({message: 'New task added', show: true});
 			$scope.$root.$broadcast('addTask', newTask);
+			ga('send', 'event', 'gantt', 'create', 'task');
 		}
 		$scope.showTask = function() {
 			$scope.toggleSidenav('left');
@@ -165,6 +166,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		                  .position('top right')
 		                  .hideDelay(1500)
 		              );
+				ga('send', 'event', 'project', 'load');
 			} else {
 				$mdDialog.show(
 					      $mdDialog.alert()
@@ -188,6 +190,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		                  .position('top right')
 		                  .hideDelay(1500)
 		              );
+				ga('send', 'event', 'project', 'store');
 			} else {
 				$mdDialog.show(
 					      $mdDialog.alert()
@@ -214,7 +217,8 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 							return document.getElementById("ganttCanvas").toDataURL();
 						}
 		         }
-		      });   
+		      });
+		       ga('send', 'event', 'project', 'asImage');
 		};
 		
 		}]);
@@ -236,6 +240,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					_startingTask : $scope.selectedTask,
 					_duration: restriction.delay?restriction.delay:new Duration()
 				});
+		    	ga('send', 'event', 'gantt', 'create', 'restriction');
 		    }, function() {
 		    	console.log('You cancelled the TaskDependency dialog.');
 		    });
@@ -260,6 +265,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		                  .position('top right')
 		                  .hideDelay(1500)
 		              );
+		    	ga('send', 'event', 'gantt', 'delete', 'task');
 		    }, function() {
 		        console.log('Removal of task ' + name + ' cancelled');
 		    });
