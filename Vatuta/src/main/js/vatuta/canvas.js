@@ -145,7 +145,8 @@ define(
 									if (this._listener) {
 										this._listener.onClickOnTask(event, task);
 									};
-								}, this)
+								}, this),
+								false
 					);
 					element.on("click", 
 							_.bind(
@@ -153,7 +154,8 @@ define(
 										if (this._listener) {
 											this._listener.onClickOnTaskContainer(event, task);
 										};
-									}, this)
+									}, this),
+									false
 						);
 					
 					taskContainer.x = 0;
