@@ -46,6 +46,17 @@ define(
 					
 					/* @member {Number} */
 					var parent = angular.element(element)[0];
+					
+					parent.addEventListener("click", 
+							_.bind(
+									function(event) {
+										if (this._listener && event.target.localName != 'canvas') {
+											this._listener.onClickOnTaskContainer(event);
+										};
+									}, this),
+									false
+						);
+					
 					this._width = parent.offsetWidth;
 					/* @member {Number} */
 					this._height = parent.offsetHeight;
@@ -145,6 +156,7 @@ define(
 									if (this._listener) {
 										this._listener.onClickOnTask(event, task);
 									};
+									event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true)
 								}, this),
 								false
 					);
@@ -154,6 +166,7 @@ define(
 										if (this._listener) {
 											this._listener.onClickOnTaskContainer(event, task);
 										};
+										event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true)
 									}, this),
 									false
 						);
