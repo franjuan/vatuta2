@@ -105,7 +105,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 			      options: '=canvasOptions',
 			      listener: '='
 			    },
-			    template: '<canvas id="ganttCanvas"></canvas>',
+			    template: '<canvas id="ganttRuler"></canvas><canvas id="ganttCanvas"></canvas>',
 			    link: function link($scope, element, attrs) {
 			    	$scope.canvas = new Canvas(element, $scope.options);
 			    	$scope.canvas.listener($scope.listener);

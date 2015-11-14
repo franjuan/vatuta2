@@ -6,7 +6,7 @@
         <div class="md-grid-text">Add task</div>
       </md-button>
     </md-list-item>
-    <md-list-item>
+    <md-list-item ng-hide="!selectedTask">
       <md-button class="md-grid-item-content" ng-click="showTask()">
         <md-icon md-svg-src="icons/ic_info_black_48px.svg"></md-icon>
         <div class="md-grid-text">Task info</div>

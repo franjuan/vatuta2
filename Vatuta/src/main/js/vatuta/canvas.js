@@ -63,19 +63,31 @@ define(
 					
 					this._taskRowHeight= this._taskTopHeight + this._taskHeight + this._taskBottomHeight;
 					
-					this._canvas = element.children()[0];
+					this._rulerCanvas = angular.element("#ganttRuler")[0];
+					this._rulerCanvas.width = this._width;
+					this._rulerCanvas.heigth = this._rulerHeight;
+					
+					this._canvas = angular.element("#ganttCanvas")[0];
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
 					
 				    /* @member {Object} */
 					this._stage = new createjs.Stage(this._canvas);
+					this._rulerStage = new createjs.Stage(this._rulerCanvas);
 					
 					this._listener = null;
+					
+					$('#content > md-content').scroll(function(){
+						  $('vatuta-gantt #ganttRuler').css('left',-$('#content > md-content').scrollLeft());
+					});
 				},
 				listener: function(newListener) {
 					return arguments.length ? (this._listener = newListener) : this._listener;
 				},
 				drawTimeRuler: function(project) {
+					this._rulerCanvas.width = this._canvas.width;
+					this._rulerCanvas.height = this._rulerHeight;
+					
 					var ruler = new createjs.Container();
 					
 					var dayCounter = moment(project.start());
@@ -96,9 +108,12 @@ define(
 					}
 					ruler.x = 0;
 					ruler.y = 0;
-					this._stage.addChild(ruler);
+					this._rulerStage.addChild(ruler);
+					//this._stage.addChild(ruler); // TODO Verificar que pintar dos veces el ruler no afecta al rendimiento
 
-					this._stage.update();
+					this._rulerStage.update();
+					//this._stage.update();
+			
 				},
 				drawProject: function(project) {
 					
