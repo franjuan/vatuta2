@@ -90,6 +90,10 @@ define(
 					
 					var ruler = new createjs.Container();
 					
+					var background = new createjs.Shape();
+					background.graphics.beginFill("#FFF").drawRect(0,0, this._canvas.width, this._rulerHeight);
+					ruler.addChild(background);
+					
 					var dayCounter = moment(project.start());
 					for (i=0; i*this._dayWidth < this._width; i++) {
 						var element = new createjs.Shape();
@@ -109,10 +113,10 @@ define(
 					ruler.x = 0;
 					ruler.y = 0;
 					this._rulerStage.addChild(ruler);
-					//this._stage.addChild(ruler); // TODO Verificar que pintar dos veces el ruler no afecta al rendimiento
+					this._stage.addChild(ruler); // TODO Verificar que pintar dos veces el ruler no afecta al rendimiento
 
 					this._rulerStage.update();
-					//this._stage.update();
+					this._stage.update();
 			
 				},
 				drawProject: function(project) {

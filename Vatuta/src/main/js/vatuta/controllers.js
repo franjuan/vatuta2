@@ -214,7 +214,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				          $mdDialog.hide();
 				        }
 				        $scope.imageContents = function() {
-							return document.getElementById("ganttCanvas").toDataURL();
+							return angular.element("canvas#ganttCanvas")[0].toDataURL();
 						}
 		         }
 		      });
