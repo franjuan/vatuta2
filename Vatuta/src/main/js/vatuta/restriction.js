@@ -7,10 +7,15 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
      */
 	var Restriction = declare("Restriction", null, {
 		/**
+		 * To allow this.inherited on constructor
+		 */
+		"-chains-": {
+			constructor: "manual"
+		},
+		/**
 		 * @constructs Restriction
 		 */
 		constructor : function(/* Object */kwArgs) {
-			this._delay = new Duration();
 			lang.mixin(this, kwArgs);
 		}
 	});
@@ -18,7 +23,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 	/**
      * @exports Restriction
      */
-	var EndToStartDependency = declare("EndToStartDependency", Restriction, {
+	var TaskDependency = declare("TaskDependency", Restriction, {
 		constructor: function(/* Object */kwArgs) {
 			if (kwArgs._dependant) {
 				kwArgs._dependantId = kwArgs._dependant.id();
@@ -28,6 +33,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				kwArgs._dependencyId = kwArgs._dependency.id();
 				delete kwArgs._dependency;
 			}
+			this._delay = new Duration();
 			this.inherited(arguments);
 			this.dependency().addRestrictionFromDependants(this);
 			this.dependant().addRestriction(this);
@@ -55,6 +61,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return [];
 			}
 		},
+		remove: function() {
+			this.dependant().removeRestriction(this);
+			this.dependency().removeRestrictionFromDependants(this);
+		},
+		equals: function(other) {
+			if (other.isInstanceOf && other.isInstanceOf(this.constructor) && this._dependantId == other._dependantId && this._dependencyId == other._dependencyId) {
+				return true;
+			} else return false; 
+		}
+	});
+	/**
+     * @exports EndToStartDependency
+     */
+	var EndToStartDependency = declare("EndToStartDependency", TaskDependency, {
+		constructor: function(/* Object */kwArgs) {
+			this.inherited(arguments);
+		},
 		getMinEarlyStart4Task: function(task) {
 			if (!task || task.id()===this.dependant().id()) {
 				if (this.dependency().earlyEnd()) {
@@ -66,6 +89,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return 0;
 			}
 		},
+		getMinEarlyEnd4Task: function(task) {
+			return 0;
+		},
 		getMaxLateEnd4Task: function(task) {
 			if (!task || task.id()===this.dependency().id()) {
 				if (this.dependant().lateStart()) {
@@ -76,6 +102,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			} else {
 				return Infinity;
 			}
+		},
+		getMaxLateEnd4Task: function(task) {
+			return Infinity;
 		},
 		template: 'EndToStartDependencyItem.html',
 		watchHash: function() {
@@ -89,15 +118,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		},
 		type: function() {
 			return "Finish-Start";
-		},
-		remove: function() {
-			this.dependant().removeRestriction(this);
-			this.dependency().removeRestrictionFromDependants(this);
-		},
-		equals: function(other) {
-			if (other.isInstanceOf && other.isInstanceOf(this.constructor) && this._dependantId == other._dependantId && this._dependencyId == other._dependencyId) {
-				return true;
-			} else return false; 
 		}
 	});
 	
