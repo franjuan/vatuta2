@@ -198,15 +198,15 @@ define(
 				drawRestriction: function(restriction, task, project) {
 					var container = new createjs.Container();
 					
-					var xf = (this.daysFromProjectStart(restriction.endingTask().earlyEnd(), project))*this._dayWidth;
-					var yf = this._taskRowHeight * (restriction.endingTask().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
+					var xf = (this.daysFromProjectStart(restriction.dependency().earlyEnd(), project))*this._dayWidth;
+					var yf = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
 					
-					var xs = this.daysFromProjectStart(restriction.startingTask().earlyStart(), project)*this._dayWidth + this._arrowInTaskXOffset;
-					var downwards = restriction.startingTask().index()>restriction.endingTask().index();
+					var xs = this.daysFromProjectStart(restriction.dependant().earlyStart(), project)*this._dayWidth + this._arrowInTaskXOffset;
+					var downwards = restriction.dependant().index()>restriction.dependency().index();
 					if (downwards) {
-						var ys = this._taskRowHeight * (restriction.startingTask().index() - 1) + this._rulerHeight + this._taskTopHeight;
+						var ys = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeight + this._taskTopHeight;
 					} else {
-						var ys = this._taskRowHeight * (restriction.startingTask().index()) + this._rulerHeight - this._taskBottomHeight;
+						var ys = this._taskRowHeight * (restriction.dependant().index()) + this._rulerHeight - this._taskBottomHeight;
 					}
 					
 					var base = new createjs.Shape();

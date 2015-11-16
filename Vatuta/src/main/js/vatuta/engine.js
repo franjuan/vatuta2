@@ -58,7 +58,7 @@ define(
 							var task = tasks[i];
 							var earlyStart = moment(this._project.start());
 							_.forEach(task.restrictions(), function(restriction) {
-								var restrictionValue = restriction.getEarlyStart(this);
+								var restrictionValue = restriction.getMinEarlyStart4Task(this);
 								if (isNaN(restrictionValue)) {
 									earlyStart = NaN
 								} else if (restrictionValue != 0) {
@@ -66,7 +66,7 @@ define(
 								}
 							}, task);
 							_.forEach(task.restrictionsFromDependants(), function(restriction) {
-								var restrictionValue = restriction.getEarlyStart(this);
+								var restrictionValue = restriction.getMinEarlyStart4Task(this);
 								if (isNaN(restrictionValue)) {
 									earlyStart = NaN
 								} else if (restrictionValue != 0) {
@@ -95,7 +95,7 @@ define(
 							var task = tasks[i];
 							var lateEnd = moment(endOfProject);
 							_.forEach(task.restrictions(), function(restriction) {
-								var restrictionValue = restriction.getLateEnd(this);
+								var restrictionValue = restriction.getMaxLateEnd4Task(this);
 								if (isNaN(restrictionValue)) {
 									lateEnd = NaN
 								} else if (isFinite(restrictionValue)) {
@@ -103,7 +103,7 @@ define(
 								}
 							}, task);
 							_.forEach(task.restrictionsFromDependants(), function(restriction) {
-								var restrictionValue = restriction.getLateEnd(this);
+								var restrictionValue = restriction.getMaxLateEnd4Task(this);
 								if (isNaN(restrictionValue)) {
 									lateEnd = NaN
 								} else if (isFinite(restrictionValue)) {

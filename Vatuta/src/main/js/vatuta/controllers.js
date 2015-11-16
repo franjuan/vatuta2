@@ -51,20 +51,20 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				project.addTask(taskD);
 				
 				new Restrictions.EndToStart({
-					_endingTask : taskA,
-					_startingTask : taskB
+					_dependency : taskA,
+					_dependant : taskB
 				});
 				new Restrictions.EndToStart({
-					_endingTask : taskA,
-					_startingTask : taskC
+					_dependency : taskA,
+					_dependant : taskC
 				});
 				new Restrictions.EndToStart({
-					_endingTask : taskB,
-					_startingTask : taskD
+					_dependency : taskB,
+					_dependant : taskD
 				});
 				new Restrictions.EndToStart({
-					_endingTask : taskC,
-					_startingTask : taskD
+					_dependency : taskC,
+					_dependant : taskD
 				});
 
 				$scope.project = project;
@@ -236,9 +236,9 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		    .then(function(restriction) {
 		    	console.log(restriction.task.index() + restriction.type + ' created for task ' + $scope.selectedTask.index() + '.- ' + $scope.selectedTask.name());
 		    	new Restrictions.EndToStart({
-					_endingTask : restriction.task,
-					_startingTask : $scope.selectedTask,
-					_duration: restriction.delay?restriction.delay:new Duration()
+					_dependency : restriction.task,
+					_dependant : $scope.selectedTask,
+					_delay: restriction.delay?restriction.delay:new Duration()
 				});
 		    	ga('send', 'event', 'gantt', 'create', 'restriction');
 		    }, function() {

@@ -10,7 +10,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		 * @constructs Restriction
 		 */
 		constructor : function(/* Object */kwArgs) {
-			this._duration = new Duration();
+			this._delay = new Duration();
 			lang.mixin(this, kwArgs);
 		}
 	});
@@ -20,45 +20,45 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
      */
 	var EndToStartDependency = declare("EndToStartDependency", Restriction, {
 		constructor: function(/* Object */kwArgs) {
-			if (kwArgs._startingTask) {
-				kwArgs._startingTaskId = kwArgs._startingTask.id();
-				delete kwArgs._startingTask;
+			if (kwArgs._dependant) {
+				kwArgs._dependantId = kwArgs._dependant.id();
+				delete kwArgs._dependant;
 			}
-			if (kwArgs._endingTask) {
-				kwArgs._endingTaskId = kwArgs._endingTask.id();
-				delete kwArgs._endingTask;
+			if (kwArgs._dependency) {
+				kwArgs._dependencyId = kwArgs._dependency.id();
+				delete kwArgs._dependency;
 			}
 			this.inherited(arguments);
-			this.endingTask().addRestrictionFromDependants(this);
-			this.startingTask().addRestriction(this);
+			this.dependency().addRestrictionFromDependants(this);
+			this.dependant().addRestriction(this);
 		},
-		endingTask: function() {
-			return Engine.taskById(this._endingTaskId);
+		dependency: function() {
+			return Engine.taskById(this._dependencyId);
 		},
-		startingTask: function() {
-			return Engine.taskById(this._startingTaskId);
+		dependant: function() {
+			return Engine.taskById(this._dependantId);
 		},
 		delay: function(newDuration) {
-			return arguments.length ? (this._duration = newDuration) : this._duration;
+			return arguments.length ? (this._delay = newDuration) : this._delay;
 		},
 		getDependants4Task: function(task) {
-			if (!task || task.id()===this.endingTask().id()) {
-				return [this.startingTask()];
+			if (!task || task.id()===this.dependency().id()) {
+				return [this.dependant()];
 			} else {
 				return [];
 			}
 		},
 		getDependencies4Task: function(task) {
-			if (!task || task.id()===this.startingTask().id()) {
-				return [this.endingTask()];
+			if (!task || task.id()===this.dependant().id()) {
+				return [this.dependency()];
 			} else {
 				return [];
 			}
 		},
-		getEarlyStart: function(task) {
-			if (!task || task.id()===this.startingTask().id()) {
-				if (this.endingTask().earlyEnd()) {
-					return this.delay().addTo(this.endingTask().earlyEnd());
+		getMinEarlyStart4Task: function(task) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyEnd()) {
+					return this.delay().addTo(this.dependency().earlyEnd());
 				} else {
 					return NaN;
 				}
@@ -66,10 +66,10 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return 0;
 			}
 		},
-		getLateEnd: function(task) {
-			if (!task || task.id()===this.endingTask().id()) {
-				if (this.startingTask().lateStart()) {
-					return this.delay().subtractFrom(this.startingTask().lateStart());
+		getMaxLateEnd4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				if (this.dependant().lateStart()) {
+					return this.delay().subtractFrom(this.dependant().lateStart());
 				} else {
 					return NaN;
 				}
@@ -79,23 +79,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		},
 		template: 'EndToStartDependencyItem.html',
 		watchHash: function() {
-			return this._endingTaskId + 'FS' + this._startingTaskId;
+			return this._dependencyId + 'FS' + this._dependantId;
 		},
 		shortDescription: function() {
-			return this.endingTask().index()+'FS'+(this.delay().isZero()?'':(' + '+this.delay().shortFormatter()));
+			return this.dependency().index()+'FS'+(this.delay().isZero()?'':(' + '+this.delay().shortFormatter()));
 		},
 		longDescription: function() {
-			return this.type() + " restriction between the task " + this.startingTask().index() + ".- " + this.startingTask().name() + " that starts when " + this.endingTask().index() + ".- " + this.endingTask().name()+ " finishes.";
+			return this.type() + " restriction between the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts when " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
 		},
 		type: function() {
 			return "Finish-Start";
 		},
 		remove: function() {
-			this.startingTask().removeRestriction(this);
-			this.endingTask().removeRestrictionFromDependants(this);
+			this.dependant().removeRestriction(this);
+			this.dependency().removeRestrictionFromDependants(this);
 		},
 		equals: function(other) {
-			if (other.isInstanceOf && other.isInstanceOf(this.constructor) && this._startingTaskId == other._startingTaskId && this._endingTaskId == other._endingTaskId) {
+			if (other.isInstanceOf && other.isInstanceOf(this.constructor) && this._dependantId == other._dependantId && this._dependencyId == other._dependencyId) {
 				return true;
 			} else return false; 
 		}
