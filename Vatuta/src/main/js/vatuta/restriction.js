@@ -103,7 +103,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
-		getMaxLateEnd4Task: function(task) {
+		getMaxLateStart4Task: function(task) {
 			return Infinity;
 		},
 		template: 'EndToStartDependencyItem.html',

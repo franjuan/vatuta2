@@ -56,28 +56,48 @@ define(
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						for (i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
-							var earlyStart = moment(this._project.start());
-							_.forEach(task.restrictions(), function(restriction) {
-								var restrictionValue = restriction.getMinEarlyStart4Task(this);
-								if (isNaN(restrictionValue)) {
-									earlyStart = NaN
-								} else if (restrictionValue != 0) {
-									earlyStart = moment.max(earlyStart, restrictionValue);
-								}
-							}, task);
-							_.forEach(task.restrictionsFromDependants(), function(restriction) {
-								var restrictionValue = restriction.getMinEarlyStart4Task(this);
-								if (isNaN(restrictionValue)) {
-									earlyStart = NaN
-								} else if (restrictionValue != 0) {
-									earlyStart = moment.max(earlyStart, restrictionValue);
-								}
-							}, task);
+							// Calculate EarlyStart
+							var earlyStart = NaN;
+							if (task.earlyStart()) {
+								earlyStart = task.earlyStart()
+							} else {
+								earlyStart = moment(this._project.start());
+								_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
+									_.forEach(restrictions, function(restriction) {
+										var restrictionValue = restriction.getMinEarlyStart4Task(this);
+										if (isNaN(restrictionValue)) {
+											earlyStart = NaN
+										} else if (restrictionValue != 0) {
+											earlyStart = moment.max(earlyStart, restrictionValue);
+										}
+									}, task);
+								}, task);
+							}
 							if (!isNaN(earlyStart)) {
 								task.earlyStart(earlyStart);
-								task.earlyEnd(task.duration().addTo(earlyStart));
+							}
+							// Calculate EarlyEnd
+							var earlyEnd = NaN;
+							if (task.earlyEnd()) {
+								earlyEnd = task.earlyEnd()
+							} else {
+								earlyEnd = task.duration().addTo(earlyStart);
+								_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
+									_.forEach(restrictions, function(restriction) {
+										var restrictionValue = restriction.getMinEarlyEnd4Task(this);
+										if (isNaN(restrictionValue)) {
+											earlyEnd = NaN
+										} else if (restrictionValue != 0) {
+											earlyEnd = moment.max(earlyEnd, restrictionValue);
+										}
+									}, task);
+								}, task);
+							}
+							if (!isNaN(earlyEnd)) {
+								task.earlyEnd(earlyEnd);
 								endOfProject = moment.max(endOfProject, task.earlyEnd());
-								
+							}
+							if (!isNaN(earlyStart) && !isNaN(earlyEnd)) {
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
 									tasks[i] = tasks[alreadyCalculatedIndex + 1];
@@ -93,27 +113,47 @@ define(
 					while (alreadyCalculatedIndex > 0) {
 						for (i = alreadyCalculatedIndex - 1; i >= 0; i--) {
 							var task = tasks[i];
-							var lateEnd = moment(endOfProject);
-							_.forEach(task.restrictions(), function(restriction) {
-								var restrictionValue = restriction.getMaxLateEnd4Task(this);
-								if (isNaN(restrictionValue)) {
-									lateEnd = NaN
-								} else if (isFinite(restrictionValue)) {
-									lateEnd = moment.min(lateEnd, restrictionValue);
-								}
-							}, task);
-							_.forEach(task.restrictionsFromDependants(), function(restriction) {
-								var restrictionValue = restriction.getMaxLateEnd4Task(this);
-								if (isNaN(restrictionValue)) {
-									lateEnd = NaN
-								} else if (isFinite(restrictionValue)) {
-									lateEnd = moment.min(lateEnd, restrictionValue);
-								}
-							}, task);
+							// Calculate LateEnding
+							var lateEnd = NaN;
+							if (task.lateEnd()) {
+								lateEnd = task.lateEnd()
+							} else {
+								lateEnd = moment(endOfProject);
+								_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
+									_.forEach(restrictions, function(restriction) {
+										var restrictionValue = restriction.getMaxLateEnd4Task(this);
+										if (isNaN(restrictionValue)) {
+											lateEnd = NaN
+										} else if (isFinite(restrictionValue)) {
+											lateEnd = moment.min(lateEnd, restrictionValue);
+										}
+									}, task);
+								}, task);
+							}
 							if (!isNaN(lateEnd)) {
 								task.lateEnd(lateEnd);
-								task.lateStart(task.duration().subtractFrom(lateEnd));
-								
+							}
+							// Calculate Late Start
+							var lateStart = NaN;
+							if (task.lateStart()) {
+								lateStart = task.lateStart()
+							} else {
+								lateStart = task.duration().subtractFrom(lateEnd);
+								_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
+									_.forEach(restrictions, function(restriction) {
+										var restrictionValue = restriction.getMaxLateStart4Task(this);
+										if (isNaN(restrictionValue)) {
+											lateStart = NaN
+										} else if (isFinite(restrictionValue)) {
+											lateStart = moment.min(lateStart, restrictionValue);
+										}
+									}, task);
+								}, task);
+							}
+							if (!isNaN(lateStart)) {
+								task.lateStart(lateStart);
+							}
+							if (!isNaN(lateStart) && !isNaN(lateEnd)) {
 								if (i != alreadyCalculatedIndex - 1) {
 									var aux = tasks[i];
 									tasks[i] = tasks[alreadyCalculatedIndex+1];
