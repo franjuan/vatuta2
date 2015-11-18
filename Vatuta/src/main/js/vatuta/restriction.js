@@ -112,12 +112,15 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
-		template: 'EndToStartDependencyItem.html',
+		template: 'TaskDependencyItem.html',
 		watchHash: function() {
 			return this._dependencyId + 'FS' + this._dependantId;
 		},
 		shortDescription: function() {
 			return this.dependency().index()+'FS'+(this.delay().isZero()?'':(' + '+this.delay().shortFormatter()));
+		},
+		dependantDescription: function() {
+			return "This task starts after " + this.endingTask().index() + ".- " + restriction.endingTask().name()+ " finishes.";
 		},
 		longDescription: function() {
 			return this.type() + " restriction between the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts when " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
@@ -126,6 +129,51 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			return "Finish-Start";
 		}
 	});
-	
-	return {EndToStart: EndToStartDependency};
+	/**
+     * @exports StartToStartDependency
+     */
+	var StartToStartDependency = declare("StartToStartDependency", TaskDependency, {
+		constructor: function(/* Object */kwArgs) {
+			this.inherited(arguments);
+		},
+		getMinEarlyStart4Task: function(task) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyStart()) {
+					return this.delay().addTo(this.dependency().earlyStart());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
+			}
+		},
+		getMaxLateStart4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				if (this.dependant().lateStart()) {
+					return this.delay().subtractFrom(this.dependant().lateStart());
+				} else {
+					return NaN;
+				}
+			} else {
+				return Infinity;
+			}
+		},
+		template: 'TaskDependencyItem.html',
+		watchHash: function() {
+			return this._dependencyId + 'SS' + this._dependantId;
+		},
+		shortDescription: function() {
+			return this.dependency().index()+'SS'+(this.delay().isZero()?'':(' + '+this.delay().shortFormatter()));
+		},
+		dependantDescription: function() {
+			return "This task starts after " + this.endingTask().index() + ".- " + restriction.endingTask().name()+ " starts.";
+		},
+		longDescription: function() {
+			return this.type() + " restriction between the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts when " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
+		},
+		type: function() {
+			return "Start-Start";
+		}
+	});
+	return {EndToStart: EndToStartDependency, StartToStart: StartToStartDependency};
 });
