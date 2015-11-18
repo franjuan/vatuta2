@@ -61,6 +61,18 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return [];
 			}
 		},
+		getMinEarlyStart4Task: function(task) {
+			return 0;
+		},
+		getMinEarlyEnd4Task: function(task) {
+			return 0;
+		},
+		getMaxLateStart4Task: function(task) {
+			return Infinity;
+		},
+		getMaxLateEnd4Task: function(task) {
+			return Infinity;
+		},
 		remove: function() {
 			this.dependant().removeRestriction(this);
 			this.dependency().removeRestrictionFromDependants(this);
@@ -89,9 +101,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return 0;
 			}
 		},
-		getMinEarlyEnd4Task: function(task) {
-			return 0;
-		},
 		getMaxLateEnd4Task: function(task) {
 			if (!task || task.id()===this.dependency().id()) {
 				if (this.dependant().lateStart()) {
@@ -102,9 +111,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			} else {
 				return Infinity;
 			}
-		},
-		getMaxLateStart4Task: function(task) {
-			return Infinity;
 		},
 		template: 'EndToStartDependencyItem.html',
 		watchHash: function() {

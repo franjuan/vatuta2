@@ -15,14 +15,20 @@
 			<div ng-messages="taskForm.name.$error" role="alert">
 			</div>
 			</md-input-container>
-			<md-input-container flex> <label>Duration</label>
-			<input name="duration" ng-model="ctrl.durationString"
-				ng-model-options="{ getterSetter: true }" required duration></input>
-			<div ng-messages="taskForm.duration.$error" role="alert">
-				<div ng-message="required">Task must have a duration</div>
-				<div ng-message="duration">Duration does not have a valid value, please check time units and values</div>
-			</div>
+			<div flex layout="row" layout-align="space-between center">
+			<md-input-container flex>
+				<label>Duration</label>
+				<input name="duration" ng-model="ctrl.durationString"
+					ng-model-options="{ getterSetter: true }" required duration></input>
+				<div ng-messages="taskForm.duration.$error" role="alert">
+					<div ng-message="required">Task must have a duration</div>
+					<div ng-message="duration">Duration does not have a valid value, please check time units and values</div>
+				</div>
 			</md-input-container>
+			<md-checkbox ng-model="selectedTask.duration.isEstimated" class="md-primary">
+              Estimated<md-tooltip md-direction="bottom">If estimated the duration will not be considered the main and first restriction, but an estimation that will change in accordance with other restrictions</md-tooltip>
+            </md-checkbox>
+            </div>
 		</form>
 	</section>
 	<section>
