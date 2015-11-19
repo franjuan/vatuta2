@@ -234,6 +234,8 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		      scope: $scope.$new(false, $scope)
 		    })
 		    .then(function(restriction) {
+		    	// TODO Si en task no se selecciona una tarea, aunque esté el texto de búsqueda, da error porque restriction.task es null
+		    	// TODO Si la restricción lleva la tarea a comenzar antes que el proyecto o la primera tarea da error
 		    	console.log(restriction.task.index() + restriction.type + ' created for task ' + $scope.selectedTask.index() + '.- ' + $scope.selectedTask.name());
 		    	new Restrictions.EndToStart({
 					_dependency : restriction.task,

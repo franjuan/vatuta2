@@ -15,13 +15,13 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 		 * Formats duration for display
 		 * @returns String formatted
 		 */
-		formatter: function() {
+		formatter: function(negate) {
 			var s = "";
 			_.forEach(Duration.units, function(unit) {
 				if (this[unit] && this[unit] != 0) {
 					if (s) s+= " ";
-			    	s+= this[unit] + " ";
-			    	if (this[unit] == 1) {
+			    	s+= (negate?(-1*this[unit]):this[unit]) + " ";
+			    	if (Math.abs(this[unit]) == 1) {
 			    		s+=unit.substr(0, unit.length - 1);
 			    	} else {
 			    		s+=unit;
@@ -34,11 +34,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 		 * Formats duration for display
 		 * @returns String formatted
 		 */
-		shortFormatter: function() {
+		shortFormatter: function(negate) {
 			var s = "";
 			_.forEach(Duration.units, function(unit) {
 				if (this[unit] && this[unit] != 0) {
-					s+= this[unit] + Duration.aliases[unit];
+					s+= (negate?(-1*this[unit]):this[unit]) + Duration.aliases[unit];
 				}
 			}, this);
 			return s;
@@ -88,7 +88,55 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 			return zero;
 		},
 		isNegative: function() {
-			
+			return this.moment().asMilliseconds() < 0;
+		},
+		humanize: function(showSuffix) {
+			var suffix = "";
+			if (showSuffix) {
+				suffix = this.isNegative()?" before":" after";
+			}
+			return this.moment().humanize(false) + suffix;
+		},
+		toString: function(showSuffix) {
+			var suffix = "";
+			if (showSuffix) {
+				suffix = this.isNegative()?" before":" after";
+			}
+			var values = [];
+			_.forEach(Duration.units, function(unit) {
+				if (this[unit] && this[unit] != 0) {
+					var u = ""
+			    	if (Math.abs(this[unit]) == 1) {
+			    		u=unit.substr(0, unit.length - 1);
+			    	} else {
+			    		u=unit;
+			    	}
+					values.push(((this.isNegative() && showSuffix)?(this[unit]*-1):this[unit]) + " " + u);
+				}
+			}, this);
+			var s = ""
+			for (var i=0; i < values.length - 1; i++) {
+				if (s) {
+					s+=", ";
+				}
+				s+= values[i];
+			}
+			if (s) {
+				s+=" and ";
+			}
+			if (values.length > 0) s+= values[values.length - 1];
+			return s + suffix;
+		},
+		moment: function() {
+			if (!this._moment) {
+				this._moment = moment.duration();
+				_.forEach(Duration.units, function(unit) {
+					if (this[unit] && this[unit] != 0) {
+						this._moment.add(this[unit], unit);
+					}
+				}, this);
+			}
+			return this._moment;
 		}
 	});
 	

@@ -117,13 +117,13 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			return this._dependencyId + 'FS' + this._dependantId;
 		},
 		shortDescription: function() {
-			return this.dependency().index()+'FS'+(this.delay().isZero()?'':(' + '+this.delay().shortFormatter()));
+			return this.dependency().index()+'FS'+(this.delay().isZero()?'':(this.delay().isNegative()?(' - '+this.delay().shortFormatter(true)):(' + '+this.delay().shortFormatter())));
 		},
 		dependantDescription: function() {
-			return "This task starts after " + this.endingTask().index() + ".- " + restriction.endingTask().name()+ " finishes.";
+			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
 		},
 		longDescription: function() {
-			return this.type() + " restriction between the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts when " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
+			return this.type() + " restriction for the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
 		},
 		type: function() {
 			return "Finish-Start";
@@ -163,13 +163,13 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			return this._dependencyId + 'SS' + this._dependantId;
 		},
 		shortDescription: function() {
-			return this.dependency().index()+'SS'+(this.delay().isZero()?'':(' + '+this.delay().shortFormatter()));
+			return this.dependency().index()+'SS'+(this.delay().isZero()?'':(this.delay().isNegative()?(' - '+this.delay().shortFormatter(true)):(' + '+this.delay().shortFormatter())));
 		},
 		dependantDescription: function() {
-			return "This task starts after " + this.endingTask().index() + ".- " + restriction.endingTask().name()+ " starts.";
+			return "This task starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
 		longDescription: function() {
-			return this.type() + " restriction between the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts when " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
+			return this.type() + " restriction for the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
 		type: function() {
 			return "Start-Start";
