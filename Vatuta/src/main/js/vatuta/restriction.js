@@ -81,7 +81,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			if (other.isInstanceOf && other.isInstanceOf(this.constructor) && this._dependantId == other._dependantId && this._dependencyId == other._dependencyId) {
 				return true;
 			} else return false; 
-		}
+		},
+		watchHash: function() {
+			return this._dependencyId + this.shortType() + this._dependantId;
+		},
+		shortDescription: function() {
+			return this.dependency().index()+this.shortType()+(this.delay().isZero()?'':(this.delay().isNegative()?(' - '+this.delay().shortFormatter(true)):(' + '+this.delay().shortFormatter())));
+		},
+		template: 'TaskDependencyItem.html'
 	});
 	/**
      * @exports EndToStartDependency
@@ -112,13 +119,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
-		template: 'TaskDependencyItem.html',
-		watchHash: function() {
-			return this._dependencyId + 'FS' + this._dependantId;
-		},
-		shortDescription: function() {
-			return this.dependency().index()+'FS'+(this.delay().isZero()?'':(this.delay().isNegative()?(' - '+this.delay().shortFormatter(true)):(' + '+this.delay().shortFormatter())));
-		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
 		},
@@ -127,6 +127,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		},
 		type: function() {
 			return "Finish-Start";
+		},
+		shortType: function() {
+			return "FS";
 		}
 	});
 	/**
@@ -158,13 +161,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
-		template: 'TaskDependencyItem.html',
-		watchHash: function() {
-			return this._dependencyId + 'SS' + this._dependantId;
-		},
-		shortDescription: function() {
-			return this.dependency().index()+'SS'+(this.delay().isZero()?'':(this.delay().isNegative()?(' - '+this.delay().shortFormatter(true)):(' + '+this.delay().shortFormatter())));
-		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -173,6 +169,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		},
 		type: function() {
 			return "Start-Start";
+		},
+		shortType: function() {
+			return "SS";
 		}
 	});
 	return {EndToStart: EndToStartDependency, StartToStart: StartToStartDependency};
