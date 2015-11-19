@@ -35,7 +35,11 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 		namespace.Task = Task;
 		namespace.Project = Project;
 		namespace.EndToStartDependency = Restrictions.EndToStart;
+		namespace.StartToEndDependency = Restrictions.StartToEnd;
+		namespace.StartToStartDependency = Restrictions.StartToStart;
+		namespace.EndToEndDependency = Restrictions.EndToEnd;
 		namespace.Restriction = Restriction;
+		namespace.TaskDependency = TaskDependency;
 		namespace.Duration = Duration;
 		
 		var serializers = {};

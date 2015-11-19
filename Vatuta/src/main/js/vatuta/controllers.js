@@ -75,16 +75,16 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					_dayFont : "Roboto, sans-serif",
 					_taskFontSize : 15,
 					_taskFont : "Roboto, sans-serif",
-					_taskTopHeight : 5,
-					_taskBottomHeight : 5,
-					_taskHeight : 25,
+					_taskTopHeight : 10,
+					_taskBottomHeight : 10,
+					_taskHeight : 30,
 					_arrowHeight : 8,
 					_arrowWidth : 5,
 					_arrowColor : "#CFD8DC",
 					_taskBgColor : "#607D8B",
 					_taskNameColor : "White",
-					_arrowInTaskXOffset : 6,
-					_arrowCornerR : 6
+					_arrowCornerR : 6,
+					_connectorRatio : 5 / 3
 				};
 				
 				if(typeof(Storage) !== "undefined" && localStorage.getItem("project")) {

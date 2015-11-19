@@ -95,7 +95,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 			if (showSuffix) {
 				suffix = this.isNegative()?" before":" after";
 			}
-			return this.moment().humanize(false) + suffix;
+			return (this.isZero()?'':this.moment().humanize(false)) + suffix;
 		},
 		toString: function(showSuffix) {
 			var suffix = "";
@@ -128,15 +128,15 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 			return s + suffix;
 		},
 		moment: function() {
-			if (!this._moment) {
-				this._moment = moment.duration();
+			if (!this._$moment) {
+				this._$moment = moment.duration();
 				_.forEach(Duration.units, function(unit) {
 					if (this[unit] && this[unit] != 0) {
-						this._moment.add(this[unit], unit);
+						this._$moment.add(this[unit], unit);
 					}
 				}, this);
 			}
-			return this._moment;
+			return this._$moment;
 		}
 	});
 	

@@ -132,6 +132,50 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			return "FS";
 		}
 	});
+	
+	/**
+     * @exports StartToEndDependency
+     */
+	var StartToEndDependency = declare("StartToEndDependency", TaskDependency, {
+		constructor: function(/* Object */kwArgs) {
+			this.inherited(arguments);
+		},
+		getMinEarlyEnd4Task: function(task) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyStart()) {
+					return this.delay().addTo(this.dependency().earlyStart());
+				} else {
+					return NaN;
+				}
+			} else {
+				return Infinity;
+			}
+		},
+		getMaxLateStart4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				if (this.dependant().lateEnd()) {
+					return this.delay().subtractFrom(this.dependant().lateEnd());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
+			}
+		},
+		dependantDescription: function() {
+			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
+		},
+		longDescription: function() {
+			return this.type() + " restriction for the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
+		},
+		type: function() {
+			return "Finish-Start";
+		},
+		shortType: function() {
+			return "FS";
+		}
+	});
+	
 	/**
      * @exports StartToStartDependency
      */
@@ -147,7 +191,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 					return NaN;
 				}
 			} else {
-				return 0;
+				return Infinity;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
@@ -174,5 +218,49 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			return "SS";
 		}
 	});
-	return {EndToStart: EndToStartDependency, StartToStart: StartToStartDependency};
+	
+	/**
+     * @exports StartToStartDependency
+     */
+	var EndToEndDependency = declare("EndToEndDependency", TaskDependency, {
+		constructor: function(/* Object */kwArgs) {
+			this.inherited(arguments);
+		},
+		getMinEarlyEnd4Task: function(task) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyEnd()) {
+					return this.delay().addTo(this.dependency().earlyEnd());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
+			}
+		},
+		getMaxLateEnd4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				if (this.dependant().lateEnd()) {
+					return this.delay().subtractFrom(this.dependant().lateEnd());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
+			}
+		},
+		dependantDescription: function() {
+			return "This task ends " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " ends.";
+		},
+		longDescription: function() {
+			return this.type() + " restriction for the task " + this.dependant().index() + ".- " + this.dependant().name() + " that ends " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " ends.";
+		},
+		type: function() {
+			return "End-End";
+		},
+		shortType: function() {
+			return "EE";
+		}
+	});
+	
+	return {EndToStart: EndToStartDependency, StartToEnd: StartToEndDependency, StartToStart: StartToStartDependency, EndToEnd: EndToEndDependency};
 });
