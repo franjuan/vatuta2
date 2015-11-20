@@ -66,6 +66,25 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					_dependency : taskC,
 					_dependant : taskD
 				});
+				
+				var taskE = new Task({
+					_name : "E",
+					_duration : new Duration({days: 3})
+				});
+				project.addTask(taskE);
+				var taskF = new Task({
+					_name : "F",
+					_duration : new Duration({days: 5})
+				});
+				project.addTask(taskF);
+				new Restrictions.EndToEnd({
+					_dependency : taskE,
+					_dependant : taskF
+				});
+				new Restrictions.EndToStart({
+					_dependency : taskB,
+					_dependant : taskE
+				});
 
 				$scope.project = project;
 				$scope.canvasOptions = {

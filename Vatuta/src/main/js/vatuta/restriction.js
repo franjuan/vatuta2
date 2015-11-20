@@ -148,7 +148,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 					return NaN;
 				}
 			} else {
-				return Infinity;
+				return 0;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
@@ -159,7 +159,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 					return NaN;
 				}
 			} else {
-				return 0;
+				return Infinity;
 			}
 		},
 		dependantDescription: function() {
@@ -191,7 +191,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 					return NaN;
 				}
 			} else {
-				return Infinity;
+				return 0;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
@@ -245,7 +245,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 					return NaN;
 				}
 			} else {
-				return 0;
+				return Infinity;
 			}
 		},
 		dependantDescription: function() {
