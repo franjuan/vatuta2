@@ -109,6 +109,8 @@ define(
 								}
 							}
 							if (!isNaN(earlyStart) && !isNaN(earlyEnd)) {
+								task.actualStart(earlyStart);
+								task.actualEnd(earlyEnd);
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
 									tasks[i] = tasks[alreadyCalculatedIndex + 1];

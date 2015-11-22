@@ -110,6 +110,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 		lateEnd: function(newLateEnd) {
 			return arguments.length ? this._lateEnd = newLateEnd : this._lateEnd;
 		},
+		actualStart: function(newActualStart) {
+			return arguments.length ? this._actualStart = newActualStart : this._actualStart;
+		},
+		actualEnd: function(newActualEnd) {
+			return arguments.length ? this._actualEnd = newActualEnd : this._actualEnd;
+		},
 		watchHash: function() {
 			return this.id() + this.index() + this.name() + this.description() + this.duration().shortFormatter() +
 				_.reduce(

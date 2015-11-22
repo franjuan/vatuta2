@@ -150,8 +150,8 @@ define(
 					
 					var taskShape = new createjs.Shape();
 					taskShape.mouseChildren = false;
-					var daysFromStart = this.daysFromProjectStart(task.earlyStart(), project);
-					var daysFromEnd = this.daysFromProjectStart(task.earlyEnd(), project);
+					var daysFromStart = this.daysFromProjectStart(task.actualStart(), project);
+					var daysFromEnd = this.daysFromProjectStart(task.actualEnd(), project);
 					var durationInDays = daysFromEnd - daysFromStart;
 					taskShape.graphics.beginFill(this._taskBgColor).drawRect(
 							daysFromStart*this._dayWidth,
@@ -206,9 +206,9 @@ define(
 					var container = new createjs.Container();
 					
 					// X position of ending task
-					var x1 = (this.daysFromProjectStart(restriction.dependency().earlyEnd(), project))*this._dayWidth;
+					var x1 = (this.daysFromProjectStart(restriction.dependency().actualEnd(), project))*this._dayWidth;
 					// X position of starting task
-					var x2 = this.daysFromProjectStart(restriction.dependant().earlyStart(), project)*this._dayWidth;
+					var x2 = this.daysFromProjectStart(restriction.dependant().actualStart(), project)*this._dayWidth;
 					
 					// Directions 
 					var downwards = restriction.dependant().index() > restriction.dependency().index();
@@ -279,9 +279,9 @@ define(
 					var container = new createjs.Container();
 					
 					// X position of ending task
-					var x1 = this.daysFromProjectStart(restriction.dependency().earlyEnd(), project)*this._dayWidth;
+					var x1 = this.daysFromProjectStart(restriction.dependency().actualEnd(), project)*this._dayWidth;
 					// X position of starting task
-					var x2 = this.daysFromProjectStart(restriction.dependant().earlyEnd(), project)*this._dayWidth;
+					var x2 = this.daysFromProjectStart(restriction.dependant().actualEnd(), project)*this._dayWidth;
 					
 					// Directions 
 					var downwards = restriction.dependant().index() > restriction.dependency().index();

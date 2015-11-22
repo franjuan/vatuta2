@@ -21,7 +21,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 	});
 	
 	/**
-     * @exports Restriction
+     * @exports TaskDependencyRestriction
      */
 	var TaskDependency = declare("TaskDependency", Restriction, {
 		constructor: function(/* Object */kwArgs) {
@@ -260,6 +260,51 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		shortType: function() {
 			return "EE";
 		}
+	});
+	
+	/**
+     * @exports PlanningCriteria
+     */
+	var TaskDependency = declare("PlanningCriteria", Restriction, {
+		constructor: function(/* Object */kwArgs) {
+			if (kwArgs._dependant) {
+				kwArgs._dependantId = kwArgs._dependant.id();
+				delete kwArgs._dependant;
+			}
+			this.inherited(arguments);
+			this.dependant().addRestriction(this);
+		},
+		dependant: function() {
+			return Engine.taskById(this._dependantId);
+		},
+		getDependants4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				return [this.dependant()];
+			} else {
+				return [];
+			}
+		},
+		getActualStart4Task: function(task) {
+			return 0;
+		},
+		getActualEnd4Task: function(task) {
+			return 0;
+		},
+		remove: function() {
+			this.dependant().removeRestriction(this);
+		},
+		equals: function(other) {
+			if (other.isInstanceOf && other.isInstanceOf(this.constructor) && this._dependantId == other._dependantId) {
+				return true;
+			} else return false; 
+		},
+		watchHash: function() {
+			return this._dependantId + this.shortType();
+		},
+		shortDescription: function() {
+			return "Start task ASAP";
+		},
+		template: 'PlanningCriteriaItem.html'
 	});
 	
 	return {EndToStart: EndToStartDependency, StartToEnd: StartToEndDependency, StartToStart: StartToStartDependency, EndToEnd: EndToEndDependency};
