@@ -39,7 +39,7 @@ define(
 				 */
 				calculateEarlyStartLateEnding : function() {
 					// Remove old values
-					delete this._project._end;
+					delete this._project._calculatedStart, this._project._calculatedEnd;
 					_.forEach(this._project.tasks(), function(task) {
 						delete task._earlyStart;
 						delete task._earlyEnd;
