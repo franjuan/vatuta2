@@ -94,7 +94,7 @@ define(
 					background.graphics.beginFill("#FFF").drawRect(0,0, this._canvas.width, this._rulerHeight);
 					ruler.addChild(background);
 					
-					var dayCounter = moment(project.start());
+					var dayCounter = moment(project.calculatedStart());
 					for (i=0; i*this._dayWidth < this._width; i++) {
 						var element = new createjs.Shape();
 						element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth, 0, this._dayWidth, this._rulerHeight, 5);
@@ -343,7 +343,7 @@ define(
 					this._stage.update();
 				},
 				daysFromProjectStart: function(moment, project) {
-					return moment.diff(project.start(), 'days', true);
+					return moment.diff(project.calculatedStart(), 'days', true);
 				}
 			});
 		}

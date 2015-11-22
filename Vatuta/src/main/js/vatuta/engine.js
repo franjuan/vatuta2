@@ -52,8 +52,10 @@ define(
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = -1;
-					var endOfProject = moment(this._project.start());
+					var startOfProject = moment(this._project.baseStart());
+					var endOfProject = moment(this._project.baseStart());
 					while (alreadyCalculatedIndex < tasks.length - 1) {
+						var lastCalculatedIndex = alreadyCalculatedIndex;
 						for (i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
 							// Calculate EarlyStart
@@ -61,21 +63,30 @@ define(
 							if (task.earlyStart()) {
 								earlyStart = task.earlyStart()
 							} else {
-								earlyStart = moment(this._project.start());
+								earlyStart = null;
 								_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
 									_.forEach(restrictions, function(restriction) {
 										var restrictionValue = restriction.getMinEarlyStart4Task(this);
 										if (isNaN(restrictionValue)) {
 											earlyStart = NaN
 										} else if (restrictionValue != 0) {
-											earlyStart = moment.max(earlyStart, restrictionValue);
+											if (earlyStart == null) {
+												earlyStart = restrictionValue;
+											} else {
+												earlyStart = moment.max(earlyStart, restrictionValue);
+											}
 										}
 									}, task);
 								}, task);
+								if (earlyStart == null) {
+									earlyStart = moment(this._project.baseStart());
+								}
+								if (!isNaN(earlyStart)) {
+									task.earlyStart(earlyStart);
+									startOfProject = moment.min(startOfProject, task.earlyStart());
+								}
 							}
-							if (!isNaN(earlyStart)) {
-								task.earlyStart(earlyStart);
-							}
+							
 							// Calculate EarlyEnd
 							var earlyEnd = NaN;
 							if (task.earlyEnd()) {
@@ -92,10 +103,10 @@ define(
 										}
 									}, task);
 								}, task);
-							}
-							if (!isNaN(earlyEnd)) {
-								task.earlyEnd(earlyEnd);
-								endOfProject = moment.max(endOfProject, task.earlyEnd());
+								if (!isNaN(earlyEnd)) {
+									task.earlyEnd(earlyEnd);
+									endOfProject = moment.max(endOfProject, task.earlyEnd());
+								}
 							}
 							if (!isNaN(earlyStart) && !isNaN(earlyEnd)) {
 								if (i != alreadyCalculatedIndex + 1) {
@@ -106,11 +117,15 @@ define(
 								alreadyCalculatedIndex++;
 							}
 						}
+						if (lastCalculatedIndex == alreadyCalculatedIndex) {
+							throw "Lock on iteration " + alreadyCalculatedIndex;
+						}
 					}
 					
 					// Calculate late start and ending
 					alreadyCalculatedIndex = tasks.length;
 					while (alreadyCalculatedIndex > 0) {
+						var lastCalculatedIndex = alreadyCalculatedIndex;
 						for (i = alreadyCalculatedIndex - 1; i >= 0; i--) {
 							var task = tasks[i];
 							// Calculate LateEnding
@@ -129,10 +144,11 @@ define(
 										}
 									}, task);
 								}, task);
+								if (!isNaN(lateEnd)) {
+									task.lateEnd(lateEnd);
+								}
 							}
-							if (!isNaN(lateEnd)) {
-								task.lateEnd(lateEnd);
-							}
+							
 							// Calculate Late Start
 							var lateStart = NaN;
 							if (task.lateStart()) {
@@ -149,10 +165,11 @@ define(
 										}
 									}, task);
 								}, task);
+								if (!isNaN(lateStart)) {
+									task.lateStart(lateStart);
+								}
 							}
-							if (!isNaN(lateStart)) {
-								task.lateStart(lateStart);
-							}
+							
 							if (!isNaN(lateStart) && !isNaN(lateEnd)) {
 								if (i != alreadyCalculatedIndex - 1) {
 									var aux = tasks[i];
@@ -162,9 +179,13 @@ define(
 								alreadyCalculatedIndex--;
 							}
 						}
+						if (lastCalculatedIndex == alreadyCalculatedIndex) {
+							throw "Lock on iteration " + alreadyCalculatedIndex;
+						}
 					}
 					
-					this._project.end(endOfProject);
+					this._project.calculatedStart(startOfProject);
+					this._project.calculatedEnd(endOfProject);
 				}
 			};
 		});

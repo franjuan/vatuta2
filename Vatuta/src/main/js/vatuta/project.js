@@ -12,7 +12,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 */
 				constructor : function(/* Object */kwArgs) {
 					this._tasks = [];
-					this.start(moment());
+					this.baseStart(moment());
 					lang.mixin(this, kwArgs);
 				},
 				/**
@@ -54,23 +54,29 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 * @function
 				 * @memberof Project
 				 */
-				start: function(newStart) {
-					return arguments.length ? (this._start = newStart) : this._start;
+				baseStart: function(newStart) {
+					return arguments.length ? (this._baseStart = newStart) : this._baseStart;
 				},
-				
 				/**
 				 * @function
 				 * @memberof Project
 				 */
-				end: function(newEnd) {
-					return arguments.length ? (this._end = newEnd) : this._end;
+				calculatedStart: function(newEnd) {
+					return arguments.length ? (this._calculatedStart= newEnd) : this._calculatedStart;
+				},
+				/**
+				 * @function
+				 * @memberof Project
+				 */
+				calculatedEnd: function(newEnd) {
+					return arguments.length ? (this._calculatedEnd = newEnd) : this._calculatedEnd;
 				},
 				/**
 				 * @function
 				 * @memberof Project
 				 */
 				calculatedLength: function() {
-					return moment.duration(this.end().diff(this.start()));
+					return moment.duration(this.calculatedEnd().diff(this.calculatedStart()));
 				},
 				/**
 				 * @function
