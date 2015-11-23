@@ -103,7 +103,8 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					_taskBgColor : "#607D8B",
 					_taskNameColor : "White",
 					_arrowCornerR : 6,
-					_connectorRatio : 5 / 3
+					_connectorRatio : 5 / 3,
+					_sideMargins : 20
 				};
 				
 				if(typeof(Storage) !== "undefined" && localStorage.getItem("project")) {

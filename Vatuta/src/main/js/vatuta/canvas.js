@@ -41,6 +41,8 @@ define(
 					this._arrowCornerR = 10;
 					/* @member {Number} */
 					this._connectorRatio = this._arrowWidth  / 3;
+					/* @member {Number} */
+					this._sideMargins = this._arrowWidth  + this._arrowCornerR;
 						
 					lang.mixin(this, kwArgs);
 					
@@ -94,17 +96,17 @@ define(
 					background.graphics.beginFill("#FFF").drawRect(0,0, this._canvas.width, this._rulerHeight);
 					ruler.addChild(background);
 					
-					var dayCounter = moment(project.calculatedStart());
-					for (i=0; i*this._dayWidth < this._width; i++) {
+					var dayCounter = moment(project.calculatedStart().subtract(1,"day"));
+					for (i=-1; i*this._dayWidth < this._width; i++) {
 						var element = new createjs.Shape();
-						element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth, 0, this._dayWidth, this._rulerHeight, 5);
+						element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth + this._sideMargins, 0, this._dayWidth, this._rulerHeight, 5);
 
 						var text = new createjs.Text(dayCounter.date(), "bold " + this._dayFontSize + "px " + this._dayFont);
 						text.color = "White";
 						text.maxWidth = this._dayWidth;
 						text.textBaseline = "middle";
 						text.textAlign = "center";
-						text.x = i*this._dayWidth + this._dayWidth/2;
+						text.x = this._dayWidth*(i + 1/2) + this._sideMargins;
 						text.y = this._rulerHeight/2;
 						
 						ruler.addChild(element, text);
@@ -121,7 +123,7 @@ define(
 				},
 				drawProject: function(project) {
 					
-					this._width = project.calculatedLength().asDays() * this._dayWidth;
+					this._width = project.calculatedLength().asDays() * this._dayWidth + 2*this._sideMargins;
 					this._height = this._rulerHeight + this._taskRowHeight * project.tasks().length;
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
@@ -154,7 +156,7 @@ define(
 					var daysFromEnd = this.daysFromProjectStart(task.actualEnd(), project);
 					var durationInDays = daysFromEnd - daysFromStart;
 					taskShape.graphics.beginFill(this._taskBgColor).drawRect(
-							daysFromStart*this._dayWidth,
+							daysFromStart*this._dayWidth + this._sideMargins,
 							this._taskTopHeight,
 							durationInDays*this._dayWidth,
 							this._taskHeight);
@@ -164,7 +166,7 @@ define(
 					text.maxWidth = durationInDays*this._dayWidth;
 					text.textBaseline = "middle";
 					text.textAlign = "center";
-					text.x = (daysFromStart + durationInDays/2)*this._dayWidth;
+					text.x = (daysFromStart + durationInDays/2)*this._dayWidth + this._sideMargins;
 					text.y = this._taskTopHeight + this._taskHeight/2;
 					
 					taskContainer.addChild(element, taskShape, text);
@@ -206,9 +208,9 @@ define(
 					var container = new createjs.Container();
 					
 					// X position of ending task
-					var x1 = (this.daysFromProjectStart(restriction.dependency().actualEnd(), project))*this._dayWidth;
+					var x1 = (this.daysFromProjectStart(restriction.dependency().actualEnd(), project))*this._dayWidth + this._sideMargins;
 					// X position of starting task
-					var x2 = this.daysFromProjectStart(restriction.dependant().actualStart(), project)*this._dayWidth;
+					var x2 = this.daysFromProjectStart(restriction.dependant().actualStart(), project)*this._dayWidth + this._sideMargins;
 					
 					// Directions 
 					var downwards = restriction.dependant().index() > restriction.dependency().index();
@@ -279,9 +281,9 @@ define(
 					var container = new createjs.Container();
 					
 					// X position of ending task
-					var x1 = this.daysFromProjectStart(restriction.dependency().actualEnd(), project)*this._dayWidth;
+					var x1 = this.daysFromProjectStart(restriction.dependency().actualEnd(), project)*this._dayWidth + this._sideMargins;
 					// X position of starting task
-					var x2 = this.daysFromProjectStart(restriction.dependant().actualEnd(), project)*this._dayWidth;
+					var x2 = this.daysFromProjectStart(restriction.dependant().actualEnd(), project)*this._dayWidth + this._sideMargins;
 					
 					// Directions 
 					var downwards = restriction.dependant().index() > restriction.dependency().index();
@@ -299,7 +301,7 @@ define(
 						.endFill();
 					
 					var arrow = new createjs.Shape();
-					if (!backwards) {
+					if (backwards) {
 						arrow.graphics
 							.setStrokeStyle(2,"round","round")
 							.beginStroke(this._arrowColor)
