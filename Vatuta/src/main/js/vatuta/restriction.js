@@ -108,6 +108,28 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return 0;
 			}
 		},
+		getMinLateStart4Task: function(task) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependant().earlyStart()) {
+					return this.dependant().duration().addTo(this.dependant().earlyStart());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
+			}
+		},
+		getMaxLateStart4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				if (this.dependency().lateEnd()) {
+					return this.dependency().duration().subtractFrom(this.dependency().lateEnd());
+				} else {
+					return NaN;
+				}
+			} else {
+				return Infinity;
+			}
+		},
 		getMaxLateEnd4Task: function(task) {
 			if (!task || task.id()===this.dependency().id()) {
 				if (this.dependant().lateStart()) {
@@ -226,6 +248,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		constructor: function(/* Object */kwArgs) {
 			this.inherited(arguments);
 		},
+		getMinEarlyStart4Task: function(task) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependant().earlyEnd()) {
+					return this.dependant().duration().subtractFrom(this.dependant().earlyEnd());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
+			}
+		},
 		getMinEarlyEnd4Task: function(task) {
 			if (!task || task.id()===this.dependant().id()) {
 				if (this.dependency().earlyEnd()) {
@@ -235,6 +268,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				}
 			} else {
 				return 0;
+			}
+		},
+		getMaxLateStart4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				if (this.dependency().lateEnd()) {
+					return this.dependency().duration().subtractFrom(this.dependency().lateEnd());
+				} else {
+					return NaN;
+				}
+			} else {
+				return Infinity;
 			}
 		},
 		getMaxLateEnd4Task: function(task) {

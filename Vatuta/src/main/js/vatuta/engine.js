@@ -55,7 +55,7 @@ define(
 					var startOfProject = moment(this._project.baseStart());
 					var endOfProject = moment(this._project.baseStart());
 					while (alreadyCalculatedIndex < tasks.length - 1) {
-						var lastCalculatedIndex = alreadyCalculatedIndex;
+						var unknownResolvedInIteration = false;
 						for (i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
 							// Calculate EarlyStart
@@ -82,6 +82,7 @@ define(
 									earlyStart = moment(this._project.baseStart());
 								}
 								if (!isNaN(earlyStart)) {
+									unknownResolvedInIteration = true;
 									task.earlyStart(earlyStart);
 									startOfProject = moment.min(startOfProject, task.earlyStart());
 								}
@@ -92,18 +93,26 @@ define(
 							if (task.earlyEnd()) {
 								earlyEnd = task.earlyEnd()
 							} else {
-								earlyEnd = task.duration().addTo(earlyStart);
+								earlyEnd = null;
 								_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
 									_.forEach(restrictions, function(restriction) {
 										var restrictionValue = restriction.getMinEarlyEnd4Task(this);
 										if (isNaN(restrictionValue)) {
 											earlyEnd = NaN
 										} else if (restrictionValue != 0) {
-											earlyEnd = moment.max(earlyEnd, restrictionValue);
+											if (earlyEnd == null) {
+												earlyEnd = restrictionValue;
+											} else {
+												earlyEnd = moment.max(earlyEnd, restrictionValue);
+											}
 										}
 									}, task);
 								}, task);
+								if (earlyEnd == null && task.earlyStart()) {
+									earlyEnd = task.duration().addTo(task.earlyStart());
+								}
 								if (!isNaN(earlyEnd)) {
+									unknownResolvedInIteration = true;
 									task.earlyEnd(earlyEnd);
 									endOfProject = moment.max(endOfProject, task.earlyEnd());
 								}
@@ -119,15 +128,15 @@ define(
 								alreadyCalculatedIndex++;
 							}
 						}
-						if (lastCalculatedIndex == alreadyCalculatedIndex) {
-							throw "Lock on iteration " + alreadyCalculatedIndex;
+						if (!unknownResolvedInIteration) {
+							throw "Lock on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for early stage";
 						}
 					}
 					
 					// Calculate late start and ending
 					alreadyCalculatedIndex = tasks.length;
 					while (alreadyCalculatedIndex > 0) {
-						var lastCalculatedIndex = alreadyCalculatedIndex;
+						var unknownResolvedInIteration = false;
 						for (i = alreadyCalculatedIndex - 1; i >= 0; i--) {
 							var task = tasks[i];
 							// Calculate LateEnding
@@ -135,18 +144,26 @@ define(
 							if (task.lateEnd()) {
 								lateEnd = task.lateEnd()
 							} else {
-								lateEnd = moment(endOfProject);
+								lateEnd = null;
 								_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
 									_.forEach(restrictions, function(restriction) {
 										var restrictionValue = restriction.getMaxLateEnd4Task(this);
 										if (isNaN(restrictionValue)) {
 											lateEnd = NaN
 										} else if (isFinite(restrictionValue)) {
-											lateEnd = moment.min(lateEnd, restrictionValue);
+											if (lateEnd == null) {
+												lateEnd = restrictionValue;
+											} else {
+												lateEnd = moment.min(lateEnd, restrictionValue);
+											}
 										}
 									}, task);
 								}, task);
+								if (lateEnd == null) {
+									lateEnd =  moment(endOfProject);
+								}
 								if (!isNaN(lateEnd)) {
+									unknownResolvedInIteration = true;
 									task.lateEnd(lateEnd);
 								}
 							}
@@ -156,18 +173,26 @@ define(
 							if (task.lateStart()) {
 								lateStart = task.lateStart()
 							} else {
-								lateStart = task.duration().subtractFrom(lateEnd);
+								lateStart = null;
 								_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
 									_.forEach(restrictions, function(restriction) {
 										var restrictionValue = restriction.getMaxLateStart4Task(this);
 										if (isNaN(restrictionValue)) {
 											lateStart = NaN
 										} else if (isFinite(restrictionValue)) {
-											lateStart = moment.min(lateStart, restrictionValue);
+											if (lateStart == null) {
+												lateStart = restrictionValue;
+											} else {
+												lateStart = moment.min(lateStart, restrictionValue);
+											}
 										}
 									}, task);
 								}, task);
+								if (lateStart == null && task.lateEnd()) {
+									lateStart = task.duration().subtractFrom(task.lateEnd());
+								}
 								if (!isNaN(lateStart)) {
+									unknownResolvedInIteration = true;
 									task.lateStart(lateStart);
 								}
 							}
@@ -181,8 +206,8 @@ define(
 								alreadyCalculatedIndex--;
 							}
 						}
-						if (lastCalculatedIndex == alreadyCalculatedIndex) {
-							throw "Lock on iteration " + alreadyCalculatedIndex;
+						if (!unknownResolvedInIteration) {
+							throw "Lock on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for late stage";
 						}
 					}
 					
