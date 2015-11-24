@@ -45,6 +45,8 @@ define(
 						delete task._earlyEnd;
 						delete task._lateStart;
 						delete task._lateEnd;
+						delete task._actualStart;
+						delete task._actualEnd;
 					});
 					
 					// We clone the tasks array
