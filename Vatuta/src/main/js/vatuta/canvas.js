@@ -202,6 +202,8 @@ define(
 						return this.drawEndToStartRestriction(restriction, task, project);
 					} else if (restriction.isInstanceOf(Restrictions.EndToEnd)) {
 						return this.drawEndToEndRestriction(restriction, task, project);
+					} else if (restriction.isInstanceOf(Restrictions.StartToStart)) {
+						return this.drawStartToStartRestriction(restriction, task, project);
 					}
 				},
 				drawEndToStartRestriction: function(restriction, task, project) {
@@ -331,6 +333,68 @@ define(
 						.moveTo(x2,y2)
 						.lineTo(x2 + this._arrowHeight, y2 - this._arrowWidth/2)
 						.lineTo(x2 + this._arrowHeight, y2 + this._arrowWidth/2)
+						.closePath()
+						.endFill();
+					
+					container.addChild(arrow, base, head);
+					
+					return container;
+					
+				},
+				drawStartToStartRestriction: function(restriction, task, project) {
+					var container = new createjs.Container();
+					
+					// X position of ending task
+					var x1 = this.daysFromProjectStart(restriction.dependency().actualStart(), project)*this._dayWidth + this._sideMargins;
+					// X position of starting task
+					var x2 = this.daysFromProjectStart(restriction.dependant().actualStart(), project)*this._dayWidth + this._sideMargins;
+					
+					// Directions 
+					var downwards = restriction.dependant().index() > restriction.dependency().index();
+					var backwards = x2 < x1;
+					
+					// Y position
+					var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
+					var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
+					
+					var base = new createjs.Shape();
+					base.graphics
+						.beginStroke(this._arrowColor)
+						.beginFill(this._arrowColor)
+						.drawCircle(x1, y1, this._connectorRatio)
+						.endFill();
+					
+					var arrow = new createjs.Shape();
+					if (!backwards) {
+						arrow.graphics
+							.setStrokeStyle(2,"round","round")
+							.beginStroke(this._arrowColor)
+							.moveTo(x1, y1)
+							.lineTo(x1 - this._arrowHeight, y1)
+							.arcTo(x1 - this._arrowCornerR - this._arrowHeight, y1, x1 - this._arrowCornerR - this._arrowHeight, y1 + this._arrowCornerR * (downwards?1:-1), this._arrowCornerR)
+							.lineTo(x1 - this._arrowCornerR - this._arrowHeight, y2 + this._arrowCornerR * (downwards?-1:+1))
+							.arcTo(x1 - this._arrowCornerR - this._arrowHeight, y2, x1 - this._arrowHeight, y2, this._arrowCornerR)
+							.lineTo(x2,y2);
+					} else {
+						arrow.graphics
+							.setStrokeStyle(2,"round","round")
+							.beginStroke(this._arrowColor)
+							.moveTo(x1, y1)
+							.lineTo(x2 - this._arrowHeight, y1)
+							.arcTo(x2 - this._arrowCornerR - this._arrowHeight, y1, x2 - this._arrowCornerR - this._arrowHeight, y1 + this._arrowCornerR * (downwards?1:-1), this._arrowCornerR)
+							.lineTo(x2 - this._arrowCornerR - this._arrowHeight, y2 + this._arrowCornerR * (downwards?-1:+1))
+							.arcTo(x2 - this._arrowCornerR - this._arrowHeight, y2, x2 - this._arrowHeight, y2, this._arrowCornerR)
+							.lineTo(x2,y2);
+					}
+					
+					var head = new createjs.Shape();
+					head.graphics
+						.setStrokeStyle(1,"butt","miter")
+						.beginStroke(this._arrowColor)
+						.beginFill(this._arrowColor)
+						.moveTo(x2,y2)
+						.lineTo(x2 - this._arrowHeight, y2 - this._arrowWidth/2)
+						.lineTo(x2 - this._arrowHeight, y2 + this._arrowWidth/2)
 						.closePath()
 						.endFill();
 					

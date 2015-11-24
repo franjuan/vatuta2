@@ -77,7 +77,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					_duration : new Duration({days: 5})
 				});
 				project.addTask(taskF);
-				new Restrictions.EndToEnd({
+				new Restrictions.StartToStart({
 					_dependency : taskE,
 					_dependant : taskF
 				});
@@ -271,6 +271,14 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 							_delay: restriction.delay?restriction.delay:new Duration()
 						});
 		    	    break;
+		    	  case "SS":
+		    		  new Restrictions.StartToStart({
+							_dependency : restriction.task,
+							_dependant : $scope.selectedTask,
+							_delay: restriction.delay?restriction.delay:new Duration()
+						});
+		    	    break;
+		    	    
 		    	}
 		    	ga('send', 'event', 'gantt', 'create', 'restriction');
 		    }, function() {

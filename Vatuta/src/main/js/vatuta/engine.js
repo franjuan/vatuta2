@@ -56,7 +56,7 @@ define(
 					var endOfProject = moment(this._project.baseStart());
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						var unknownResolvedInIteration = false;
-						for (i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
+						for (var i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
 							// Calculate EarlyStart
 							var earlyStart = NaN;
@@ -137,7 +137,7 @@ define(
 					alreadyCalculatedIndex = tasks.length;
 					while (alreadyCalculatedIndex > 0) {
 						var unknownResolvedInIteration = false;
-						for (i = alreadyCalculatedIndex - 1; i >= 0; i--) {
+						for (var i = alreadyCalculatedIndex - 1; i >= 0; i--) {
 							var task = tasks[i];
 							// Calculate LateEnding
 							var lateEnd = NaN;
@@ -200,8 +200,8 @@ define(
 							if (!isNaN(lateStart) && !isNaN(lateEnd)) {
 								if (i != alreadyCalculatedIndex - 1) {
 									var aux = tasks[i];
-									tasks[i] = tasks[alreadyCalculatedIndex+1];
-									tasks[alreadyCalculatedIndex + 1] = aux;
+									tasks[i] = tasks[alreadyCalculatedIndex - 1];
+									tasks[alreadyCalculatedIndex - 1] = aux;
 								}
 								alreadyCalculatedIndex--;
 							}

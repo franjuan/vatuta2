@@ -216,10 +216,32 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return 0;
 			}
 		},
+		getMinEarlyEnd4Task: function(task) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependant().earlyStart()) {
+					return this.dependant().duration().addTo(this.dependant().earlyStart());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
+			}
+		},
 		getMaxLateStart4Task: function(task) {
 			if (!task || task.id()===this.dependency().id()) {
 				if (this.dependant().lateStart()) {
 					return this.delay().subtractFrom(this.dependant().lateStart());
+				} else {
+					return NaN;
+				}
+			} else {
+				return Infinity;
+			}
+		},
+		getMaxLateEnd4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				if (this.dependency().lateStart()) {
+					return this.dependency().duration().addTo(this.dependency().lateStart());
 				} else {
 					return NaN;
 				}
