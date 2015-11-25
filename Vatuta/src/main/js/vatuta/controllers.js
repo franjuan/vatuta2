@@ -278,6 +278,13 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 							_delay: restriction.delay?restriction.delay:new Duration()
 						});
 		    	    break;
+		    	  case "SF":
+		    		  new Restrictions.StartToEnd({
+							_dependency : restriction.task,
+							_dependant : $scope.selectedTask,
+							_delay: restriction.delay?restriction.delay:new Duration()
+						});
+		    	    break;
 		    	    
 		    	}
 		    	ga('send', 'event', 'gantt', 'create', 'restriction');

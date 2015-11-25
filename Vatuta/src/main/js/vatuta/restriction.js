@@ -108,7 +108,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return 0;
 			}
 		},
-		getMinLateStart4Task: function(task) {
+		getMinEarlyEnd4Task: function(task) {
 			if (!task || task.id()===this.dependant().id()) {
 				if (this.dependency().earlyEnd()) {
 					return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyEnd()));
@@ -162,6 +162,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		constructor: function(/* Object */kwArgs) {
 			this.inherited(arguments);
 		},
+		getMinEarlyStart4Task: function(task) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyStart()) {
+					return this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().earlyStart()));
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
+			}
+		},
 		getMinEarlyEnd4Task: function(task) {
 			if (!task || task.id()===this.dependant().id()) {
 				if (this.dependency().earlyStart()) {
@@ -184,17 +195,28 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
+		getMaxLateEnd4Task: function(task) {
+			if (!task || task.id()===this.dependency().id()) {
+				if (this.dependant().lateEnd()) {
+					return this.dependency().duration().addTo(this.delay().subtractFrom(this.dependant().lateEnd()));
+				} else {
+					return NaN;
+				}
+			} else {
+				return Infinity;
+			}
+		},
 		dependantDescription: function() {
-			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
+			return "This task finishes " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
 		longDescription: function() {
-			return this.type() + " restriction for the task " + this.dependant().index() + ".- " + this.dependant().name() + " that starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
+			return this.type() + " restriction for the task " + this.dependant().index() + ".- " + this.dependant().name() + " that finishes " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
 		type: function() {
-			return "Finish-Start";
+			return "Start-Finish";
 		},
 		shortType: function() {
-			return "FS";
+			return "SF";
 		}
 	});
 	
