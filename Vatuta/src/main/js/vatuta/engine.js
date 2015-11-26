@@ -28,7 +28,7 @@ define(
 				 * 
 				 */
 				taskById: function(id) {
-					return this._project.findTaskById(id);
+					return this.currentProject().findTaskById(id);
 				},
 				/**
 				 * Calculate early start and late end dates of every task of the
@@ -38,9 +38,12 @@ define(
 				 * 
 				 */
 				calculateEarlyStartLateEnding : function() {
+					// First detect circular dependencies
+					this.detectCircularDependencies();
+					
 					// Remove old values
-					delete this._project._calculatedStart, this._project._calculatedEnd;
-					_.forEach(this._project.tasks(), function(task) {
+					delete this.currentProject()._calculatedStart, this.currentProject()._calculatedEnd;
+					_.forEach(this.currentProject().tasks(), function(task) {
 						delete task._earlyStart;
 						delete task._earlyEnd;
 						delete task._lateStart;
@@ -50,12 +53,12 @@ define(
 					});
 					
 					// We clone the tasks array
-					var tasks = _.clone(this._project.tasks());
+					var tasks = _.clone(this.currentProject().tasks());
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = -1;
-					var startOfProject = moment(this._project.baseStart());
-					var endOfProject = moment(this._project.baseStart());
+					var startOfProject = moment(this.currentProject().baseStart());
+					var endOfProject = moment(this.currentProject().baseStart());
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						var unknownResolvedInIteration = false;
 						for (var i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
@@ -81,7 +84,7 @@ define(
 									}, task);
 								}, task);
 								if (earlyStart == null) {
-									earlyStart = moment(this._project.baseStart());
+									earlyStart = moment(this.currentProject().baseStart());
 								}
 								if (!isNaN(earlyStart)) {
 									unknownResolvedInIteration = true;
@@ -213,8 +216,63 @@ define(
 						}
 					}
 					
-					this._project.calculatedStart(startOfProject);
-					this._project.calculatedEnd(endOfProject);
+					this.currentProject().calculatedStart(startOfProject);
+					this.currentProject().calculatedEnd(endOfProject);
+				},
+				/**
+				 * Detect circular dependencies on project, based on Tarjan algorithm
+				 * 
+				 * @function
+				 * 
+				 */
+				detectCircularDependencies : function() {
+					var index = 0;
+					var stack = [];
+					
+					var strongConnect = function(task) {
+						// Set the depth index for task to the smallest unused index
+					    task._$index = index;
+					    task._$lowlink = index;
+					    index++;
+					    stack.push(task);
+					    task._$onStack = true;
+					    
+					    // Consider successors of task
+					    _.forEach(task.restrictionsFromDependants(), function(restriction) {
+					    	var dependant = restriction.dependant();
+					    	if (!dependant._$index) {
+						        // Dependant has not yet been visited; recurse on it
+						        strongConnect(dependant);
+						        task._$lowlink  = Math.min(task._$lowlink, dependant._$lowlink);
+					    	} else if (dependant._$onStack) {
+						        // Successor w is in stack S and hence in the current SCC
+					    		task._$lowlink  = Math.min(task._$lowlink, dependant._$index);
+					    	}
+					    }, task);
+					    
+					    // If v is a root node, pop the stack and generate an SCC
+					    if (task._$lowlink == task._$index) {
+					    	console.log("Start of cycle");
+						      do {
+							        var dependant = stack.pop();
+							        dependant._$onStack = false;
+							        console.log(dependant.name());
+						      } while (task.id() != dependant.id());
+					      	console.log("End of cycle");
+					    }
+					};
+					
+
+					_.forEach(this.currentProject().tasks(), function(task) {
+						if (!task._$index) {
+							strongConnect(task);
+						}
+					});
+					_.forEach(this.currentProject().tasks(), function(task) {
+						delete task._$index;
+						delete task._$lowlinj;
+						delete task._$onStack;
+					});
 				}
 			};
 		});
