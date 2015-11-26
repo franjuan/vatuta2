@@ -229,12 +229,12 @@ define(
 					var index = 0;
 					var stack = [];
 					
-					var strongConnect = function(task) {
+					var strongConnect = function(task, restriction) {
 						// Set the depth index for task to the smallest unused index
 					    task._$index = index;
 					    task._$lowlink = index;
 					    index++;
-					    stack.push(task);
+					    stack.push({task: task, restriction: restriction});
 					    task._$onStack = true;
 					    
 					    // Consider successors of task
@@ -242,7 +242,7 @@ define(
 					    	var dependant = restriction.dependant();
 					    	if (!dependant._$index) {
 						        // Dependant has not yet been visited; recurse on it
-						        strongConnect(dependant);
+						        strongConnect(dependant, restriction);
 						        task._$lowlink  = Math.min(task._$lowlink, dependant._$lowlink);
 					    	} else if (dependant._$onStack) {
 						        // Successor w is in stack S and hence in the current SCC
@@ -253,11 +253,17 @@ define(
 					    // If v is a root node, pop the stack and generate an SCC
 					    if (task._$lowlink == task._$index) {
 					    	console.log("Start of cycle");
-						      do {
-							        var dependant = stack.pop();
+						    do {
+						    	  	var element = stack.pop();
+						    	  	var restriction = element.restriction;
+							        var dependant = element.task;
 							        dependant._$onStack = false;
-							        console.log(dependant.name());
-						      } while (task.id() != dependant.id());
+							        if (!restriction) {
+							        	console.log(dependant.name());
+							        } else {
+							        	console.log(restriction.dependant().name() +" -> " +restriction.dependency().name() + " : " + restriction.shortDescription());
+							        }
+						    } while (task.id() != dependant.id());
 					      	console.log("End of cycle");
 					    }
 					};
