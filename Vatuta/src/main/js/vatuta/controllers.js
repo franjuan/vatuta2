@@ -1,7 +1,12 @@
 require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], function(vatuta, resurrect, moment, DurationUtils) {
-	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages','ngSanitize',
+	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages','ngSanitize','ngCookies',
 			'vatuta' ]);
 
+	vatutaApp.constant('config', {policyVersion: 0.1})
+			.run(function ($rootScope, config) {
+		        $rootScope.$config = config;
+		    });
+	
 	vatutaApp.controller('projectCtrl', [
 			'$scope',
 			'$mdSidenav',
@@ -14,8 +19,10 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 			'$mdBottomSheet',
 			'$mdToast',
 			'ProjectSerializer',
+			'$cookies',
+			'config',
 			function($scope, $mdSidenav, Project, Task, Engine, Canvas,
-					Restrictions, $mdDialog, $mdBottomSheet, $mdToast, ProjectSerializer) {
+					Restrictions, $mdDialog, $mdBottomSheet, $mdToast, ProjectSerializer, $cookies, $config) {
 				
 				$scope.toggleSidenav = function(menuId) {
 					$mdSidenav(menuId).toggle();
@@ -155,6 +162,29 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				}
 				
 				$scope.$watch(watchSelectedTask, taskChanged, true);
+				
+				if (!$cookies.get("policyVersion") || $cookies.getObject("policyVersion") < $config.policyVersion) {
+				    $mdDialog.show({
+				    	  controller: 	function ($scope, $mdDialog) {
+					    		  			$scope.close = function() {
+					    		  				$mdDialog.hide();
+					    		  			};
+					    		  			$scope.cancel = function() {
+					    		  				$mdDialog.cancel();
+					    		  			};
+				    	  				},
+					      templateUrl: 'vatuta/templates/policyWarning.tmpl.html',
+					      parent: angular.element(document.body),
+					      clickOutsideToClose:true,
+					      escapeToClose: true,
+					      scope: $scope.$new(false, $scope)
+				    }).then(
+				    	function() {
+				    		var now = new Date();
+				    		now.setFullYear(now.getFullYear() + 1)
+				    		$cookies.putObject("policyVersion", $config.policyVersion, {expires: now});
+				        });
+				}
 			} ]);
 	
 	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', function($scope, $mdBottomSheet, Task, Engine) {

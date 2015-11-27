@@ -1,0 +1,31 @@
+<md-dialog aria-label="Privacy policy"  ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Privacy policy v{{$config.policyVersion}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="icons/ic_close_white_48px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <h2>Cookies</h2>
+        <p>
+          In order to provide you the best user experience, we use cookies. By continuing to use vatuta.com you are giving consent to cookies being used.
+        </p>
+        <p>
+          We also use third party cookies like Google Analytics one. We use it to track the usage and navigation path of the users. Although some actions like loading or creating or removing elements are tracked, we DO NOT track any content or detail of your project which it is only stored and retrieved in your browser local storage at your request.
+        </p>
+        <h2>Privacy</h2>
+        <p>
+          We do not use your project, its details or part of its contents for any purpose. We DO NOT send to anywhere, we DO NOT storage. It is contained in your browser.
+        </p>
+      </div>
+    </md-dialog-content>
+    <div class="md-actions" layout="row" layout-align="space-between center">
+      <span flex></span><md-button ng-click="close()">Ok, I agree</md-button>
+    </div>
+  </form>
+</md-dialog>
