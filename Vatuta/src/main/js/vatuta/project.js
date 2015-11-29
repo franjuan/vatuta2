@@ -40,6 +40,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 					this.tasks().push(task);
 					this._tasksIndex()[task.id()] = task;
 					task.index(this.tasks().length);
+					task.parent(this);
 					return task;
 				},
 				/**

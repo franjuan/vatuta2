@@ -61,7 +61,6 @@ define(
 						for (var i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
 							// Calculate EarlyStart
-							var earlyStart = NaN;
 							if (task.earlyStart()) {
 								earlyStart = task.earlyStart()
 							} else {
@@ -91,7 +90,6 @@ define(
 							}
 							
 							// Calculate EarlyEnd
-							var earlyEnd = NaN;
 							if (task.earlyEnd()) {
 								earlyEnd = task.earlyEnd()
 							} else {
@@ -142,7 +140,6 @@ define(
 						for (var i = alreadyCalculatedIndex - 1; i >= 0; i--) {
 							var task = tasks[i];
 							// Calculate LateEnding
-							var lateEnd = NaN;
 							if (task.lateEnd()) {
 								lateEnd = task.lateEnd()
 							} else {
@@ -171,7 +168,6 @@ define(
 							}
 							
 							// Calculate Late Start
-							var lateStart = NaN;
 							if (task.lateStart()) {
 								lateStart = task.lateStart()
 							} else {

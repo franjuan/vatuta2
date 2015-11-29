@@ -1,6 +1,6 @@
-define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
+define([ "./vatuta/project.js", "./vatuta/task.js","./vatuta/baseTask.js", "./vatuta/engine.js",
 		"./vatuta/restriction.js", "./vatuta/canvas.js", "moment", "./vatuta/Duration.js" ], function(Project,
-		Task, Engine, Restrictions, Canvas, moment, Duration) {
+		Task, baseTask, Engine, Restrictions, Canvas, moment, Duration) {
 
 	var vatutaMod = angular.module('vatuta', [])
 		.config( ['$compileProvider', function( $compileProvider )
@@ -32,6 +32,7 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/engine.js",
 	
 	vatutaMod.factory('ProjectSerializer', [ function() {
 		var namespace = {};
+		namespace.baseTask = baseTask;
 		namespace.Task = Task;
 		namespace.Project = Project;
 		namespace.EndToStartDependency = Restrictions.EndToStart;

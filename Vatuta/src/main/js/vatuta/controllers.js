@@ -208,7 +208,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					    	function() {
 					    		var now = new Date();
 					    		now.setFullYear(now.getFullYear() + 1)
-					    		$cookies.putObject("version", 0.18, {expires: now});
+					    		$cookies.putObject("version", $config.version, {expires: now});
 					        });
 				}
 			} ]);
