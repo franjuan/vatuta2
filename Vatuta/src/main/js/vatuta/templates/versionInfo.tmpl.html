@@ -1,0 +1,44 @@
+<md-dialog aria-label="Privacy policy"  ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Current version of Vatuta is v{{$config.version}}</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="icons/ic_close_white_48px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+      	<div ng-hide="version >= 0.19">
+	        <h2>Version 0.19</h2>
+	        <p>
+	        	<ul>
+				  <li>Circular dependency detection algorithm.</li>
+				</ul>
+	        </p>
+        </div>
+      	<div ng-hide="version >= 0.18">
+	        <h2>Version 0.18</h2>
+	        <p>
+	        	<ul>
+				  <li>New restrictions added:
+				  	<ul>
+				  		<li>End to end, the dependant task should end after dependency task has finished.</li>
+				  		<li>Start to start, the dependant task should start after dependency task has started.</li>
+				  		<li>Start to end, the dependant task should end after dependency task has started.</li>
+				  	</ul>
+				  </li>
+				  <li>New features notification dialog
+				  </li>
+				</ul>
+	        </p>
+        </div>
+      </div>
+    </md-dialog-content>
+    <div class="md-actions" layout="row" layout-align="space-between center">
+      <span flex></span><md-button ng-click="close()">Ok</md-button>
+    </div>
+  </form>
+</md-dialog>

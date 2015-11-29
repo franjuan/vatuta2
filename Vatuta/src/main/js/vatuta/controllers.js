@@ -2,7 +2,10 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages','ngSanitize','ngCookies',
 			'vatuta' ]);
 
-	vatutaApp.constant('config', {policyVersion: 0.1})
+	vatutaApp
+			.constant('config', {
+				policyVersion: 0.1,
+				version: 0.19})
 			.run(function ($rootScope, config) {
 		        $rootScope.$config = config;
 		    });
@@ -184,6 +187,29 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				    		now.setFullYear(now.getFullYear() + 1)
 				    		$cookies.putObject("policyVersion", $config.policyVersion, {expires: now});
 				        });
+				} else if (!$cookies.get("version") || $cookies.getObject("version") < $config.version) {
+					var newScope = $scope.$new(false, $scope);
+					newScope.version = $cookies.getObject("version");
+				    $mdDialog.show({
+				    	  controller: 	function ($scope, $mdDialog) {
+					    		  			$scope.close = function() {
+					    		  				$mdDialog.hide();
+					    		  			};
+					    		  			$scope.cancel = function() {
+					    		  				$mdDialog.hide();
+					    		  			};
+				    	  				},
+					      templateUrl: 'vatuta/templates/versionInfo.tmpl.html',
+					      parent: angular.element(document.body),
+					      clickOutsideToClose:true,
+					      escapeToClose: true,
+					      scope: newScope
+				    }).then(
+					    	function() {
+					    		var now = new Date();
+					    		now.setFullYear(now.getFullYear() + 1)
+					    		$cookies.putObject("version", 0.18, {expires: now});
+					        });
 				}
 			} ]);
 	
