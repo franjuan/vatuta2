@@ -299,7 +299,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		
 		}]);
 
-	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav','Restrictions', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions) {
+	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav','Restrictions', 'Engine', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions, Engine) {
 		this.showTaskDependency = function(ev) {
 		    $mdDialog.show({
 		      controller: DialogController,
@@ -312,30 +312,31 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		    .then(function(restriction) {
 		    	// TODO Si en task no se selecciona una tarea, aunque esté el texto de búsqueda, da error porque restriction.task es null
 		    	console.log(restriction.task.index() + restriction.type + ' created for task ' + $scope.selectedTask.index() + '.- ' + $scope.selectedTask.name());
+		    	var restriction;
 		    	switch (restriction.type) {
 		    	  case "FS":
-		    		  new Restrictions.EndToStart({
+		    		  restriction = new Restrictions.EndToStart({
 							_dependency : restriction.task,
 							_dependant : $scope.selectedTask,
 							_delay: restriction.delay?restriction.delay:new Duration()
 						});
 		    	    break;
 		    	  case "FF":
-		    		  new Restrictions.EndToEnd({
+		    		  restriction = new Restrictions.EndToEnd({
 							_dependency : restriction.task,
 							_dependant : $scope.selectedTask,
 							_delay: restriction.delay?restriction.delay:new Duration()
 						});
 		    	    break;
 		    	  case "SS":
-		    		  new Restrictions.StartToStart({
+		    		  restriction = new Restrictions.StartToStart({
 							_dependency : restriction.task,
 							_dependant : $scope.selectedTask,
 							_delay: restriction.delay?restriction.delay:new Duration()
 						});
 		    	    break;
 		    	  case "SF":
-		    		  new Restrictions.StartToEnd({
+		    		  restriction = new Restrictions.StartToEnd({
 							_dependency : restriction.task,
 							_dependant : $scope.selectedTask,
 							_delay: restriction.delay?restriction.delay:new Duration()
@@ -343,6 +344,37 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 		    	    break;
 		    	    
 		    	}
+				// Then detect circular dependencies
+				var dependencies = Engine.detectCircularDependencies();
+				if (dependencies.length > 0) {
+					var newScope = $scope.$new(false, $scope);
+					newScope.tasks = dependencies[0];
+					newScope.restriction = restriction;
+				    $mdDialog.show({
+				    	  controller: 	function ($scope, $mdDialog) {
+					    		  			$scope.close = function() {
+					    		  				$mdDialog.hide();
+					    		  			};
+					    		  			$scope.cancel = function() {
+					    		  				$mdDialog.hide();
+					    		  			};
+				    	  				},
+					      templateUrl: 'vatuta/templates/circularDependencyFoundWarning.tmpl.html',
+					      parent: angular.element(document.body),
+					      clickOutsideToClose:true,
+					      escapeToClose: true,
+					      scope: newScope
+				    }).then(
+					    	function() {
+					    		restriction.remove();
+						    	$mdToast.show(
+						                $mdToast.simple()
+						                  .content(restriction.shortDescription() + " has been removed")
+						                  .position('top right')
+						                  .hideDelay(1500)
+						              );
+					        });
+				}
 		    	ga('send', 'event', 'gantt', 'create', 'restriction');
 		    }, function() {
 		    	console.log('You cancelled the TaskDependency dialog.');

@@ -1,0 +1,27 @@
+<md-dialog aria-label="Privacy policy"  ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Circular dependency found</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="icons/ic_close_white_48px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <p>
+        	Circular dependency found when creating restriction {{restriction.shortDescription()}} for following tasks:
+        	<ul>
+			  <li ng-repeat="task in tasks">{{task.index()}}.- {{task.name()}}</li>
+			</ul>
+			The restriction will be removed.
+        </p>
+      </div>
+    </md-dialog-content>
+    <div class="md-actions" layout="row" layout-align="space-between center">
+      <span flex></span><md-button ng-click="close()">Ok, remove it</md-button>
+    </div>
+  </form>
+</md-dialog>

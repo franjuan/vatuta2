@@ -38,9 +38,6 @@ define(
 				 * 
 				 */
 				calculateEarlyStartLateEnding : function() {
-					// First detect circular dependencies
-					this.detectCircularDependencies();
-					
 					// Remove old values
 					delete this.currentProject()._calculatedStart, this.currentProject()._calculatedEnd;
 					_.forEach(this.currentProject().tasks(), function(task) {
@@ -228,6 +225,7 @@ define(
 				detectCircularDependencies : function() {
 					var index = 0;
 					var stack = [];
+					var circularDependencies = [];
 					
 					var strongConnect = function(task) {
 						// Set the depth index for task to the smallest unused index
@@ -252,13 +250,16 @@ define(
 					    
 					    // If v is a root node, pop the stack and generate an SCC
 					    if (task._$lowlink == task._$index) {
-					    	console.log("Start of cycle");
-						    do {
+					    	var tasks = [];
+					    	do {
 					    	  	var dependant = stack.pop()
 						        dependant._$onStack = false;
-					        	console.log(dependant.name());
+					    	  	tasks.push(dependant);
 						    } while (task.id() != dependant.id());
-					      	console.log("End of cycle");
+					    	// If SCC contains more than one element, it implies a cicular dependency
+					    	if (tasks.length > 1) {
+					    		circularDependencies.push(tasks);
+					    	}
 					    }
 					};
 					
@@ -273,6 +274,8 @@ define(
 						delete task._$lowlinj;
 						delete task._$onStack;
 					});
+					
+					return circularDependencies;
 				}
 			};
 		});
