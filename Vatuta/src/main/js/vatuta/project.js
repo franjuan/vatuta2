@@ -12,7 +12,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 */
 				constructor : function(/* Object */kwArgs) {
 					this._tasks = [];
-					this.baseStart(moment());
+					this.earlyStart(moment());
 					lang.mixin(this, kwArgs);
 				},
 				/**
@@ -50,34 +50,43 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				name: function(newName) {
 				     return arguments.length ? (this._name = newName) : this._name;
 				},
-				
 				/**
 				 * @function
 				 * @memberof Project
 				 */
-				baseStart: function(newStart) {
-					return arguments.length ? (this._baseStart = newStart) : this._baseStart;
+				earlyStart: function(newEarlyStart) {
+					return arguments.length ? this._earlyStart = newEarlyStart : this._earlyStart;
+				},
+				earlyEnd: function(newEarlyEnd) {
+					return arguments.length ? this._earlyStart = newEarlyEnd : this._earlyStart;
+				},
+				lateStart: function(newLateStart) {
+					return arguments.length ? this._lateEnd = newLateStart : this._lateEnd;
+				},
+				lateEnd: function(newLateEnd) {
+					return arguments.length ? this._lateEnd = newLateEnd : this._lateEnd;
 				},
 				/**
 				 * @function
 				 * @memberof Project
 				 */
-				calculatedStart: function(newEnd) {
-					return arguments.length ? (this._calculatedStart= newEnd) : this._calculatedStart;
+				actualStart: function(newActualStart) {
+					return arguments.length ? this._actualStart = newActualStart : this._actualStart;
+				}
+				/**
+				 * @function
+				 * @memberof Project
+				 */
+				,
+				actualEnd: function(newActualEnd) {
+					return arguments.length ? this._actualEnd = newActualEnd : this._actualEnd;
 				},
 				/**
 				 * @function
 				 * @memberof Project
 				 */
-				calculatedEnd: function(newEnd) {
-					return arguments.length ? (this._calculatedEnd = newEnd) : this._calculatedEnd;
-				},
-				/**
-				 * @function
-				 * @memberof Project
-				 */
-				calculatedLength: function() {
-					return moment.duration(this.calculatedEnd().diff(this.calculatedStart()));
+				actualDuration: function() {
+					return moment.duration(this.actualEnd().diff(this.actualStart()));
 				},
 				/**
 				 * @function

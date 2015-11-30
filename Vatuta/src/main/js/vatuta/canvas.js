@@ -96,7 +96,7 @@ define(
 					background.graphics.beginFill("#FFF").drawRect(0,0, this._canvas.width, this._rulerHeight);
 					ruler.addChild(background);
 					
-					var dayCounter = moment(project.calculatedStart().subtract(1,"day"));
+					var dayCounter = moment(project.actualStart().subtract(1,"day"));
 					for (i=-1; i*this._dayWidth < this._width; i++) {
 						var element = new createjs.Shape();
 						element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth + this._sideMargins, 0, this._dayWidth, this._rulerHeight, 5);
@@ -123,7 +123,7 @@ define(
 				},
 				drawProject: function(project) {
 					
-					this._width = project.calculatedLength().asDays() * this._dayWidth + 2*this._sideMargins;
+					this._width = project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins;
 					this._height = this._rulerHeight + this._taskRowHeight * project.tasks().length;
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
@@ -484,7 +484,7 @@ define(
 					this._stage.update();
 				},
 				daysFromProjectStart: function(moment, project) {
-					return moment.diff(project.calculatedStart(), 'days', true);
+					return moment.diff(project.actualStart(), 'days', true);
 				}
 			});
 		}

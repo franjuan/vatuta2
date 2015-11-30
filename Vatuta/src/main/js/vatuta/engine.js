@@ -39,7 +39,7 @@ define(
 				 */
 				calculateEarlyStartLateEnding : function() {
 					// Remove old values
-					delete this.currentProject()._calculatedStart, this.currentProject()._calculatedEnd;
+					delete this.currentProject()._actualStart, this.currentProject()._actualEnd;
 					_.forEach(this.currentProject().tasks(), function(task) {
 						delete task._earlyStart;
 						delete task._earlyEnd;
@@ -54,8 +54,8 @@ define(
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = -1;
-					var startOfProject = moment(this.currentProject().baseStart());
-					var endOfProject = moment(this.currentProject().baseStart());
+					var startOfProject = moment(this.currentProject().earlyStart());
+					var endOfProject = moment(this.currentProject().earlyStart());
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						var unknownResolvedInIteration = false;
 						for (var i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
@@ -80,7 +80,7 @@ define(
 									}, task);
 								}, task);
 								if (earlyStart == null) {
-									earlyStart = moment(this.currentProject().baseStart());
+									earlyStart = moment(task.parent().earlyStart());
 								}
 								if (!isNaN(earlyStart)) {
 									unknownResolvedInIteration = true;
@@ -209,8 +209,10 @@ define(
 						}
 					}
 					
-					this.currentProject().calculatedStart(startOfProject);
-					this.currentProject().calculatedEnd(endOfProject);
+					// TODO Mover los actual a última fase de cálculo
+					this.currentProject().actualStart(startOfProject);
+					this.currentProject().actualEnd(endOfProject);
+					this.currentProject().lateEnd(endOfProject);
 				},
 				/**
 				 * Detect circular dependencies on project, based on Tarjan algorithm
