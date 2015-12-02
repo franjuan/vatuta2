@@ -15,6 +15,55 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 		children: function() {
 			return this._children;
 		},
+		/**
+		 * @function
+		 * @memberof Project
+		 */
+		addTask : function(task) {
+			this.children().push(task);
+			task.parent(this);
+			return task;
+		},
+		getDefaultEarlyStart: function() {
+			return this.parent().earlyStart()?this.parent().earlyStart():NaN;
+		},
+		getDefaultEarlyEnd: function() {
+			return _.reduce(this.children(), function(max, child) {
+				if (!isNaN(max) && child.earlyEnd()) {
+					return max==0?child.earlyEnd():moment.max(max, child.earlyEnd());
+				} else {
+					return NaN;
+				}
+			}, 0, this);
+		},
+		getDefaultLateStart: function() {
+			return _.reduce(this.children(), function(min, child) {
+				if (!isNaN(min) && child.lateStart()) {
+					return min==0?child.lateStart():moment.min(min, child.lateStart());
+				} else {
+					return NaN;
+				}
+			}, 0, this);
+		},
+		getDefaultLateEnd: function() {
+			return this.parent().lateEnd()?this.parent().lateEnd():NaN;
+		},
+		actualStart: function(newActualStart) {
+			return _.reduce(this.children(), function(min, child) {
+				  return min==0?child.actualStart():moment.min(min, child.actualStart());
+				}, 0, this);
+		},
+		actualEnd: function(newActualEnd) {
+			return _.reduce(this.children(), function(max, child) {
+				  return max==0?child.actualEnd():moment.max(max, child.actualEnd());
+				}, 0, this);
+		},
+		actualDuration: function(newActualDuration) {
+			return moment.duration(this.actualEnd().diff(this.actualStart()));
+		},
+		hasFixedDuration: function() {
+			return false;
+		},
 		watchHash: function() {
 			return this.id() + this.index() + this.name() + this.description() + this.duration().shortFormatter() +
 				_.reduce(

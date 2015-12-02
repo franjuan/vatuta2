@@ -1,6 +1,6 @@
-define([ "./vatuta/project.js", "./vatuta/task.js","./vatuta/baseTask.js", "./vatuta/engine.js",
+define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/baseTask.js", "./vatuta/summaryTask.js", "./vatuta/engine.js",
 		"./vatuta/restriction.js", "./vatuta/canvas.js", "moment", "./vatuta/Duration.js" ], function(Project,
-		Task, baseTask, Engine, Restrictions, Canvas, moment, Duration) {
+		Task, baseTask, summaryTask, Engine, Restrictions, Canvas, moment, Duration) {
 
 	var vatutaMod = angular.module('vatuta', [])
 		.config( ['$compileProvider', function( $compileProvider )
@@ -16,6 +16,9 @@ define([ "./vatuta/project.js", "./vatuta/task.js","./vatuta/baseTask.js", "./va
 	
 	vatutaMod.service('Task', [ function() {
 		return Task;
+	} ]);
+	vatutaMod.service('SummaryTask', [ function() {
+		return summaryTask;
 	} ]);
 	
 	vatutaMod.service('Engine', [ function() {

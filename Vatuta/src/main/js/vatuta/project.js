@@ -40,8 +40,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 					this.tasks().push(task);
 					this._tasksIndex()[task.id()] = task;
 					task.index(this.tasks().length);
-					task.parent(this);
+					if (!task.parent())	task.parent(this);
 					return task;
+				},
+				removeTask: function(task) {
+					// Remove task from project
+					_.remove(this.tasks(), "_id", task.id());
+					// Remove index
+					delete this._tasksIndex()[task.id()];
+					// Update ordinal indexes
+					for (var i = task.index() - 1; i < this.tasks().length; i++) { 
+					    this.tasks()[i].index(i + 1);
+					}
+					if (task.children()) {
+						_.forEach(task.children(), function(child) {
+							this.removeTask(child);
+						}, this);
+					}
 				},
 				/**
 				 * @function
@@ -94,17 +109,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 				 */
 				findTaskById: function(id) {
 					return this._tasksIndex()[id];
-				},
-				removeTask: function(task) {
-					task.remove();
-					// Remove task from project
-					_.remove(this.tasks(), "_id", task.id());
-					// Remove index
-					delete this._tasksIndex()[task.id()];
-					// Update ordinal indexes
-					for (var i = task.index() - 1; i < this.tasks().length; i++) { 
-					    this.tasks()[i].index(i + 1);
-					}
 				}
 			});
 		});

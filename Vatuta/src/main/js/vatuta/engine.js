@@ -80,7 +80,7 @@ define(
 									}, task);
 								}, task);
 								if (earlyStart == null) {
-									earlyStart = moment(task.parent().earlyStart());
+									earlyStart = task.getDefaultEarlyStart();
 								}
 								if (!isNaN(earlyStart)) {
 									unknownResolvedInIteration = true;
@@ -108,8 +108,8 @@ define(
 										}
 									}, task);
 								}, task);
-								if (earlyEnd == null && task.earlyStart()) {
-									earlyEnd = task.duration().addTo(task.earlyStart());
+								if (earlyEnd == null) {
+									earlyEnd = task.getDefaultEarlyEnd();
 								}
 								if (!isNaN(earlyEnd)) {
 									unknownResolvedInIteration = true;
@@ -128,6 +128,7 @@ define(
 								alreadyCalculatedIndex++;
 							}
 						}
+						this.currentProject().lateEnd(endOfProject);
 						if (!unknownResolvedInIteration) {
 							throw "Lock on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for early stage";
 						}
@@ -159,7 +160,7 @@ define(
 									}, task);
 								}, task);
 								if (lateEnd == null) {
-									lateEnd =  moment(endOfProject);
+									lateEnd =  task.getDefaultLateEnd();
 								}
 								if (!isNaN(lateEnd)) {
 									unknownResolvedInIteration = true;
@@ -186,8 +187,8 @@ define(
 										}
 									}, task);
 								}, task);
-								if (lateStart == null && task.lateEnd()) {
-									lateStart = task.duration().subtractFrom(task.lateEnd());
+								if (lateStart == null) {
+									lateStart = task.getDefaultLateStart();
 								}
 								if (!isNaN(lateStart)) {
 									unknownResolvedInIteration = true;
@@ -212,7 +213,6 @@ define(
 					// TODO Mover los actual a última fase de cálculo
 					this.currentProject().actualStart(startOfProject);
 					this.currentProject().actualEnd(endOfProject);
-					this.currentProject().lateEnd(endOfProject);
 				},
 				/**
 				 * Detect circular dependencies on project, based on Tarjan algorithm

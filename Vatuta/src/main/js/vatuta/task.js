@@ -5,7 +5,25 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 			this.inherited(arguments);
 		},
 		duration: function(newDuration) {
-		     return arguments.length ? (this._duration = newDuration) : this._duration;
+		    return arguments.length ? (this._duration = newDuration) : this._duration;
+		},
+		isEstimated: function(estimated) {
+			return arguments.length ? (this._isEstimated = estimated) : this._isEstimated;
+		},
+		getDefaultEarlyStart: function() {
+			return this.parent().earlyStart()?this.parent().earlyStart():NaN;
+		},
+		getDefaultEarlyEnd: function() {
+			return this.parent().earlyStart()?this.duration().addTo(this.parent().earlyStart()):NaN;
+		},
+		getDefaultLateStart: function() {
+			return this.parent().lateEnd()?this.parent().lateEnd():NaN;
+		},
+		getDefaultLateEnd: function() {
+			return this.parent().lateEnd()?this.parent().lateEnd():NaN;
+		},
+		hasFixedDuration: function() {
+			return !this.isEstimated();
 		},
 		watchHash: function() {
 			return this.id() + this.index() + this.name() + this.description() + this.duration().shortFormatter() +

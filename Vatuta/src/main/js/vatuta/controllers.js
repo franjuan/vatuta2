@@ -15,6 +15,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 			'$mdSidenav',
 			'Project',
 			'Task',
+			'SummaryTask',
 			'Engine',
 			'Canvas',
 			'Restrictions',
@@ -24,7 +25,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 			'ProjectSerializer',
 			'$cookies',
 			'config',
-			function($scope, $mdSidenav, Project, Task, Engine, Canvas,
+			function($scope, $mdSidenav, Project, Task, SummaryTask, Engine, Canvas,
 					Restrictions, $mdDialog, $mdBottomSheet, $mdToast, ProjectSerializer, $cookies, $config) {
 				
 				$scope.toggleSidenav = function(menuId) {
@@ -36,65 +37,114 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				});
 				Engine.currentProject(project);
 				
-				var taskA = new Task({
-					_name : "A",
+				
+				var base = new Task({
+					_name : "base",
 					_duration : new Duration({days: 3})
 				});
+				project.addTask(base);
+				
+				var summary = new SummaryTask({
+					_name : "Summary"
+				});
+				project.addTask(summary);
+				
+				var taskA = new Task({
+					_name : "A",
+					_duration :new Duration({days: 5})
+				});
 				project.addTask(taskA);
+				summary.addTask(taskA);
 				
 				var taskB = new Task({
 					_name : "B",
-					_duration :new Duration({days: 5})
+					_duration :new Duration({days: 4})
 				});
 				project.addTask(taskB);
+				summary.addTask(taskB);
 				
 				var taskC = new Task({
 					_name : "C",
-					_duration : new Duration({days: 7})
+					_duration :new Duration({days: 6})
 				});
 				project.addTask(taskC);
+				summary.addTask(taskC);
 				
-				var taskD = new Task({
-					_name : "D",
-					_duration : new Duration({days: 2})
+				new Restrictions.EndToStart({
+					_dependency : base,
+					_dependant : summary
 				});
-				project.addTask(taskD);
 				
 				new Restrictions.EndToStart({
 					_dependency : taskA,
 					_dependant : taskB
 				});
+				
 				new Restrictions.EndToStart({
-					_dependency : taskA,
+					_dependency : taskB,
 					_dependant : taskC
 				});
-				new Restrictions.EndToStart({
-					_dependency : taskB,
-					_dependant : taskD
-				});
-				new Restrictions.EndToStart({
-					_dependency : taskC,
-					_dependant : taskD
-				});
+					
 				
-				var taskE = new Task({
-					_name : "E",
-					_duration : new Duration({days: 3})
-				});
-				project.addTask(taskE);
-				var taskF = new Task({
-					_name : "F",
-					_duration : new Duration({days: 5})
-				});
-				project.addTask(taskF);
-				new Restrictions.StartToStart({
-					_dependency : taskE,
-					_dependant : taskF
-				});
-				new Restrictions.EndToStart({
-					_dependency : taskB,
-					_dependant : taskE
-				});
+//				var taskA = new Task({
+//					_name : "A",
+//					_duration : new Duration({days: 3})
+//				});
+//				project.addTask(taskA);
+//				
+//				var taskB = new Task({
+//					_name : "B",
+//					_duration :new Duration({days: 5})
+//				});
+//				project.addTask(taskB);
+//				
+//				var taskC = new Task({
+//					_name : "C",
+//					_duration : new Duration({days: 7})
+//				});
+//				project.addTask(taskC);
+//				
+//				var taskD = new Task({
+//					_name : "D",
+//					_duration : new Duration({days: 2})
+//				});
+//				project.addTask(taskD);
+//				
+//				new Restrictions.EndToStart({
+//					_dependency : taskA,
+//					_dependant : taskB
+//				});
+//				new Restrictions.EndToStart({
+//					_dependency : taskA,
+//					_dependant : taskC
+//				});
+//				new Restrictions.EndToStart({
+//					_dependency : taskB,
+//					_dependant : taskD
+//				});
+//				new Restrictions.EndToStart({
+//					_dependency : taskC,
+//					_dependant : taskD
+//				});
+//				
+//				var taskE = new Task({
+//					_name : "E",
+//					_duration : new Duration({days: 3})
+//				});
+//				project.addTask(taskE);
+//				var taskF = new Task({
+//					_name : "F",
+//					_duration : new Duration({days: 5})
+//				});
+//				project.addTask(taskF);
+//				new Restrictions.StartToStart({
+//					_dependency : taskE,
+//					_dependant : taskF
+//				});
+//				new Restrictions.EndToStart({
+//					_dependency : taskB,
+//					_dependant : taskE
+//				});
 
 				$scope.project = project;
 				$scope.canvasOptions = {
@@ -392,6 +442,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 	          .cancel("Don't do it!");
 		    $mdDialog.show(confirm).then(function() {
 		    	$mdSidenav('left').toggle();
+		    	task.remove();
 		    	$scope.project.removeTask(task);
 		    	$scope.$root.$broadcast('deleteTask', task);
 		    	$mdToast.show(
