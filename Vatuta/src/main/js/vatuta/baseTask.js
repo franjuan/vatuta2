@@ -1,5 +1,5 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/Duration.js" ], function(declare,
-		lang, _, moment, DurationUtils) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/Duration.js", "./vatuta/tactics.js" ], function(declare,
+		lang, _, moment, DurationUtils, Tactics) {
 	return declare("baseTask", null, {
 		/**
 		 * To allow this.inherited on constructor
@@ -8,12 +8,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 			constructor: "manual"
 		},
 		constructor : function (/* Object */kwArgs) {
-			if (!this._id) {
-				this._id='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-				    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-				    return v.toString(16);
-				});
-			}
 			if (this._earlyStart && !moment.isMoment(this._earlyStart)) {
 				this._earlyStart = moment(this._earlyStart);
 			}
@@ -27,6 +21,15 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 				this._lateEnd = moment(this._lateEnd);
 			}
 			lang.mixin(this, kwArgs);
+			if (!this._id) {
+				this._id='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+				    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+				    return v.toString(16);
+				});
+			}
+			if (!this._tactic) {
+				this._tactic = new Tactics.ASAP();
+			}
 		},
 		remove: function() {
 			// Hay que hacerlo así porque el remove lo quita de la misma lista
@@ -51,6 +54,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 		},
 		description: function(newDescription) {
 		     return arguments.length ? (this._description = newDescription) : this._description;
+		},
+		tactic: function(newTactic) {
+			return arguments.length ? (this._tactic = newTactic) : this._tactic;
 		},
 		restrictions : function() {
 			if (!this._restrictions) {

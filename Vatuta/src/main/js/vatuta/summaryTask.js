@@ -50,12 +50,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 		},
 		actualStart: function(newActualStart) {
 			return _.reduce(this.children(), function(min, child) {
-				  return min==0?child.actualStart():moment.min(min, child.actualStart());
+					if (!isNaN(min) && child.actualStart() && !isNaN(child.actualStart())) {
+						return min==0?child.actualStart():moment.min(min, child.actualStart());
+					} else {
+						return NaN;
+					}
 				}, 0, this);
 		},
 		actualEnd: function(newActualEnd) {
 			return _.reduce(this.children(), function(max, child) {
-				  return max==0?child.actualEnd():moment.max(max, child.actualEnd());
+				  if (!isNaN(max) && child.actualEnd() && !isNaN(child.actualEnd())) {
+					  	return max==0?child.actualEnd():moment.max(max, child.actualEnd());
+					} else {
+						return NaN;
+					}
 				}, 0, this);
 		},
 		actualDuration: function(newActualDuration) {

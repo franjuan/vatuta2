@@ -1,6 +1,6 @@
 define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/baseTask.js", "./vatuta/summaryTask.js", "./vatuta/engine.js",
-		"./vatuta/restriction.js", "./vatuta/canvas.js", "moment", "./vatuta/Duration.js" ], function(Project,
-		Task, baseTask, summaryTask, Engine, Restrictions, Canvas, moment, Duration) {
+		"./vatuta/restriction.js", "./vatuta/tactics.js", "./vatuta/canvas.js", "moment", "./vatuta/Duration.js" ], function(Project,
+		Task, baseTask, summaryTask, Engine, Restrictions, Tactics, Canvas, moment, Duration) {
 
 	var vatutaMod = angular.module('vatuta', [])
 		.config( ['$compileProvider', function( $compileProvider )
@@ -43,7 +43,8 @@ define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/baseTask.js", "./v
 		namespace.StartToStartDependency = Restrictions.StartToStart;
 		namespace.EndToEndDependency = Restrictions.EndToEnd;
 		namespace.Restriction = Restriction;
-		namespace.TaskDependency = TaskDependency;
+		namespace.PlanningTactic = PlanningTactic;
+		namespace.ASAPTactic = Tactics.ASAP;
 		namespace.Duration = Duration;
 		
 		var serializers = {};

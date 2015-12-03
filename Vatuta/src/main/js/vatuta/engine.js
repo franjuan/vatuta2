@@ -2,8 +2,8 @@
  * @module Engine
  */
 define(
-		[ "lodash", "moment", "./vatuta/Duration.js"],
-		function(_, moment, Duration) {
+		[ "lodash", "moment", "./vatuta/Duration.js","./vatuta/tactics.js"],
+		function(_, moment, Duration, Tactics) {
 			/**
 			 * @constructor
 			 * @alias module:Engine
@@ -118,8 +118,6 @@ define(
 								}
 							}
 							if (!isNaN(earlyStart) && !isNaN(earlyEnd)) {
-								task.actualStart(earlyStart);
-								task.actualEnd(earlyEnd);
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
 									tasks[i] = tasks[alreadyCalculatedIndex + 1];
@@ -213,6 +211,48 @@ define(
 					// TODO Mover los actual a última fase de cálculo
 					this.currentProject().actualStart(startOfProject);
 					this.currentProject().actualEnd(endOfProject);
+					
+					// Calculate actual start and ending
+					var alreadyCalculatedIndex = -1;
+					while (alreadyCalculatedIndex < tasks.length - 1) {
+						var unknownResolvedInIteration = false;
+						for (var i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
+							var task = tasks[i];
+							
+							// Calculate EarlyStart
+							if (task.actualStart()) {
+								actualStart = task.actualStart()
+							} else {
+								actualStart = task.tactic().getActualStart4Task(task);
+								if (!isNaN(actualStart)) {
+									unknownResolvedInIteration = true;
+									task.actualStart(actualStart);
+								}
+							}
+							
+							// Calculate EarlyEnd
+							if (task.actualEnd()) {
+								actualEnd = task.actualEnd()
+							} else {
+								actualEnd = task.tactic().getActualEnd4Task(task);
+								if (!isNaN(actualEnd)) {
+									unknownResolvedInIteration = true;
+									task.actualEnd(actualEnd);
+								}
+							}
+							if (!isNaN(earlyStart) && !isNaN(earlyEnd)) {
+								if (i != alreadyCalculatedIndex + 1) {
+									var aux = tasks[i];
+									tasks[i] = tasks[alreadyCalculatedIndex + 1];
+									tasks[alreadyCalculatedIndex + 1] = aux;
+								}
+								alreadyCalculatedIndex++;
+							}
+						}
+						if (!unknownResolvedInIteration) {
+							throw "Lock on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for actual stage";
+						}
+					}
 				},
 				/**
 				 * Detect circular dependencies on project, based on Tarjan algorithm
