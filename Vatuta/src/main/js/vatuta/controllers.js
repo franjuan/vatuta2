@@ -32,15 +32,16 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					$mdSidenav(menuId).toggle();
 				};
 
+				
 				var project = new Project({
 					_name : "Example Project"
 				});
 				Engine.currentProject(project);
 				
-				
+				// Start2End
 				var base = new Task({
-					_name : "base",
-					_duration : new Duration({days: 3})
+					_name : "Base",
+					_duration : new Duration({days: 20})
 				});
 				project.addTask(base);
 				
@@ -70,20 +71,69 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				project.addTask(taskC);
 				summary.addTask(taskC);
 				
-				new Restrictions.StartToStart({
+				new Restrictions.EndToEnd({
 					_dependency : base,
 					_dependant : summary
 				});
 				
-				new Restrictions.StartToEnd({
+				new Restrictions.EndToStart({
 					_dependency : taskA,
 					_dependant : taskB
 				});
 				
-				new Restrictions.StartToEnd({
+				new Restrictions.EndToStart({
 					_dependency : taskB,
 					_dependant : taskC
 				});
+				
+//				// End2Start
+//				var base2 = new Task({
+//					_name : "Base",
+//					_duration : new Duration({days: 3})
+//				});
+//				project.addTask(base2);
+//				
+//				var summary2 = new SummaryTask({
+//					_name : "Summary"
+//				});
+//				project.addTask(summary2);
+//				
+//				var taskA2 = new Task({
+//					_name : "A",
+//					_duration :new Duration({days: 5})
+//				});
+//				project.addTask(taskA2);
+//				summary.addTask(taskA2);
+//				
+//				var taskB2 = new Task({
+//					_name : "B",
+//					_duration :new Duration({days: 4})
+//				});
+//				project.addTask(taskB2);
+//				summary.addTask(taskB2);
+//				
+//				var taskC2 = new Task({
+//					_name : "C",
+//					_duration :new Duration({days: 6})
+//				});
+//				project.addTask(taskC2);
+//				summary.addTask(taskC2);
+//				
+//				new Restrictions.EndToEnd({
+//					_dependency : base2,
+//					_dependant : summary2
+//				});
+//				
+//				new Restrictions.EndToStart({
+//					_dependency : taskA2,
+//					_dependant : taskB2
+//				});
+//				
+//				new Restrictions.EndToStart({
+//					_dependency : taskB2,
+//					_dependant : taskC2
+//				});
+
 					
 				
 //				var taskA = new Task({

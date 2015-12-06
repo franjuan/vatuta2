@@ -10,6 +10,32 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 		isEstimated: function(estimated) {
 			return arguments.length ? (this._isEstimated = estimated) : this._isEstimated;
 		},
+//		hasRestrictionOnStart: function() {
+//			if (_.reduce(this.restrictions(), function(start, restriction) {
+//				  return start || restriction.onStart(this);
+//				}, false, this)) {
+//				return true;
+//			}
+//			if (_.reduce(this.restrictionsFromDependants(), function(start, restriction) {
+//				  return start || restriction.onStart(this);
+//				}, false, this)) {
+//				return true;
+//			}
+//			return false;
+//		},
+//		hasRestrictionOnEnd: function() {
+//			if (_.reduce(this.restrictions(), function(end, restriction) {
+//				  return end || restriction.onFinish(this);
+//				}, false, this)) {
+//				return true;
+//			}
+//			if (_.reduce(this.restrictionsFromDependants(), function(end, restriction) {
+//				  return end || restriction.onFinish(this);
+//				}, false, this)) {
+//				return true;
+//			}
+//			return false;
+//		},
 		getDefaultEarlyStart: function() {
 			return this.parent().earlyStart()?this.parent().earlyStart():NaN;
 		},
@@ -17,7 +43,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 			return this.parent().earlyStart()?this.duration().addTo(this.parent().earlyStart()):NaN;
 		},
 		getDefaultLateStart: function() {
-			return this.parent().lateEnd()?this.parent().lateEnd():NaN;
+			return this.parent().lateEnd()?this.duration().subtractFrom(this.parent().lateEnd()):NaN;
 		},
 		getDefaultLateEnd: function() {
 			return this.parent().lateEnd()?this.parent().lateEnd():NaN;

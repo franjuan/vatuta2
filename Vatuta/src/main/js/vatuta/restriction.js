@@ -17,7 +17,13 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		 */
 		constructor : function(/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
-		}
+		},
+//		onStart: function(task) {
+//			return false;
+//		},
+//		onFinish: function(task) {
+//			return false;
+//		}
 	});
 	
 	/**
@@ -98,7 +104,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			this.inherited(arguments);
 		},
 		getMinEarlyStart4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) {
+			if (task.id()===this.dependant().id()) {
 				if (this.dependency().earlyEnd()) {
 					return this.delay().addTo(this.dependency().earlyEnd());
 				} else {
@@ -109,7 +115,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) {
+			if (task.id()===this.dependant().id()) {
 				if (this.dependency().earlyEnd()) {
 					if (this.dependant().hasFixedDuration()){
 						return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyEnd()));
@@ -124,7 +130,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			}
 		},
 		getMaxLateStart4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.id()===this.dependency().id()) {
 				if (this.dependant().lateStart()) {
 					if (this.dependency().hasFixedDuration()) {
 						return this.dependency().duration().subtractFrom(this.delay().subtractFrom(this.dependant().lateStart()));
@@ -139,7 +145,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			}
 		},
 		getMaxLateEnd4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.id()===this.dependency().id()) {
 				if (this.dependant().lateStart()) {
 					return this.delay().subtractFrom(this.dependant().lateStart());
 				} else {
@@ -149,6 +155,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
+//		onStart: function(task) {
+//			if (task.id()===this.dependency().id()) {
+//				return false;
+//			} else {
+//				return true;
+//			}
+//		},
+//		onFinish: function(task) {
+//			if (task.id()===this.dependency().id()) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
 		},
@@ -222,6 +242,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
+//		onStart: function(task) {
+//			if (task.id()===this.dependency().id()) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		},
+//		onFinish: function(task) {
+//			if (task.id()===this.dependency().id()) {
+//				return false;
+//			} else {
+//				return true;
+//			}
+//		},
 		dependantDescription: function() {
 			return "This task finishes " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -295,6 +329,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
+//		onStart: function(task) {
+//			return true;
+//		},
+//		onFinish: function(task) {
+//			return false;
+//		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -368,6 +408,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 				return Infinity;
 			}
 		},
+//		onStart: function(task) {
+//			return false;
+//		},
+//		onFinish: function(task) {
+//			return true;
+//		},
 		dependantDescription: function() {
 			return "This task ends " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " ends.";
 		},

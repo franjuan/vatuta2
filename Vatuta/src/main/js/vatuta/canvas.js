@@ -291,7 +291,7 @@ define(
 					
 					// Directions 
 					var downwards = restriction.dependant().index() > restriction.dependency().index();
-					var backwards = x2 < x1;
+					var backwards = x2 <= x1;
 					// To allow curve from beginning
 					if (x1==x2) x2-=this._arrowCornerR;
 					
