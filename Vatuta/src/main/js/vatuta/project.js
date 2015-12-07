@@ -73,10 +73,10 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/
 					return arguments.length ? this._earlyStart = newEarlyStart : this._earlyStart;
 				},
 				earlyEnd: function(newEarlyEnd) {
-					return arguments.length ? this._earlyStart = newEarlyEnd : this._earlyStart;
+					return arguments.length ? this._lateEnd = newEarlyEnd : this._lateEnd;
 				},
 				lateStart: function(newLateStart) {
-					return arguments.length ? this._lateEnd = newLateStart : this._lateEnd;
+					return arguments.length ? this._earlyStart = newLateStart : this._earlyStart;
 				},
 				lateEnd: function(newLateEnd) {
 					return arguments.length ? this._lateEnd = newLateEnd : this._lateEnd;

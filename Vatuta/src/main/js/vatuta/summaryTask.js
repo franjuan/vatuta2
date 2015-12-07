@@ -24,10 +24,40 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 			task.parent(this);
 			return task;
 		},
-		getDefaultEarlyStart: function() {
-			return this.parent().earlyStart()?this.parent().earlyStart():NaN;
+		earlyStart: function(newEarlyStart) {
+			if (arguments.length) {
+				this._earlyStart = newEarlyStart;
+			} else {
+				if (this._earlyStart) {
+					return this._earlyStart;
+				} else {
+					var earlyStart = this.calculatedEarlyStart();
+					return isNaN(earlyStart)?undefined:earlyStart;
+				}
+			}
 		},
-		getDefaultEarlyEnd: function() {
+		earlyEnd: function(newEarlyEnd) {
+			if (arguments.length) {
+				this._earlyEnd = newEarlyEnd;
+			} else {
+				if (this._earlyEnd) {
+					return this._earlyEnd;
+				} else {
+					var earlyStart = this.calculatedEarlyEnd();
+					return isNaN(earlyStart)?undefined:earlyEnd;
+				}
+			}
+		},
+		calculatedEarlyStart: function() {
+			return _.reduce(this.children(), function(min, child) {
+				if (!isNaN(min) && child.earlyStart()) {
+					return min==0?child.earlyStart():moment.min(min, child.earlyStart());
+				} else {
+					return NaN;
+				}
+			}, 0, this);
+		},
+		calculatedEarlyEnd: function() {
 			return _.reduce(this.children(), function(max, child) {
 				if (!isNaN(max) && child.earlyEnd()) {
 					return max==0?child.earlyEnd():moment.max(max, child.earlyEnd());
@@ -35,6 +65,22 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 					return NaN;
 				}
 			}, 0, this);
+		},
+		getDefaultEarlyStart: function() {
+			var earlyStart = this.calculatedEarlyStart();
+			if (!isNaN(earlyStart)) {
+				return earlyStart;
+			} else {
+				return this.parent().earlyStart()?this.parent().earlyStart():0;
+			}
+		},
+		getDefaultEarlyEnd: function() {
+			var earlyEnd = this.calculatedEarlyEnd();
+			if (!isNaN(earlyEnd)) {
+				return earlyEnd;
+			} else {
+				return this.parent().earlyEnd()?this.parent().earlyEnd():Infinity;
+			}
 		},
 		getDefaultLateStart: function() {
 			return _.reduce(this.children(), function(min, child) {

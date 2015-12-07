@@ -60,6 +60,7 @@ define(
 						var unknownResolvedInIteration = false;
 						for (var i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
+							
 							// Calculate EarlyStart
 							var earlyStart;
 							if (task.earlyStart()) {
@@ -74,7 +75,7 @@ define(
 												earlyStart = NaN
 												return false;
 											} else if (restrictionValue != 0) {
-												if (earlyStart == null) {
+												if (earlyStart == 0) {
 													earlyStart = restrictionValue;
 												} else {
 													earlyStart = moment.max(earlyStart, restrictionValue);
@@ -82,10 +83,12 @@ define(
 											}
 										}, task);
 									}, task);
-									if (!isNaN(earlyStart)) {
+									if (!isNaN(earlyStart) && earlyStart != 0) {
 										unknownResolvedInIteration = true;
 										task.earlyStart(earlyStart);
 										startOfProject = moment.min(startOfProject, task.earlyStart());
+									} else {
+										earlyStart = NaN;
 									}
 								}
 							}
@@ -104,7 +107,7 @@ define(
 												earlyEnd = NaN
 												return false;
 											} else if (restrictionValue != 0) {
-												if (earlyEnd == null) {
+												if (!isFinite(earlyEnd)) {
 													earlyEnd = restrictionValue;
 												} else {
 													earlyEnd = moment.max(earlyEnd, restrictionValue);
@@ -112,10 +115,12 @@ define(
 											}
 										}, task);
 									}, task);
-									if (!isNaN(earlyEnd)) {
+									if (!isNaN(earlyEnd) && isFinite(earlyEnd)) {
 										unknownResolvedInIteration = true;
 										task.earlyEnd(earlyEnd);
 										endOfProject = moment.max(endOfProject, task.earlyEnd());
+									} else {
+										earlyEnd = NaN;
 									}
 								}
 							}
@@ -128,12 +133,13 @@ define(
 								alreadyCalculatedIndex++;
 							}
 						}
-						this.currentProject().lateEnd(endOfProject);
 						if (!unknownResolvedInIteration) {
 							this.showState(this.currentProject(), tasks);
 							throw "Lock on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for early stage";
 						}
+						this.showState(this.currentProject(), tasks);
 					}
+					this.currentProject().lateEnd(endOfProject);
 					
 					// Calculate late start and ending
 					alreadyCalculatedIndex = tasks.length;

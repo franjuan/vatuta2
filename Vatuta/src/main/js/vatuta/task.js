@@ -37,10 +37,18 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 //			return false;
 //		},
 		getDefaultEarlyStart: function() {
-			return this.parent().earlyStart()?this.parent().earlyStart():NaN;
+			if (this.parent().earlyStart()) { // Forwards
+				return this.parent().earlyStart();
+			} else {
+				return 0;
+			}
 		},
 		getDefaultEarlyEnd: function() {
-			return this.parent().earlyStart()?this.duration().addTo(this.parent().earlyStart()):NaN;
+			if (this.parent().earlyEnd()) { // Backwards
+				return this.parent().earlyEnd();
+			} else {
+				return Infinity;
+			}
 		},
 		getDefaultLateStart: function() {
 			return this.parent().lateEnd()?this.duration().subtractFrom(this.parent().lateEnd()):NaN;
