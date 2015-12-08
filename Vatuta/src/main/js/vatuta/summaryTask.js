@@ -43,8 +43,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 				if (this._earlyEnd) {
 					return this._earlyEnd;
 				} else {
-					var earlyStart = this.calculatedEarlyEnd();
-					return isNaN(earlyStart)?undefined:earlyEnd;
+					var earlyEnd = this.calculatedEarlyEnd();
+					return isNaN(earlyEnd)?undefined:earlyEnd;
 				}
 			}
 		},

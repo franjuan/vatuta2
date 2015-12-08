@@ -130,6 +130,7 @@ define(
 									tasks[i] = tasks[alreadyCalculatedIndex + 1];
 									tasks[alreadyCalculatedIndex + 1] = aux;
 								}
+								unknownResolvedInIteration = true;
 								alreadyCalculatedIndex++;
 							}
 						}
@@ -211,6 +212,7 @@ define(
 									tasks[i] = tasks[alreadyCalculatedIndex - 1];
 									tasks[alreadyCalculatedIndex - 1] = aux;
 								}
+								unknownResolvedInIteration = true;
 								alreadyCalculatedIndex--;
 							}
 						}

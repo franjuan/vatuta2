@@ -146,7 +146,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 			} else { // Dependency
 				if (task.parent().earlyStart()) { // Forward Early calculation
 					if (this.dependency().earlyStart() && this.dependency().hasFixedDuration()) {
-						return this.dependency().duration().addTo(this.dependant().earlyStart());
+						return this.dependency().duration().addTo(this.dependency().earlyStart());
 					} else {
 						return NaN;
 					}
