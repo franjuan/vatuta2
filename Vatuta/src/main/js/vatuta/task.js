@@ -39,6 +39,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 		getDefaultEarlyStart: function() {
 			if (this.earlyStart()) {
 				return this.earlyStart();
+			} else if (this.earlyEnd() && this.hasFixedDuration()) {
+				return this.duration().subtractFrom(this.earlyEnd());
 			} else if (this.parent().earlyStart()) {
 				return this.parent().earlyStart();
 			} else {
@@ -48,7 +50,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/
 		getDefaultEarlyEnd: function() {
 			if (this.earlyEnd()) {
 				return this.earlyEnd();
-			} else if (this.parent().earlyEnd()) { // Backwards
+			} else if (this.earlyStart() && this.hasFixedDuration()) {
+				return this.duration().addTo(this.earlyStart());
+			} else if (this.parent().earlyEnd()) {
 				return this.parent().earlyEnd();
 			} else {
 				return Infinity;

@@ -105,7 +105,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 		},
 		getMinEarlyStart4Task: function(task) {
 			if (task.id()===this.dependant().id()) { //Dependant
-				if (!task.parent().earlyEnd()) { // Forward Early calculation
+				if (task.parent().earlyStart()) { // Forward Early calculation
 					if (this.dependency().earlyEnd()) {
 						return this.delay().addTo(this.dependency().earlyEnd());
 					} else {
@@ -113,17 +113,13 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/engine.js", "./vatut
 					}
 				} else { // Backwards Early calculation
 					if (this.dependant().earlyEnd()) {
-						if (this.dependant().hasFixedDuration()){
-							return this.dependant().duration().subtractFrom(this.dependant().earlyEnd());
-						} else {
-							return 0;
-						}
+						return 0;
 					} else {
 						return NaN;
 					}
 				}
 			} else { // Dependency
-				if (!task.parent().earlyEnd()) { // Forward Early calculation
+				if (task.parent().earlyStart()) { // Forward Early calculation
 					return 0;
 				} else { // Backwards Early calculation
 					if (this.dependant().earlyStart()) {
