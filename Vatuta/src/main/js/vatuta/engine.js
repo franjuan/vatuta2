@@ -110,7 +110,7 @@ define(
 												if (!isFinite(earlyEnd)) {
 													earlyEnd = restrictionValue;
 												} else {
-													earlyEnd = moment.max(earlyEnd, restrictionValue);
+													earlyEnd = moment.min(earlyEnd, restrictionValue);
 												}
 											}
 										}, task);
@@ -193,7 +193,7 @@ define(
 												if (lateStart == null) {
 													lateStart = restrictionValue;
 												} else {
-													lateStart = moment.min(lateStart, restrictionValue);
+													lateStart = moment.max(lateStart, restrictionValue);
 												}
 											}
 										}, task);
