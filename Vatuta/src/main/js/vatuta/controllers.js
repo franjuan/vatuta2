@@ -71,7 +71,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 				project.addTask(taskC);
 				summary.addTask(taskC);
 				
-				new Restrictions.EndToStart({
+				new Restrictions.EndToEnd({
 					_dependency : base,
 					_dependant : summary
 				});
@@ -81,7 +81,7 @@ require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], 
 					_dependant : taskB
 				});
 				
-				new Restrictions.EndToStart({
+				new Restrictions.EndToEnd({
 					_dependency : taskB,
 					_dependant : taskC
 				});
