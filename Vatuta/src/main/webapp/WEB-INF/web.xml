@@ -4,6 +4,16 @@
 
 <web-app>
   <display-name>Vatuta</display-name>
+  <servlet>
+  	<servlet-name>VatutaServlet</servlet-name>
+  	<display-name>VatutaServlet</display-name>
+  	<description>Sample Servlet</description>
+  	<servlet-class>com.example.myproject.VatutaServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>VatutaServlet</servlet-name>
+  	<url-pattern>/vatuta</url-pattern>
+  </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
