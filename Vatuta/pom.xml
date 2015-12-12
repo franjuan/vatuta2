@@ -29,6 +29,9 @@
 			<resource>
 				<directory>${basedir}/src/main/js</directory>
 			</resource>
+			<resource>
+				<directory>${basedir}/src/test/webapp</directory>
+			</resource>
 		</resources>
 
 		<plugins>
@@ -99,11 +102,18 @@
 					</execution>
 				</executions>
 				<configuration>
-					<jsSrcDir>src/main/js/index.html</jsSrcDir>
-					<jsTestSrcDir>src/test/webapp/js/specs</jsTestSrcDir>
+					<!-- <jsSrcDir>${project.basedir}/src/main/js</jsSrcDir> -->
+					<jsTestSrcDir>${project.basedir}/src/test/webapp/js/specs</jsTestSrcDir>
+					<specIncludes>
+					    <!--   add the ones you want first  -->
+					    <include>**/specsSample.js</include>
+					    <!--   these are the defaults  -->
+					    <include>**/*.js</include>
+					    <include>**/*.coffee</include>
+					</specIncludes>
 					<preloadSources>
-						<preloadSource>lib/easeljs-0.8.1.min.js</preloadSource>
 					</preloadSources>
+					<customRunnerTemplate>${project.basedir}/src/test/resources/CustomSpecRunner.htmltemplate</customRunnerTemplate>
 					<systemPropertyVariables>
 						<phantomjs.binary.path>${phantomjs.binary.path}</phantomjs.binary.path>
 					</systemPropertyVariables>

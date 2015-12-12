@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=$sourceEncoding$">
+	$if(autoRefresh)$
+	<meta http-equiv="refresh" content="$autoRefreshInterval$">
+	$endif$
+
+    <title>Jasmine Spec Runner</title>
+
+ 	$cssDependencies$
+  	$preloadScriptTags$
+  	$javascriptDependencies$
+  	
+  	<script
+	src="https://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js"
+	data-dojo-config="async: true,
+					  packages : [
+					  	{name : 'underscorejs',	location : 'http://underscorejs.org', main: 'underscore-min'},
+					  	{name : 'lodash', location: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1', main: 'lodash.min'},
+					  	{name : 'easeljs', location: 'https://code.createjs.com', main: 'easeljs-0.8.1.min'},
+					  	{name : 'resurrect', location: 'lib', main: 'resurrect'},
+					  	{name : 'moment', location: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6', main: 'moment'}
+					  ], 
+					  baseUrl : '/'"></script>
+
+    <script>
+        require(["dojo/ready"],
+                function (ready) {
+                    ready(function () {
+                        jasmine.boot();
+                    });
+                });
+    </script>
+    
+    $allScriptTags$
+</head>
+    
+</html>
