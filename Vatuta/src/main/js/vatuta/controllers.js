@@ -41,7 +41,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 				// Start2End
 				var base = new Task({
 					_name : "Base",
-					_duration : new Duration({days: 20})
+					_duration : new Duration({days: 3})
 				});
 				project.addTask(base);
 				

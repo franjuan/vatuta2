@@ -268,6 +268,7 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 			Engine.calculateEarlyStartLateEnding();
 			
 			expect(summary.earlyEnd()).toBeAfter(base.earlyEnd());
+			expect(summary.earlyStart()).toBeSameDay(base.earlyStart());
 			
 			expect(taskB.earlyStart()).toBeAfter(taskA.earlyStart());
 	        expect(taskC.earlyStart()).toBeAfter(taskA.earlyStart());
