@@ -104,57 +104,25 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 			this.inherited(arguments);
 		},
 		getMinEarlyStart4Task: function(task) {
-			if (task.id()===this.dependant().id()) { //Dependant
-				if (task.parent().earlyStart()) { // Forward Early calculation
-					if (this.dependency().earlyEnd()) {
-						return this.delay().addTo(this.dependency().earlyEnd());
-					} else {
-						return NaN;
-					}
-				} else if (task.parent().earlyEnd()) { // Backwards Early calculation
-					if (this.dependant().earlyEnd() && this.dependant().hasFixedDuration()) {
-						return this.dependant().duration().subtractFrom(this.dependant().earlyEnd());
-					} else {
-						return NaN;
-					}
-				} else return NaN;
-			} else { // Dependency
-				if (task.parent().earlyStart()) { // Forward Early calculation
-					return task.earlyStart()?task.earlyStart():task.parent().earlyStart();
-				} else if (task.parent().earlyEnd()) { // Backwards Early calculation
-					if (this.dependant().earlyStart() && this.dependency().hasFixedDuration()) {
-						return this.dependency().duration().subtractFrom(this.delay().subtractFrom(this.dependant().earlyStart()));
-					} else {
-						return NaN;
-					}
-				} else return NaN;
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyEnd()) {
+					return this.delay().addTo(this.dependency().earlyEnd());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {
-			if (task.id()===this.dependant().id()) { // Dependant
-				if (task.parent().earlyStart()) { // Forward Early calculation
-					if (this.dependency().earlyEnd() && this.dependant().hasFixedDuration()) {
-							return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyEnd()));
-					} else {
-						return NaN;
-					}
-				} else if (task.parent().earlyEnd()) { // Backwards Early calculation
-					return task.earlyEnd()?task.earlyEnd():task.parent().earlyEnd();
-				} else return NaN;
-			} else { // Dependency
-				if (task.parent().earlyStart()) { // Forward Early calculation
-					if (this.dependency().earlyStart() && this.dependency().hasFixedDuration()) {
-						return this.dependency().duration().addTo(this.dependency().earlyStart());
-					} else {
-						return NaN;
-					}
-				} else if (task.parent().earlyEnd()) { // Backwards Early calculation
-					if (this.dependant().earlyStart()) {
-						return this.delay().subtractFrom(this.dependant().earlyStart());
-					} else {
-						return NaN;
-					}
-				} else return NaN;
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyEnd()) {
+					return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyEnd()));
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
@@ -385,57 +353,25 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 			this.inherited(arguments);
 		},
 		getMinEarlyStart4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) { //Dependant
-				if (this.dependency().earlyStart()) {// Forward Early calculation
-					if (this.dependency().earlyEnd() && this.dependant().hasFixedDuration()){
-						return this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().earlyEnd()));
-					} else {
-						return NaN;
-					}
-				} else if (task.parent().earlyEnd()) {// Backwards Early calculation
-					if (this.dependant().earlyEnd() && this.dependant().hasFixedDuration()) {
-						return this.dependant().duration().subtractFrom(this.dependant().earlyEnd());
-					} else {
-						return NaN;
-					}
-				} else return NaN;
-			} else { // Dependency
-				if (task.parent().earlyStart()) { // Forward Early calculation
-					return task.earlyStart()?task.earlyStart():task.parent().earlyStart();
-				} else if (task.parent().earlyEnd()) { // Backwards Early calculation
-					if (this.dependant().earlyEnd() && this.dependency().hasFixedDuration()) {
-						return this.dependency().duration().subtractFrom(this.delay().subtractFrom(this.dependant().earlyEnd()));
-					} else {
-						return NaN;
-					}
-				} else return NaN;
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyEnd()) {
+					return this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().earlyEnd()));
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) { // Dependant
-				if (task.parent().earlyStart()) { // Forward Early calculation
-					if (this.dependency().earlyEnd()) {
-						return this.delay().addTo(this.dependency().earlyEnd());
-					} else {
-						return NaN;
-					}
-				} else if (task.parent().earlyEnd()) { // Backwards Early calculation
-					return task.earlyEnd()?task.earlyEnd():task.parent().earlyEnd();
-				} else return NaN;
-			} else { // Dependency
-				if (task.parent().earlyStart()) { // Forward Early calculation
-					if (this.dependency().earlyStart() && this.dependency().hasFixedDuration()) {
-						return this.dependency().duration().addTo(this.dependency().earlyStart());
-					} else {
-						return NaN;
-					}
-				} else if (task.parent().earlyEnd()) { // Backwards Early calculation
-					if (this.dependant().earlyEnd()) {
-						return this.delay().subtractFrom(this.dependant().earlyEnd());
-					} else {
-						return NaN;
-					}
-				} else return NaN;
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().earlyEnd()) {
+					return this.delay().addTo(this.dependency().earlyEnd());
+				} else {
+					return NaN;
+				}
+			} else {
+				return 0;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
