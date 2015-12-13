@@ -1,4 +1,4 @@
-require([ "./vatuta/vatuta.js", "resurrect", "moment", "./vatuta/Duration.js"], function(vatuta, resurrect, moment, DurationUtils) {
+require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(vatuta, resurrect, moment, DurationUtils) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages','ngSanitize','ngCookies',
 			'vatuta' ]);
 

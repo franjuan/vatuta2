@@ -2,7 +2,7 @@
  * @module Engine
  */
 define(
-		[ "lodash", "moment", "./vatuta/Duration.js","./vatuta/tactics.js"],
+		[ "lodash", "moment", "vatuta/Duration","vatuta/tactics"],
 		function(_, moment, Duration, Tactics) {
 			/**
 			 * @constructor

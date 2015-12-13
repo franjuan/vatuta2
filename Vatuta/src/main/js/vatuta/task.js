@@ -1,4 +1,4 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/Duration.js", "./vatuta/baseTask.js" ], function(declare,
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Duration", "vatuta/baseTask" ], function(declare,
 		lang, _, moment, DurationUtils, baseTask) {
 	return declare("Task", baseTask, {
 		constructor : function (/* Object */kwArgs) {

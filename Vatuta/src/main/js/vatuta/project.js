@@ -1,7 +1,7 @@
 /**
  * @module Project
  */
-define([ "dojo/_base/declare", "dojo/_base/lang", "./vatuta/task.js", "./vatuta/engine.js", "lodash", "moment" ],
+define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/task", "vatuta/engine", "lodash", "moment" ],
 		function(declare, lang, Task, Engine, _, moment) {
 			/**
 		     * @exports Project

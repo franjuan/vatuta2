@@ -1,5 +1,5 @@
-define([ "./vatuta/project.js", "./vatuta/task.js", "./vatuta/baseTask.js", "./vatuta/summaryTask.js", "./vatuta/engine.js",
-		"./vatuta/restriction.js", "./vatuta/tactics.js", "./vatuta/canvas.js", "moment", "./vatuta/Duration.js" ], function(Project,
+define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask", "vatuta/engine",
+		"vatuta/restriction", "vatuta/tactics", "vatuta/canvas", "moment", "vatuta/Duration" ], function(Project,
 		Task, baseTask, summaryTask, Engine, Restrictions, Tactics, Canvas, moment, Duration) {
 
 	var vatutaMod = angular.module('vatuta', [])

@@ -1,4 +1,4 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "./vatuta/Duration.js", "./vatuta/tactics.js" ], function(declare,
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Duration", "vatuta/tactics" ], function(declare,
 		lang, _, moment, DurationUtils, Tactics) {
 	return declare("baseTask", null, {
 		/**
