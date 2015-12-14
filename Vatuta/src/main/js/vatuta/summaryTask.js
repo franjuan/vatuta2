@@ -5,6 +5,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			this._children = [];
 			this.inherited(arguments);
 		},
+		duration: function(newDuration) {
+		    var earlyStart = this.calculatedEarlyStart();
+		    var earlyEnd = this.calculateEarlyEnd();
+		    if (!isNaN(earlyStart) && !isNaN(earlyEnd)) {
+		    	return moment.duration(earlyEnd.diff(earlyStart));
+		    } else {
+		    	return NaN;
+		    }
+		},
+		isEstimated: function(estimated) {
+			return _.reduce(this.children(), function(estimated, child) {
+				return estimated || child.isEstimated();
+			}, false, this);
+		},
 		remove: function() {
 			this.inherited(arguments);
 			_.forEach(this.children(), function(child) {
@@ -114,9 +128,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 		},
 		actualDuration: function(newActualDuration) {
 			return moment.duration(this.actualEnd().diff(this.actualStart()));
-		},
-		hasFixedDuration: function() {
-			return false;
 		},
 		watchHash: function() {
 			return this.id() + this.index() + this.name() + this.description() + this.duration().shortFormatter() +

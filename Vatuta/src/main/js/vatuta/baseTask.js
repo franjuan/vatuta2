@@ -144,9 +144,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 		},
 		actualDuration: function(newActualDuration) {
 			return arguments.length ? this._actualDuration = newActualDuration : this._actualDuration;
-		},
-		hasFixedDuration: function() {
-			return this.duration;
 		}
 	});
 });

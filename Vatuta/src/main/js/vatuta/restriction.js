@@ -17,13 +17,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 		 */
 		constructor : function(/* Object */kwArgs) {
 			lang.mixin(this, kwArgs);
-		},
-//		onStart: function(task) {
-//			return false;
-//		},
-//		onFinish: function(task) {
-//			return false;
-//		}
+		}
 	});
 	
 	/**
@@ -116,7 +110,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 		},
 		getMinEarlyEnd4Task: function(task) {
 			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency().earlyEnd()) {
+				if (this.dependency().earlyEnd() && this.dependant().duration()) {
 					return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyEnd()));
 				} else {
 					return NaN;
@@ -151,20 +145,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				return Infinity;
 			}
 		},
-//		onStart: function(task) {
-//			if (task.id()===this.dependency().id()) {
-//				return false;
-//			} else {
-//				return true;
-//			}
-//		},
-//		onFinish: function(task) {
-//			if (task.id()===this.dependency().id()) {
-//				return true;
-//			} else {
-//				return false;
-//			}
-//		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
 		},
@@ -188,12 +168,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 		},
 		getMinEarlyStart4Task: function(task) {
 			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency().earlyStart()) {
-					if (this.dependant().hasFixedDuration()){
-						return this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().earlyStart()));
-					} else {
-						return 0;
-					}
+				if (this.dependency().earlyStart() && this.dependant().duration()) {
+					return this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().earlyStart()));
 				} else {
 					return NaN;
 				}
@@ -238,20 +214,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				return Infinity;
 			}
 		},
-//		onStart: function(task) {
-//			if (task.id()===this.dependency().id()) {
-//				return true;
-//			} else {
-//				return false;
-//			}
-//		},
-//		onFinish: function(task) {
-//			if (task.id()===this.dependency().id()) {
-//				return false;
-//			} else {
-//				return true;
-//			}
-//		},
 		dependantDescription: function() {
 			return "This task finishes " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -286,12 +248,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 		},
 		getMinEarlyEnd4Task: function(task) {
 			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency().earlyStart()) {
-					if (this.dependant().hasFixedDuration()){
-						return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyStart()));
-					} else {
-						return 0;
-					}
+				if (this.dependency().earlyStart() && this.dependant().duration()) {
+					return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyStart()));
 				} else {
 					return NaN;
 				}
@@ -325,12 +283,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				return Infinity;
 			}
 		},
-//		onStart: function(task) {
-//			return true;
-//		},
-//		onFinish: function(task) {
-//			return false;
-//		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -354,7 +306,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 		},
 		getMinEarlyStart4Task: function(task) {
 			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency().earlyEnd()) {
+				if (this.dependency().earlyEnd() && this.dependant().duration()) {
 					return this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().earlyEnd()));
 				} else {
 					return NaN;
@@ -400,12 +352,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				return Infinity;
 			}
 		},
-//		onStart: function(task) {
-//			return false;
-//		},
-//		onFinish: function(task) {
-//			return true;
-//		},
 		dependantDescription: function() {
 			return "This task ends " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " ends.";
 		},

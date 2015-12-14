@@ -10,32 +10,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 		isEstimated: function(estimated) {
 			return arguments.length ? (this._isEstimated = estimated) : this._isEstimated;
 		},
-//		hasRestrictionOnStart: function() {
-//			if (_.reduce(this.restrictions(), function(start, restriction) {
-//				  return start || restriction.onStart(this);
-//				}, false, this)) {
-//				return true;
-//			}
-//			if (_.reduce(this.restrictionsFromDependants(), function(start, restriction) {
-//				  return start || restriction.onStart(this);
-//				}, false, this)) {
-//				return true;
-//			}
-//			return false;
-//		},
-//		hasRestrictionOnEnd: function() {
-//			if (_.reduce(this.restrictions(), function(end, restriction) {
-//				  return end || restriction.onFinish(this);
-//				}, false, this)) {
-//				return true;
-//			}
-//			if (_.reduce(this.restrictionsFromDependants(), function(end, restriction) {
-//				  return end || restriction.onFinish(this);
-//				}, false, this)) {
-//				return true;
-//			}
-//			return false;
-//		},
 		getDefaultEarlyStart: function() {
 			if (this.earlyStart()) {
 				return this.earlyStart();
