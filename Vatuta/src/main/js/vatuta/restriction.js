@@ -145,20 +145,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				return Infinity;
 			}
 		},
-		onStart: function(task) {
-			if (task.id()===this.dependency().id()) {
-				return false;
-			} else {
-				return true;
-			}
-		},
-		onFinish: function(task) {
-			if (task.id()===this.dependency().id()) {
-				return true;
-			} else {
-				return false;
-			}
-		},
+//		onStart: function(task) {
+//			if (task.id()===this.dependency().id()) {
+//				return false;
+//			} else {
+//				return true;
+//			}
+//		},
+//		onFinish: function(task) {
+//			if (task.id()===this.dependency().id()) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
 		},
