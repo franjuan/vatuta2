@@ -172,5 +172,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 	Duration.units= ['years', 'quarters', 'months', 'weeks', 'days', 'hours', 'minutes', 'milliseconds'];
 	Duration.aliases= {'years':'y', 'quarters':'q', 'months':'M', 'weeks':'w', 'days':'d', 'hours':'h', 'minutes':'m', 'milliseconds':'ms'};
 	
+	/**
+	 * Creates a duration object from moment.duration type
+	 * @param moment moment.duration
+	 * @returns Duration object from moment.duration
+	 */
+	Duration.fromMoment = function(moment) {
+		var duration = new Duration();
+		_.forEach(Duration.units, function(unit) {
+			if (moment["_"+unit] && moment["_"+unit] != 0) {
+				duration[unit] = moment["_"+unit];
+			}
+		}, duration);
+		return duration;
+	}
+	
 	return Duration;
 });

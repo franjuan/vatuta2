@@ -68,20 +68,18 @@ define(
 							} else {
 								earlyStart = task.getDefaultEarlyStart();
 								if (!isNaN(earlyStart)) {
-									_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
-										_.forEach(restrictions, function(restriction) {
-											var restrictionValue = restriction.getMinEarlyStart4Task(this);
-											if (isNaN(restrictionValue)) {
-												earlyStart = NaN
-												return false;
-											} else if (restrictionValue != 0) {
-												if (earlyStart == 0) {
-													earlyStart = restrictionValue;
-												} else {
-													earlyStart = moment.max(earlyStart, restrictionValue);
-												}
+									_.forEach(this.getMinEarlyStartConstraints(task), function(constraint) {
+										var restrictionValue = constraint();
+										if (isNaN(restrictionValue)) {
+											earlyStart = NaN
+											return false;
+										} else if (restrictionValue != 0) {
+											if (earlyStart == 0) {
+												earlyStart = restrictionValue;
+											} else {
+												earlyStart = moment.max(earlyStart, restrictionValue);
 											}
-										}, task);
+										}
 									}, task);
 									if (!isNaN(earlyStart) && earlyStart != 0) {
 										unknownResolvedInIteration = true;
@@ -100,20 +98,18 @@ define(
 							} else {
 								earlyEnd = task.getDefaultEarlyEnd();
 								if (!isNaN(earlyEnd)){
-									_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
-										_.forEach(restrictions, function(restriction) {
-											var restrictionValue = restriction.getMinEarlyEnd4Task(this);
-											if (isNaN(restrictionValue)) {
-												earlyEnd = NaN
-												return false;
-											} else if (restrictionValue != 0) {
-												if (!isFinite(earlyEnd)) {
-													earlyEnd = restrictionValue;
-												} else {
-													earlyEnd = moment.min(earlyEnd, restrictionValue);
-												}
+									_.forEach(this.getMinEarlyEndConstraints(task), function(constraint) {
+										var restrictionValue = constraint();
+										if (isNaN(restrictionValue)) {
+											earlyEnd = NaN
+											return false;
+										} else if (isFinite(restrictionValue)) {
+											if (!isFinite(earlyEnd)) {
+												earlyEnd = restrictionValue;
+											} else {
+												earlyEnd = moment.max(earlyEnd, restrictionValue);
 											}
-										}, task);
+										}
 									}, task);
 									if (!isNaN(earlyEnd) && isFinite(earlyEnd)) {
 										unknownResolvedInIteration = true;
@@ -133,12 +129,14 @@ define(
 								unknownResolvedInIteration = true;
 								alreadyCalculatedIndex++;
 							}
+							console.log ("Task: " + task.name() + " on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for early stage");
+							this.showState(this.currentProject(), tasks);
 						}
 						if (!unknownResolvedInIteration) {
 							this.showState(this.currentProject(), tasks);
 							throw "Lock on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for early stage";
 						}
-						this.showState(this.currentProject(), tasks);
+						
 					}
 					this.currentProject().lateEnd(endOfProject);
 					
@@ -283,6 +281,26 @@ define(
 								 + (task.lateStart()?task.lateStart().format('DD/MM/YYYY'):'          ') + ' '
 								 + (task.lateEnd()?task.lateEnd().format('DD/MM/YYYY'):'          ') + ' ' ));
 					});
+				},
+				getMinEarlyStartConstraints: function(task) {
+					return this.getConstraintsOnTask(task, "getMinEarlyStart4Task");
+				},
+				getMinEarlyEndConstraints: function(task) {
+					return this.getConstraintsOnTask(task, "getMinEarlyEnd4Task");
+				},
+				getConstraintsOnTask: function(task, f, constraints) {
+					if (!constraints) {
+						var constraints = [];
+					}
+					_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
+						_.forEach(restrictions, function(restriction) {
+							constraints.push(_.bind(restriction[f], restriction, task));
+						}, task);
+					}, task);
+					//if (task.parent().getConstraintsOnTask) {
+					//	this.getConstraintsOnTask(task.parent(), f, constraints);
+					//}
+					return constraints;
 				},
 				/**
 				 * Detect circular dependencies on project, based on Tarjan algorithm

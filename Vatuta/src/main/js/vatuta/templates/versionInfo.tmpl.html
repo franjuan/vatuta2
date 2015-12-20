@@ -11,6 +11,16 @@
     </md-toolbar>
     <md-dialog-content>
       <div class="md-dialog-content">
+      	<div ng-hide="version >= 0.20">
+	        <h2>Version 0.20</h2>
+	        <p>
+	        	<ul>
+				  <li>Some basic work with summary tasks.</li>
+				  <li>Improvements in task dependency calculations.</li>
+				  <li>Performance improvements on schedulling calculations.</li>
+				</ul>
+	        </p>
+        </div>
       	<div ng-hide="version >= 0.19">
 	        <h2>Version 0.19</h2>
 	        <p>

@@ -26,8 +26,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 				return this.earlyEnd();
 			} else if (this.earlyStart() && this.hasFixedDuration()) {
 				return this.duration().addTo(this.earlyStart());
-			} else if (this.parent().earlyEnd()) {
-				return this.parent().earlyEnd();
+//			} else if (this.parent().earlyEnd()) {
+//				return this.parent().earlyEnd();
 			} else {
 				return Infinity;
 			}

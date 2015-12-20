@@ -5,7 +5,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 	vatutaApp
 			.constant('config', {
 				policyVersion: 0.1,
-				version: 0.19})
+				version: 0.20})
 			.run(function ($rootScope, config) {
 		        $rootScope.$config = config;
 		    });
@@ -71,7 +71,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 				project.addTask(taskC);
 				summary.addTask(taskC);
 				
-				new Restrictions.EndToEnd({
+				new Restrictions.StartToStart({
 					_dependency : base,
 					_dependant : summary
 				});
@@ -81,7 +81,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 					_dependant : taskB
 				});
 				
-				new Restrictions.EndToEnd({
+				new Restrictions.StartToEnd({
 					_dependency : taskB,
 					_dependant : taskC
 				});
@@ -256,8 +256,12 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 
 				function taskChanged(newP, oldP, $scope) {
 					console.log('changed');
-					Engine.calculateEarlyStartLateEnding();
-					$scope.$root.$broadcast('changeTask', $scope.selectedTask);
+					if (oldP && newP.substring(0,35) === oldP.substring(0,35)) {
+						Engine.calculateEarlyStartLateEnding();
+						$scope.$root.$broadcast('changeTask', $scope.selectedTask);
+					} else {
+						$scope.$root.$broadcast('newTaskSelected', $scope.selectedTask);
+					}
 				}
 				
 				function watchSelectedTask() {
@@ -524,7 +528,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 		 }
 		 
 		 $scope.$watch('selectedTask', function(newP, oldP, $scope){
-			 $scope._durationString = newP?newP.duration().formatter():"";
+			 $scope._durationString = newP?(newP.duration()?newP.duration().formatter():newP.actualDuration().humanize()):"";
 		 });
 	
 		 function filter(query){

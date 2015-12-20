@@ -82,7 +82,7 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 		    jasmine.addMatchers(customMatchers);
 		});
 		
-	    it("End2Start", function () {
+	    it("End2Start & End2Start", function () {
 	    	var project = new Project({
 				_name : "Example Project"
 			});
@@ -185,7 +185,7 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 			project.addTask(taskC);
 			summary.addTask(taskC);
 			
-			new Restrictions.EndToEnd({
+			new Restrictions.EndToStart({
 				_dependency : base,
 				_dependant : summary
 			});
@@ -202,16 +202,16 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 			
 			Engine.calculateEarlyStartLateEnding();
 			
-			expect(summary.earlyEnd()).toBeSameDay(base.earlyEnd());
+			expect(summary.earlyStart()).toBeSameDay(base.earlyEnd());
 			
 			expect(taskB.earlyStart()).toBeAfter(taskA.earlyStart());
 	        expect(taskC.earlyStart()).toBeAfter(taskA.earlyStart());
-	        expect(taskA.earlyStart()).toBeBefore(taskC.earlyStart());
 	        expect(taskA.earlyEnd()).toBeSameDay(taskB.earlyStart());
+	        expect(taskB.earlyEnd()).toBeSameDay(taskC.earlyEnd());
 	        
 	    });
 	    
-	    it("End2Start + End2End 2", function () {
+	    it("Start2Start + Start2Start", function () {
 	    	var project = new Project({
 				_name : "Example Project"
 			});
@@ -250,7 +250,7 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 			project.addTask(taskC);
 			summary.addTask(taskC);
 			
-			new Restrictions.EndToEnd({
+			new Restrictions.StartToStart({
 				_dependency : base,
 				_dependant : summary
 			});
@@ -260,7 +260,7 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 				_dependant : taskB
 			});
 			
-			new Restrictions.EndToEnd({
+			new Restrictions.StartToStart({
 				_dependency : taskB,
 				_dependant : taskC
 			});
@@ -273,7 +273,73 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 			expect(taskB.earlyStart()).toBeAfter(taskA.earlyStart());
 	        expect(taskC.earlyStart()).toBeAfter(taskA.earlyStart());
 	        expect(taskA.earlyStart()).toBeBefore(taskC.earlyStart());
-	        expect(taskA.earlyEnd()).toBeSameDay(taskB.earlyStart());
+	        expect(taskB.earlyStart()).toBeSameDay(taskC.earlyStart());
+	        
+	    });
+	    
+	    it("Start2Start + Start2Finish", function () {
+	    	var project = new Project({
+				_name : "Example Project"
+			});
+			Engine.currentProject(project);
+			
+			// Start2End
+			var base = new Task({
+				_name : "Base",
+				_duration : new Duration({days: 3})
+			});
+			project.addTask(base);
+			
+			var summary = new SummaryTask({
+				_name : "Summary"
+			});
+			project.addTask(summary);
+			
+			var taskA = new Task({
+				_name : "A",
+				_duration :new Duration({days: 5})
+			});
+			project.addTask(taskA);
+			summary.addTask(taskA);
+			
+			var taskB = new Task({
+				_name : "B",
+				_duration :new Duration({days: 4})
+			});
+			project.addTask(taskB);
+			summary.addTask(taskB);
+			
+			var taskC = new Task({
+				_name : "C",
+				_duration :new Duration({days: 6})
+			});
+			project.addTask(taskC);
+			summary.addTask(taskC);
+			
+			new Restrictions.StartToStart({
+				_dependency : base,
+				_dependant : summary
+			});
+			
+			new Restrictions.EndToStart({
+				_dependency : taskA,
+				_dependant : taskB
+			});
+			
+			new Restrictions.StartToEnd({
+				_dependency : taskB,
+				_dependant : taskC
+			});
+			
+			Engine.calculateEarlyStartLateEnding();
+			
+			expect(summary.earlyEnd()).toBeAfter(base.earlyEnd());
+			expect(summary.earlyStart()).toBeSameDay(base.earlyStart());
+			
+			expect(taskB.earlyStart()).toBeAfter(taskA.earlyStart());
+	        expect(taskC.earlyStart()).toBeSameDay(taskA.earlyStart());
+	        expect(taskB.earlyStart()).toBeAfter(taskC.earlyStart());
+	        expect(taskC.earlyEnd()).toBeAfter(taskB.earlyStart());
 	        
 	    });
 	});

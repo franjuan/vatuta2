@@ -70,20 +70,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			}
 			return this._restrictionsFromDependants;
 		},
-//		getConstraintsOnTask: function(f, constraints) {
-//			if (!constraints) {
-//				var constraints = [];
-//			}
-//			_.forEach([this.restrictions(), this.restrictionsFromDependants()], function(restrictions) {
-//				_.forEach(restrictions, function(restriction) {
-//					constraints.push(_.bind(restriction[f], restriction, this));
-//				}, this);
-//			}, this);
-//			if (this.parent().getConstraintsOnTask) {
-//				this.parent().getConstraintsOnTask(f, constraints);
-//			}
-//			return constraints;
-//		},
 		addRestriction : function(restriction) {
 			this.restrictions().push(restriction);
 			this._dependencies = null;

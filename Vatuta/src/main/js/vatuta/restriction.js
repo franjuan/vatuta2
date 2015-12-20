@@ -116,7 +116,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 					return NaN;
 				}
 			} else {
-				return 0;
+				return Infinity;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
@@ -143,6 +143,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				}
 			} else {
 				return Infinity;
+			}
+		},
+		onStart: function(task) {
+			if (task.id()===this.dependency().id()) {
+				return false;
+			} else {
+				return true;
+			}
+		},
+		onFinish: function(task) {
+			if (task.id()===this.dependency().id()) {
+				return true;
+			} else {
+				return false;
 			}
 		},
 		dependantDescription: function() {
@@ -185,7 +199,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 					return NaN;
 				}
 			} else {
-				return 0;
+				return Infinity;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
@@ -214,6 +228,20 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				return Infinity;
 			}
 		},
+//		onStart: function(task) {
+//			if (task.id()===this.dependency().id()) {
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		},
+//		onFinish: function(task) {
+//			if (task.id()===this.dependency().id()) {
+//				return false;
+//			} else {
+//				return true;
+//			}
+//		},
 		dependantDescription: function() {
 			return "This task finishes " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -254,7 +282,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 					return NaN;
 				}
 			} else {
-				return 0;
+				return Infinity;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
@@ -283,6 +311,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				return Infinity;
 			}
 		},
+//		onStart: function(task) {
+//			return true;
+//		},
+//		onFinish: function(task) {
+//			return false;
+//		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -323,7 +357,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 					return NaN;
 				}
 			} else {
-				return 0;
+				return Infinity;
 			}
 		},
 		getMaxLateStart4Task: function(task) {
@@ -352,6 +386,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Durat
 				return Infinity;
 			}
 		},
+//		onStart: function(task) {
+//			return false;
+//		},
+//		onFinish: function(task) {
+//			return true;
+//		},
 		dependantDescription: function() {
 			return "This task ends " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " ends.";
 		},
