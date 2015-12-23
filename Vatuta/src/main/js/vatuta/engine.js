@@ -189,7 +189,7 @@ define(
 											if (lateStart == null) {
 												lateStart = restrictionValue;
 											} else {
-												lateStart = moment.max(lateStart, restrictionValue);
+												lateStart = moment.min(lateStart, restrictionValue);
 											}
 										}
 									}, task);
