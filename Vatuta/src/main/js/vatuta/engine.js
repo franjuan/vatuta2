@@ -153,20 +153,18 @@ define(
 							} else {
 								lateEnd = task.getDefaultLateEnd();
 								if (!isNaN(lateEnd)) {
-									_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
-										_.forEach(restrictions, function(restriction) {
-											var restrictionValue = restriction.getMaxLateEnd4Task(this);
-											if (isNaN(restrictionValue)) {
-												lateEnd = NaN
-												return false;
-											} else if (isFinite(restrictionValue)) {
-												if (lateEnd == null) {
-													lateEnd = restrictionValue;
-												} else {
-													lateEnd = moment.min(lateEnd, restrictionValue);
-												}
+									_.forEach(this.getMaxLateEndConstraints(task), function(constraint) {
+										var restrictionValue = constraint();
+										if (isNaN(restrictionValue)) {
+											lateEnd = NaN
+											return false;
+										} else if (isFinite(restrictionValue)) {
+											if (lateEnd == null) {
+												lateEnd = restrictionValue;
+											} else {
+												lateEnd = moment.min(lateEnd, restrictionValue);
 											}
-										}, task);
+										}
 									}, task);
 									if (!isNaN(lateEnd)) {
 										unknownResolvedInIteration = true;
@@ -182,20 +180,18 @@ define(
 							} else {
 								lateStart = task.getDefaultLateStart();
 								if (!isNaN(lateStart)){
-									_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
-										_.forEach(restrictions, function(restriction) {
-											var restrictionValue = restriction.getMaxLateStart4Task(this);
-											if (isNaN(restrictionValue)) {
-												lateStart = NaN
-												return false;
-											} else if (isFinite(restrictionValue)) {
-												if (lateStart == null) {
-													lateStart = restrictionValue;
-												} else {
-													lateStart = moment.max(lateStart, restrictionValue);
-												}
+									_.forEach(this.getMaxLateStartConstraints(task), function(constraint) {
+										var restrictionValue = constraint();
+										if (isNaN(restrictionValue)) {
+											lateStart = NaN
+											return false;
+										} else if (isFinite(restrictionValue)) {
+											if (lateStart == null) {
+												lateStart = restrictionValue;
+											} else {
+												lateStart = moment.max(lateStart, restrictionValue);
 											}
-										}, task);
+										}
 									}, task);
 									if (!isNaN(lateStart)) {
 										unknownResolvedInIteration = true;
@@ -287,6 +283,12 @@ define(
 				},
 				getMinEarlyEndConstraints: function(task) {
 					return this.getConstraintsOnTask(task, "getMinEarlyEnd4Task");
+				},
+				getMaxLateStartConstraints: function(task) {
+					return this.getConstraintsOnTask(task, "getMaxLateStart4Task");
+				},
+				getMaxLateEndConstraints: function(task) {
+					return this.getConstraintsOnTask(task, "getMaxLateEnd4Task");
 				},
 				getConstraintsOnTask: function(task, f, constraints) {
 					if (!constraints) {

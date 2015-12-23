@@ -43,7 +43,9 @@ define(
 					this._connectorRatio = this._arrowWidth  / 3;
 					/* @member {Number} */
 					this._sideMargins = this._arrowWidth  + this._arrowCornerR;
-						
+					/* @member {String} */
+					this._earlyLateLimitsColor = "#607D8B";
+					
 					lang.mixin(this, kwArgs);
 					
 					/* @member {Number} */
@@ -160,6 +162,7 @@ define(
 							this._taskTopHeight,
 							durationInDays*this._dayWidth,
 							this._taskHeight);
+					//taskShape.shadow = new createjs.Shadow("#000000", 3, 3, 10);
 					
 					var text = new createjs.Text(task.name(), "bold " + this._taskFontSize + "px " + this._taskFont);
 					text.color = this._taskNameColor;
@@ -169,7 +172,9 @@ define(
 					text.x = (daysFromStart + durationInDays/2)*this._dayWidth + this._sideMargins;
 					text.y = this._taskTopHeight + this._taskHeight/2;
 					
-					taskContainer.addChild(element, taskShape, text);
+					var selectedTaskContainer = this.drawSelectedTask(task, project);
+					
+					taskContainer.addChild(element, taskShape, text, selectedTaskContainer);
 					
 					taskShape.on("click", 
 						_.bind(
@@ -196,6 +201,71 @@ define(
 					taskContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeight;
 					
 					return taskContainer;
+				},
+				drawSelectedTask: function(task, project){
+					this._selectedTaskContainer = new createjs.Container();
+					
+					var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
+					
+					this._selectedTaskContainer.addChild(earlyLateLimitsContainer);
+					
+					return this._selectedTaskContainer;
+				},
+				drawEarlyLateLimits: function(task, project){
+					var earlyLateLimitsContainer = new createjs.Container();
+					
+					var base = this._taskTopHeight/Math.sin(Math.PI * 2 / 3);
+					
+					var earlyStart = this.daysFromProjectStart(task.earlyStart(), project);
+					var lateStart = this.daysFromProjectStart(task.lateStart(), project);
+					var startShape = new createjs.Shape();
+					startShape.graphics
+						.setStrokeStyle(1,"round","round")
+						.beginStroke(this._earlyLateLimitsColor)
+						.beginFill(this._earlyLateLimitsColor)
+						.moveTo(earlyStart*this._dayWidth, this._taskTopHeight)
+						.lineTo(earlyStart*this._dayWidth - base/2, 0)
+						.lineTo(earlyStart*this._dayWidth + base/2, 0)
+						.closePath()
+						.endFill()
+						.moveTo(earlyStart*this._dayWidth + base/2, 0)
+						.lineTo(lateStart*this._dayWidth - base/2, 0)
+						.beginStroke(this._earlyLateLimitsColor)
+						.beginFill(this._earlyLateLimitsColor)
+						.moveTo(lateStart*this._dayWidth, this._taskTopHeight)
+						.lineTo(lateStart*this._dayWidth - base/2, 0)
+						.lineTo(lateStart*this._dayWidth + base/2, 0)
+						.closePath()
+						.endFill();
+					
+					var earlyEnd = this.daysFromProjectStart(task.earlyEnd(), project);
+					var lateEnd = this.daysFromProjectStart(task.lateEnd(), project);
+					var endShape = new createjs.Shape();
+					endShape.graphics
+						.setStrokeStyle(1,"round","round")
+						.beginStroke(this._earlyLateLimitsColor)
+						.beginFill(this._earlyLateLimitsColor)
+						.moveTo(earlyEnd*this._dayWidth, this._taskTopHeight + this._taskHeight)
+						.lineTo(earlyEnd*this._dayWidth - base/2, 2*this._taskTopHeight + this._taskHeight)
+						.lineTo(earlyEnd*this._dayWidth + base/2, 2*this._taskTopHeight + this._taskHeight)
+						.closePath()
+						.endFill()
+						.moveTo(earlyEnd*this._dayWidth + base/2, 2*this._taskTopHeight + this._taskHeight)
+						.lineTo(lateEnd*this._dayWidth - base/2, 2*this._taskTopHeight + this._taskHeight)
+						.beginStroke(this._earlyLateLimitsColor)
+						.beginFill(this._earlyLateLimitsColor)
+						.moveTo(lateEnd*this._dayWidth, this._taskTopHeight + this._taskHeight)
+						.lineTo(lateEnd*this._dayWidth - base/2, 2*this._taskTopHeight + this._taskHeight)
+						.lineTo(lateEnd*this._dayWidth + base/2, 2*this._taskTopHeight + this._taskHeight)
+						.closePath()
+						.endFill();
+					
+					earlyLateLimitsContainer.addChild(startShape, endShape);
+					
+					earlyLateLimitsContainer.x = this._sideMargins;
+					earlyLateLimitsContainer.y = 0;//this._taskRowHeight * (task.index() - 1) + this._rulerHeight;
+					
+					return earlyLateLimitsContainer;
 				},
 				drawRestriction: function(restriction, task, project) {
 					if (restriction.isInstanceOf(Restrictions.EndToStart)) {

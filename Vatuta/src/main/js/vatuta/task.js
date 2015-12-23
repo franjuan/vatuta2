@@ -33,10 +33,26 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			}
 		},
 		getDefaultLateStart: function() {
-			return this.parent().lateEnd()?this.duration().subtractFrom(this.parent().lateEnd()):NaN;
+			if (this.lateStart()) {
+				return this.lateStart();
+			} else if (this.lateEnd() && this.hasFixedDuration()) {
+				return this.duration().subtractFrom(this.lateEnd());
+//			} else if (this.parent().earlyEnd()) {
+//				return this.parent().earlyEnd();
+			} else {
+				return 0;
+			}
 		},
 		getDefaultLateEnd: function() {
-			return this.parent().lateEnd()?this.parent().lateEnd():NaN;
+			if (this.lateEnd()) {
+				return this.lateEnd();
+			} else if (this.lateStart() && this.hasFixedDuration()) {
+				return this.duration().addTo(this.lateStart());
+			} else if (this.parent().lateEnd()) {
+				return this.parent().lateEnd();
+			} else {
+				return Infinity;
+			}
 		},
 		hasFixedDuration: function() {
 			return !this.isEstimated();
