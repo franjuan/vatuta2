@@ -123,7 +123,7 @@ define(
 					this._stage.update();
 			
 				},
-				drawProject: function(project) {
+				drawProject: function(project, selectedTask) {
 					
 					this._width = project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins;
 					this._height = this._rulerHeight + this._taskRowHeight * project.tasks().length;
@@ -143,6 +143,10 @@ define(
 						var taskContainer = this.drawTask(task, project);
 						this._stage.addChildAt(taskContainer); // Tasks firstlevel
 					}, this);
+					
+					if (selectedTask) {
+						this.drawSelectedTask(selectedTask, project);
+					}
 					
 					this._stage.update();
 				},
@@ -558,6 +562,10 @@ define(
 				clear: function() {
 					this._stage.clear();
 					this._stage.removeAllChildren();
+					if (this._selectedTaskContainer) {
+						this._selectedTaskContainer.removeAllChildren();
+						delete this._selectedTaskContainer;
+					}
 					this._stage.update();
 				},
 				daysFromProjectStart: function(moment, project) {
