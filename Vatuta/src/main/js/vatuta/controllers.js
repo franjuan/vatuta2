@@ -236,6 +236,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 					},
 					onClickOnTaskContainer : function(event, task) {
 						$scope.$apply(function() {
+							$scope.selectedTask = task;
 							$mdBottomSheet.show({
 							      templateUrl: 'vatuta/templates/bottomSheetMenu.html',
 							      controller: 'bottomSheetMenuCtrl',
@@ -261,7 +262,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 						Engine.calculateEarlyStartLateEnding();
 						$scope.$root.$broadcast('changeTask', $scope.selectedTask);
 					} else {
-						$scope.$root.$broadcast('newTaskSelected', $scope.selectedTask);
+						$scope.$root.$broadcast('taskSelected', $scope.selectedTask);
 					}
 				}
 				

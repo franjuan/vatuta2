@@ -122,14 +122,19 @@ define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 			    	$scope.canvas.drawProject($scope.project);
 			    },
 			    controller: function($scope, $attrs) {
-			    	var onTaskChange = function(task) {
+			    	var onTaskChange = function(event, task) {
 		                console.log('changeTask');
 		                $scope.canvas.clear();
 		                $scope.canvas.drawProject($scope.project);
 		                $scope.canvas.drawTimeRuler($scope.project);
 		            };
+		            var onTaskSelection = function(event, task) {
+		                console.log('selected Task');
+		                $scope.canvas.drawSelectedTask(task, $scope.project);
+		            };
 		            $scope.$on('deleteTask', onTaskChange);
 		            $scope.$on('changeTask', onTaskChange);
+		            $scope.$on('taskSelected', onTaskSelection);
 		        }
 			  };
 			});

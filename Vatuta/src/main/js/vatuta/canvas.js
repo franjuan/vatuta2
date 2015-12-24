@@ -98,7 +98,7 @@ define(
 					background.graphics.beginFill("#FFF").drawRect(0,0, this._canvas.width, this._rulerHeight);
 					ruler.addChild(background);
 					
-					var dayCounter = moment(project.actualStart().subtract(1,"day"));
+					var dayCounter = moment(project.actualStart()).subtract(1,"day");
 					for (i=-1; i*this._dayWidth < this._width; i++) {
 						var element = new createjs.Shape();
 						element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth + this._sideMargins, 0, this._dayWidth, this._rulerHeight, 5);
@@ -205,11 +205,16 @@ define(
 						this._selectedTaskContainer.removeAllChildren();
 					} else {
 						this._selectedTaskContainer = new createjs.Container();
+						this._stage.addChild(this._selectedTaskContainer);
 					}
 					
-					var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
+					if (task) {
+						var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
+						
+						this._selectedTaskContainer.addChild(earlyLateLimitsContainer);
+					}
 					
-					this._selectedTaskContainer.addChild(earlyLateLimitsContainer);
+					this._stage.update();
 					
 					return this._selectedTaskContainer;
 				},
