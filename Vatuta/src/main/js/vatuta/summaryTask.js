@@ -74,6 +74,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 				}
 			}, 0, this);
 		},
+		calculatedLateStart: function() {
+			return _.reduce(this.children(), function(min, child) {
+				if (!isNaN(min) && child.lateStart()) {
+					return min==0?child.lateStart():moment.min(min, child.lateStart());
+				} else {
+					return NaN;
+				}
+			}, 0, this);
+		},
+		calculatedLateEnd: function() {
+			return _.reduce(this.children(), function(max, child) {
+				if (!isNaN(max) && child.lateEnd()) {
+					return max==0?child.lateEnd():moment.max(max, child.lateEnd());
+				} else {
+					return NaN;
+				}
+			}, 0, this);
+		},
 		getDefaultEarlyStart: function() {
 			var earlyStart = this.calculatedEarlyStart();
 			if (!isNaN(earlyStart)) {
@@ -87,20 +105,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			if (!isNaN(earlyEnd)) {
 				return earlyEnd;
 			} else {
-				return this.parent().earlyEnd()?this.parent().earlyEnd():Infinity;
+				return Infinity;
 			}
 		},
 		getDefaultLateStart: function() {
-			return _.reduce(this.children(), function(min, child) {
-				if (!isNaN(min) && child.lateStart()) {
-					return min==0?child.lateStart():moment.min(min, child.lateStart());
-				} else {
-					return NaN;
-				}
-			}, 0, this);
+			var lateStart = this.calculatedLateStart();
+			if (!isNaN(lateStart)) {
+				return lateStart;
+			} else {
+				return 0;
+			}
 		},
 		getDefaultLateEnd: function() {
-			return this.parent().lateEnd()?this.parent().lateEnd():NaN;
+			var lateEnd = this.calculatedLateEnd();
+			if (!isNaN(lateEnd)) {
+				return lateEnd;
+			} else {
+				return this.parent().lateEnd()?this.parent().lateEnd():Infinity;
+			}
 		},
 		actualStart: function(newActualStart) {
 			return _.reduce(this.children(), function(min, child) {

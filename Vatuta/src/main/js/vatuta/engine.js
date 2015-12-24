@@ -166,9 +166,11 @@ define(
 											}
 										}
 									}, task);
-									if (!isNaN(lateEnd)) {
+									if (!isNaN(lateEnd) && isFinite(lateEnd)) {
 										unknownResolvedInIteration = true;
 										task.lateEnd(lateEnd);
+									} else {
+										lateEnd = NaN;
 									}
 								}
 							}
@@ -193,9 +195,11 @@ define(
 											}
 										}
 									}, task);
-									if (!isNaN(lateStart)) {
+									if (!isNaN(lateStart) && lateStart != 0) {
 										unknownResolvedInIteration = true;
 										task.lateStart(lateStart);
+									} else {
+										lateStart = NaN;
 									}
 								}
 							}

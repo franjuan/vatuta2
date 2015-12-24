@@ -172,9 +172,7 @@ define(
 					text.x = (daysFromStart + durationInDays/2)*this._dayWidth + this._sideMargins;
 					text.y = this._taskTopHeight + this._taskHeight/2;
 					
-					var selectedTaskContainer = this.drawSelectedTask(task, project);
-					
-					taskContainer.addChild(element, taskShape, text, selectedTaskContainer);
+					taskContainer.addChild(element, taskShape, text);
 					
 					taskShape.on("click", 
 						_.bind(
@@ -203,7 +201,11 @@ define(
 					return taskContainer;
 				},
 				drawSelectedTask: function(task, project){
-					this._selectedTaskContainer = new createjs.Container();
+					if (this._selectedTaskContainer) {
+						this._selectedTaskContainer.removeAllChildren();
+					} else {
+						this._selectedTaskContainer = new createjs.Container();
+					}
 					
 					var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
 					
@@ -263,7 +265,7 @@ define(
 					earlyLateLimitsContainer.addChild(startShape, endShape);
 					
 					earlyLateLimitsContainer.x = this._sideMargins;
-					earlyLateLimitsContainer.y = 0;//this._taskRowHeight * (task.index() - 1) + this._rulerHeight;
+					earlyLateLimitsContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeight;
 					
 					return earlyLateLimitsContainer;
 				},
