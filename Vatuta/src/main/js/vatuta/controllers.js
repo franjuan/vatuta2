@@ -54,22 +54,19 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 					_name : "A",
 					_duration :new Duration({days: 5})
 				});
-				project.addTask(taskA);
-				summary.addTask(taskA);
+				project.addTask(taskA, summary);
 				
 				var taskB = new Task({
 					_name : "B",
 					_duration :new Duration({days: 4})
 				});
-				project.addTask(taskB);
-				summary.addTask(taskB);
+				project.addTask(taskB, summary);
 				
 				var taskC = new Task({
 					_name : "C",
 					_duration :new Duration({days: 6})
 				});
-				project.addTask(taskC);
-				summary.addTask(taskC);
+				project.addTask(taskC, summary);
 				
 				new Restrictions.StartToStart({
 					_dependency : base,
@@ -319,15 +316,26 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 				}
 			} ]);
 	
-	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', function($scope, $mdBottomSheet, Task, Engine) {
+	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', 'ProjectHandler', function($scope, $mdBottomSheet, Task, Engine, handler) {
 		$scope.addTask = function() {
-			var newTask = new Task({_duration: new Duration({days: 1})});
-			$scope.project.addTask(newTask);
-			Engine.calculateEarlyStartLateEnding();
-			$scope.$parent.selectedTask = newTask;
+			$scope.$parent.selectedTask = handler.addTask($scope.project);
 			$scope.toggleSidenav('left');
 			$mdBottomSheet.hide({message: 'New task added', show: true});
-			$scope.$root.$broadcast('addTask', newTask);
+			$scope.$root.$broadcast('addTask', $scope.$parent.selectedTask);
+			ga('send', 'event', 'gantt', 'create', 'task');
+		}
+		$scope.addSiblingTask = function() {
+			$scope.$parent.selectedTask = handler.addTask($scope.project, null, $scope.selectedTask.parent());
+			$scope.toggleSidenav('left');
+			$mdBottomSheet.hide({message: 'New task added', show: true});
+			$scope.$root.$broadcast('addTask', $scope.$parent.selectedTask);
+			ga('send', 'event', 'gantt', 'create', 'task');
+		}
+		$scope.addChildTask = function() {
+			$scope.$parent.selectedTask = handler.addTask($scope.project, null, $scope.selectedTask);
+			$scope.toggleSidenav('left');
+			$mdBottomSheet.hide({message: 'New task added', show: true});
+			$scope.$root.$broadcast('addTask', $scope.$parent.selectedTask);
 			ga('send', 'event', 'gantt', 'create', 'task');
 		}
 		$scope.showTask = function() {

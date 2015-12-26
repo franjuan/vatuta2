@@ -104,22 +104,19 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 				_name : "A",
 				_duration :new Duration({days: 5})
 			});
-			project.addTask(taskA);
-			summary.addTask(taskA);
+			project.addTask(taskA, summary);
 			
 			var taskB = new Task({
 				_name : "B",
 				_duration :new Duration({days: 4})
 			});
-			project.addTask(taskB);
-			summary.addTask(taskB);
+			project.addTask(taskB, summary);
 			
 			var taskC = new Task({
 				_name : "C",
 				_duration :new Duration({days: 6})
 			});
-			project.addTask(taskC);
-			summary.addTask(taskC);
+			project.addTask(taskC, summary);
 			
 			new Restrictions.EndToStart({
 				_dependency : base,
@@ -168,22 +165,19 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 				_name : "A",
 				_duration :new Duration({days: 5})
 			});
-			project.addTask(taskA);
-			summary.addTask(taskA);
+			project.addTask(taskA, summary);
 			
 			var taskB = new Task({
 				_name : "B",
 				_duration :new Duration({days: 4})
 			});
-			project.addTask(taskB);
-			summary.addTask(taskB);
+			project.addTask(taskB, summary);
 			
 			var taskC = new Task({
 				_name : "C",
 				_duration :new Duration({days: 6})
 			});
-			project.addTask(taskC);
-			summary.addTask(taskC);
+			project.addTask(taskC, summary);
 			
 			new Restrictions.EndToStart({
 				_dependency : base,
@@ -233,22 +227,19 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 				_name : "A",
 				_duration :new Duration({days: 5})
 			});
-			project.addTask(taskA);
-			summary.addTask(taskA);
+			project.addTask(taskA, summary);
 			
 			var taskB = new Task({
 				_name : "B",
 				_duration :new Duration({days: 4})
 			});
-			project.addTask(taskB);
-			summary.addTask(taskB);
+			project.addTask(taskB, summary);
 			
 			var taskC = new Task({
 				_name : "C",
 				_duration :new Duration({days: 6})
 			});
-			project.addTask(taskC);
-			summary.addTask(taskC);
+			project.addTask(taskC, summary);
 			
 			new Restrictions.StartToStart({
 				_dependency : base,
@@ -299,22 +290,19 @@ require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 				_name : "A",
 				_duration :new Duration({days: 5})
 			});
-			project.addTask(taskA);
-			summary.addTask(taskA);
+			project.addTask(taskA, summary);
 			
 			var taskB = new Task({
 				_name : "B",
 				_duration :new Duration({days: 4})
 			});
-			project.addTask(taskB);
-			summary.addTask(taskB);
+			project.addTask(taskB, summary);
 			
 			var taskC = new Task({
 				_name : "C",
 				_duration :new Duration({days: 6})
 			});
-			project.addTask(taskC);
-			summary.addTask(taskC);
+			project.addTask(taskC, summary);
 			
 			new Restrictions.StartToStart({
 				_dependency : base,

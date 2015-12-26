@@ -40,6 +40,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 				this.restrictionsFromDependants()[0].remove();
 			};
 		},
+		// TODO change name as it does not behaviour as a property, last index used is returned in set (for summary), not the value set to the task
 		index: function(newIndex) {
 		     return arguments.length ? (this._index = newIndex) : this._index;
 		},

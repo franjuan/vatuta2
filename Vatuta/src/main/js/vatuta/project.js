@@ -36,12 +36,26 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/task", "vatuta/engine"
 				 * @function
 				 * @memberof Project
 				 */
-				addTask : function(task) {
+				addTask : function(task, parent) {
+					if (!parent)	{
+						task.parent(this);
+					} else {
+						parent.addTask(task);
+					}
 					this.tasks().push(task);
 					this._tasksIndex()[task.id()] = task;
-					task.index(this.tasks().length);
-					if (!task.parent())	task.parent(this);
+					this.setIndexToAllTasks();
 					return task;
+				},
+				setIndexToAllTasks: function() {
+					var index = 1;
+					_.forEach(this.tasks(), function(task) {
+						// Only set index to direct children, index of task own by other parent will be set with parent's index
+						if (task.parent().isInstanceOf(Project)) {
+							index = task.index(index);
+							index++;
+						}
+					}, this);
 				},
 				removeTask: function(task) {
 					// Remove task from project

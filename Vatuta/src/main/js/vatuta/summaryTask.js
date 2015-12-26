@@ -5,6 +5,19 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			this._children = [];
 			this.inherited(arguments);
 		},
+		index: function(newIndex) {
+		     if (arguments.length) {
+		    	 this._index = newIndex;
+		    	 var index = newIndex;
+		    	 _.forEach(this.children(), function(task) {
+			    		 index++;	
+			    		 index = task.index(index);
+					}, this);
+		    	 return index;
+		     } else {
+		    	 return this._index;
+		     }
+		},
 		duration: function(newDuration) {
 		    return NaN;
 		},
@@ -24,6 +37,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			return this._children;
 		},
 		/**
+		 * Do not call, use Project.addTask instead
 		 * @function
 		 * @memberof Project
 		 */

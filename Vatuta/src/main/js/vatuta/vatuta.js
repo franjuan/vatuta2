@@ -33,6 +33,30 @@ define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 		return Restrictions;
 	} ]);
 	
+	vatutaMod.factory('ProjectHandler', [ function() {
+		return {
+			addTask: function(project, task, parent) {
+				var newTask;
+				if (task) {
+					if (task.isInstanceOf(baseTask)) {
+						newTask = task;
+					} else {
+						newTask = new Task(task);
+					}
+				} else {
+					newTask = new Task({_name: "New", _duration: new Duration({days: 1})});
+				}
+				if (!parent) {
+					project.addTask(newTask);
+				} else {
+					project.addTask(newTask, parent);
+				}
+				Engine.calculateEarlyStartLateEnding();
+				return newTask;
+			}
+		}
+	} ]);
+	
 	vatutaMod.factory('ProjectSerializer', [ function() {
 		var namespace = {};
 		namespace.baseTask = baseTask;
