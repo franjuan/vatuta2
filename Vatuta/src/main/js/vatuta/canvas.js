@@ -2,8 +2,8 @@
  * @module Canvas
  */
 define(
-		[ 'dojo/_base/declare', 'dojo/_base/lang', 'easeljs', 'lodash', 'moment', "vatuta/restriction" ],
-		function(declare, lang, easeljs, _, moment, Restrictions) {
+		[ 'dojo/_base/declare', 'dojo/_base/lang', 'easeljs', 'lodash', 'moment', "vatuta/restriction", "vatuta/task", "vatuta/summaryTask" ],
+		function(declare, lang, easeljs, _, moment, Restrictions, Task, SummaryTask) {
 			return declare(null, {
 				/**
 				 * @constructs CanvasDrawer
@@ -151,6 +151,13 @@ define(
 					this._stage.update();
 				},
 				drawTask: function(task, project) {
+					if (task.isInstanceOf(Task)) {
+						return this.drawBasicTask(task, project);
+					} else if (task.isInstanceOf(SummaryTask)) {
+						return this.drawSummaryTask(task, project);
+					}
+				},
+				drawBasicTask: function (task, project) {
 					var taskContainer = new createjs.Container();
 					
 					var element = new createjs.Shape();
@@ -201,6 +208,26 @@ define(
 					
 					taskContainer.x = 0;
 					taskContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeight;
+					
+					return taskContainer;
+				},
+				drawSummaryTask: function (task, project) {
+					var taskContainer = this.drawBasicTask(task, project);
+					
+					var bag = new createjs.Shape();
+					
+					var daysFromStart = this.daysFromProjectStart(task.actualStart(), project);
+					var daysFromEnd = this.daysFromProjectStart(task.actualEnd(), project);
+					var durationInDays = daysFromEnd - daysFromStart;
+					bag.graphics
+						.beginStroke(this._arrowColor)
+						.setStrokeDash([10, 3], 0)
+						.moveTo(daysFromStart*this._dayWidth + this._sideMargins, this._taskTopHeight + this._taskHeight)
+						.lineTo(daysFromStart*this._dayWidth + this._sideMargins, this._taskRowHeight * (task.children().length + 1))
+						.lineTo(daysFromStart*this._dayWidth + this._sideMargins + durationInDays*this._dayWidth, this._taskRowHeight * (task.children().length + 1))
+						.lineTo(daysFromStart*this._dayWidth + this._sideMargins + durationInDays*this._dayWidth, this._taskTopHeight + this._taskHeight);
+					
+					taskContainer.addChild(bag);
 					
 					return taskContainer;
 				},
