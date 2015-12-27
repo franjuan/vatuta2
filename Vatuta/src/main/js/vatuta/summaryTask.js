@@ -18,6 +18,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 		    	 return this._index;
 		     }
 		},
+		maxIndex: function() {
+			return _.reduce(this.children(), function(max, child) {
+				return child.maxIndex?Math.max(max,child.maxIndex()):Math.max(max,child.index());
+			}, this.index(), this);
+		},
 		duration: function(newDuration) {
 		    return NaN;
 		},
@@ -45,6 +50,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			this.children().push(task);
 			task.parent(this);
 			return task;
+		},
+		replaceTask: function(task) {
+			 // Find element in project
+			 var index = _.findIndex(this.children(), "_id", task.id());
+			 this.children()[index] = task;
+			 return task;
 		},
 		earlyStart: function(newEarlyStart) {
 			if (arguments.length) {
@@ -111,7 +122,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			if (!isNaN(earlyStart)) {
 				return earlyStart;
 			} else {
-				return this.parent().earlyStart()?this.parent().earlyStart():0;
+				var parent = this.iterateDepthForProperty("earlyStart");
+				return parent?parent:0;
 			}
 		},
 		getDefaultEarlyEnd: function() {
@@ -135,7 +147,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			if (!isNaN(lateEnd)) {
 				return lateEnd;
 			} else {
-				return this.parent().lateEnd()?this.parent().lateEnd():Infinity;
+				var parent = this.iterateDepthForProperty("lateEnd");
+				return parent?parent:Infinity;
 			}
 		},
 		actualStart: function(newActualStart) {

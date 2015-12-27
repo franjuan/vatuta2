@@ -223,8 +223,8 @@ define(
 						.beginStroke(this._arrowColor)
 						.setStrokeDash([10, 3], 0)
 						.moveTo(daysFromStart*this._dayWidth + this._sideMargins, this._taskTopHeight + this._taskHeight)
-						.lineTo(daysFromStart*this._dayWidth + this._sideMargins, this._taskRowHeight * (task.children().length + 1))
-						.lineTo(daysFromStart*this._dayWidth + this._sideMargins + durationInDays*this._dayWidth, this._taskRowHeight * (task.children().length + 1))
+						.lineTo(daysFromStart*this._dayWidth + this._sideMargins, this._taskRowHeight * (task.maxIndex() - task.index() + 1))
+						.lineTo(daysFromStart*this._dayWidth + this._sideMargins + durationInDays*this._dayWidth, this._taskRowHeight * (task.maxIndex() - task.index() + 1))
 						.lineTo(daysFromStart*this._dayWidth + this._sideMargins + durationInDays*this._dayWidth, this._taskTopHeight + this._taskHeight);
 					
 					taskContainer.addChild(bag);

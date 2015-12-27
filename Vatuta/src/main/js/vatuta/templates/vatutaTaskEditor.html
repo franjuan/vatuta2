@@ -19,7 +19,7 @@
 			<md-input-container flex>
 				<label>Duration</label>
 				<input name="duration" ng-model="ctrl.durationString"
-					ng-model-options="{ getterSetter: true }" required duration></input>
+					ng-model-options="{ getterSetter: true }" required duration md-sidenav-focus></input>
 				<div ng-messages="taskForm.duration.$error" role="alert">
 					<div ng-message="required">Task must have a duration</div>
 					<div ng-message="duration">Duration does not have a valid value, please check time units and values</div>

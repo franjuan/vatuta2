@@ -47,6 +47,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/task", "vatuta/engine"
 					this.setIndexToAllTasks();
 					return task;
 				},
+				// TODO take out index from here, is part of the view or representation of the project. Tasks are not ordered in project
 				setIndexToAllTasks: function() {
 					var index = 1;
 					_.forEach(this.tasks(), function(task) {
@@ -62,15 +63,22 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/task", "vatuta/engine"
 					_.remove(this.tasks(), "_id", task.id());
 					// Remove index
 					delete this._tasksIndex()[task.id()];
-					// Update ordinal indexes
-					for (var i = task.index() - 1; i < this.tasks().length; i++) { 
-					    this.tasks()[i].index(i + 1);
-					}
 					if (task.children()) {
 						_.forEach(task.children(), function(child) {
 							this.removeTask(child);
 						}, this);
 					}
+					// Update ordinal indexes
+					this.setIndexToAllTasks();
+				},
+				replaceTask: function(task) {
+					 // Find element in project
+					 var index = _.findIndex(this.tasks(), "_id", task.id());
+					 this.tasks()[index] = task;
+					 this._tasksIndex()[task.id()] = task;
+					 task.parent().replaceTask(task);
+					 this.setIndexToAllTasks();
+					 return task;
 				},
 				/**
 				 * @function
@@ -123,6 +131,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/task", "vatuta/engine"
 				 */
 				findTaskById: function(id) {
 					return this._tasksIndex()[id];
+				},
+				iterateDepthForProperty: function(property) {
+					return this[property]();
 				}
 			});
 		});

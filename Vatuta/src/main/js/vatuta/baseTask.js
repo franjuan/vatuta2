@@ -20,7 +20,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 			if (this._lateEnd && !moment.isMoment(this._lateEnd)) {
 				this._lateEnd = moment(this._lateEnd);
 			}
-			lang.mixin(this, kwArgs);
+			declare.safeMixin(this, kwArgs);
 			if (!this._id) {
 				this._id='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
 				    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -131,6 +131,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Du
 		},
 		actualDuration: function(newActualDuration) {
 			return arguments.length ? this._actualDuration = newActualDuration : this._actualDuration;
+		},
+		iterateDepthForProperty: function(property) {
+			var value = this[property]();
+			if (value) {
+				return value;
+			} else {
+				return this.parent().iterateDepthForProperty(property);
+			}
 		}
 	});
 });

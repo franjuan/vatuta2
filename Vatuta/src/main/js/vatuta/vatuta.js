@@ -1,6 +1,6 @@
 define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask", "vatuta/engine",
 		"vatuta/restriction", "vatuta/tactics", "vatuta/canvas", "moment", "vatuta/Duration" ], function(Project,
-		Task, baseTask, summaryTask, Engine, Restrictions, Tactics, Canvas, moment, Duration) {
+		Task, baseTask, SummaryTask, Engine, Restrictions, Tactics, Canvas, moment, Duration) {
 
 	var vatutaMod = angular.module('vatuta', [])
 		.config( ['$compileProvider', function( $compileProvider )
@@ -18,7 +18,7 @@ define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 		return Task;
 	} ]);
 	vatutaMod.service('SummaryTask', [ function() {
-		return summaryTask;
+		return SummaryTask;
 	} ]);
 	
 	vatutaMod.service('Engine', [ function() {
@@ -49,9 +49,22 @@ define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 				if (!parent) {
 					project.addTask(newTask);
 				} else {
-					project.addTask(newTask, parent);
+					if (parent.isInstanceOf(SummaryTask)) {
+						project.addTask(newTask, parent);
+					} else {
+						var newParent = this.convertTaskToSummary(project, parent);
+						
+						project.addTask(newTask, newParent);
+					}
 				}
 				Engine.calculateEarlyStartLateEnding();
+				return newTask;
+			},
+			convertTaskToSummary: function(project, task) {
+				var keys = _.filter(_.keysIn(task), function(key){return key.startsWith("_") && !key.endsWith("inherited")});
+				var properties = _.pick(task, keys);
+				var newTask = new SummaryTask(properties);
+				project.replaceTask(newTask);
 				return newTask;
 			}
 		}
@@ -156,6 +169,7 @@ define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 		                console.log('selected Task');
 		                $scope.canvas.drawSelectedTask(task, $scope.project);
 		            };
+		            $scope.$on('addTask', onTaskChange);
 		            $scope.$on('deleteTask', onTaskChange);
 		            $scope.$on('changeTask', onTaskChange);
 		            $scope.$on('taskSelected', onTaskSelection);

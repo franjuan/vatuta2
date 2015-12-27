@@ -213,6 +213,8 @@ define(
 								unknownResolvedInIteration = true;
 								alreadyCalculatedIndex--;
 							}
+							console.log ("Task: " + task.name() + " on iteration " + (tasks.length - alreadyCalculatedIndex + 1) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for late stage");
+							this.showState(this.currentProject(), tasks);
 						}
 						if (!unknownResolvedInIteration) {
 							this.showState(this.currentProject(), tasks);
