@@ -5,7 +5,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 	vatutaApp
 			.constant('config', {
 				policyVersion: 0.1,
-				version: 0.20})
+				version: 0.21})
 			.run(function ($rootScope, config) {
 		        $rootScope.$config = config;
 		    });
