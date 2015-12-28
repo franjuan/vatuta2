@@ -1,5 +1,5 @@
-define([ "vatuta/shared/Duration"], function(DurationUtils) {
-	angular.module('vatutaApp').controller('taskDependencyDialogController', ['$scope', '$mdDialog', function($scope, $mdDialog) {
+define([ "vatuta/shared/Duration", "vatuta/vatutaApp"], function(DurationUtils) {
+	angular.module('vatutaApp').controller('TaskDependencyDialogController', ['$scope', '$mdDialog', function($scope, $mdDialog) {
 		$scope.hide = function() {
 		    $mdDialog.hide();
 		  };
