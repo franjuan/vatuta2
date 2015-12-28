@@ -1,6 +1,6 @@
-define(["vatuta/vatutaMod"], function() {
+define(["vatuta/vatutaApp"], function() {
 	
-	angular.module('vatuta').directive('vatutaTaskEditor', function() {
+	angular.module('vatutaApp').directive('vatutaTaskEditor', function() {
 		  return {
 			    restrict: 'EAC',
 			    scope: {

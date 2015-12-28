@@ -1,4 +1,7 @@
-define([ "vatuta/vatutaApp", "resurrect", "moment", "vatuta/controllers/TaskDependencyDialogController", "vatuta/controllers/TaskEditorController"], function(vatuta, resurrect, moment) {
+define([ "vatuta/vatutaApp", "resurrect", "moment",
+         "vatuta/controllers/TaskDependencyDialogController",
+         "vatuta/controllers/TaskEditorController",
+         "vatuta/controllers/SpeedDialMenuController"], function(vatuta, resurrect, moment) {
 	
 
 	angular.module('vatutaApp')
@@ -24,8 +27,9 @@ define([ "vatuta/vatutaApp", "resurrect", "moment", "vatuta/controllers/TaskDepe
 			'ProjectSerializer',
 			'$cookies',
 			'config',
+			'$animate',
 			function($scope, $mdSidenav, Project, Task, SummaryTask, Engine, Canvas,
-					Restrictions, $mdDialog, $mdBottomSheet, $mdToast, ProjectSerializer, $cookies, $config) {
+					Restrictions, $mdDialog, $mdBottomSheet, $mdToast, ProjectSerializer, $cookies, $config, $animate) {
 				
 				$scope.toggleSidenav = function(menuId) {
 					$mdSidenav(menuId).toggle();
@@ -342,75 +346,5 @@ define([ "vatuta/vatutaApp", "resurrect", "moment", "vatuta/controllers/TaskDepe
 			$mdBottomSheet.hide({message: 'Showing task info', show: false});
 		}
 	}]);
-	
-	angular.module('vatutaApp').controller('menuBarCtrl', ['$scope', '$mdDialog', '$mdToast' , 'Task', 'Project', 'ProjectSerializer', 'Engine', function($scope, $mdDialog, $mdToast, Task, Project, ProjectSerializer, Engine) {
-		$scope.fileOpen = function(event) {
-			if(typeof(Storage) !== "undefined") {
-				$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
-				Engine.currentProject($scope.project);
-				
-				$mdToast.show(
-		                $mdToast.simple()
-		                  .content("Project loaded from your local storage")
-		                  .position('top right')
-		                  .hideDelay(1500)
-		              );
-				ga('send', 'event', 'project', 'load');
-			} else {
-				$mdDialog.show(
-					      $mdDialog.alert()
-					        .clickOutsideToClose(true)
-					        .title('No local storage supported')
-					        .content('Your browser does not support local storage.')
-					        .ariaLabel('No local storage supported')
-					        .ok('Ok')
-					    );
-			};
-		};
-		$scope.fileSave = function(event) {
-			if(typeof(Storage) !== "undefined") {
-				var project = ProjectSerializer.serializeProject($scope.$parent.project);
-				
-				// Store
-				localStorage.setItem("project", project);
-				$mdToast.show(
-		                $mdToast.simple()
-		                  .content("Project saved on your local storage")
-		                  .position('top right')
-		                  .hideDelay(1500)
-		              );
-				ga('send', 'event', 'project', 'store');
-			} else {
-				$mdDialog.show(
-					      $mdDialog.alert()
-					        .clickOutsideToClose(true)
-					        .title('No local storage supported')
-					        .content('Your browser does not support local storage.')
-					        .ariaLabel('No local storage supported')
-					        .ok('Ok')
-					    );
-			};
-			
-		};
-		$scope.asImage = function($event) {
-		      var parentEl = angular.element(document.body);
-		       $mdDialog.show({
-		         parent: parentEl,
-		         targetEvent: $event,
-		         templateUrl:  'vatuta/templates/downloadAsImage.html',
-		         controller: function DialogController($scope, $mdDialog) {
-				        $scope.closeDialog = function() {
-				          $mdDialog.hide();
-				        }
-				        $scope.imageContents = function() {
-							return angular.element("canvas#ganttCanvas")[0].toDataURL();
-						}
-		         }
-		      });
-		       ga('send', 'event', 'project', 'asImage');
-		};
-		
-		}]);
-	
-	
+
 });

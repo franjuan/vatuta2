@@ -72,3 +72,17 @@ vatuta-task-editor .dependencyIcon {
 .dependencyTypeOption .rightSide {
     padding-left: 1em;
 }
+
+/* To avoid 24px border of the icon in the menu item */
+vatuta-menu md-menu button md-icon {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+/* Workaround for 5600 issue (SpeedDial does not hide items */
+.custom-fab md-fab-actions .md-fab-action-item {
+  transition: none;
+}
+.custom-fab:not(.md-is-open) md-fab-actions {
+  visibility: hidden;
+}

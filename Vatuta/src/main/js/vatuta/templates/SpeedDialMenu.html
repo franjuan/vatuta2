@@ -1,0 +1,37 @@
+<div ng-controller = "SpeedDialMenuController as ctrl" >
+<md-fab-speed-dial md-direction="left" ng-class="md-scale" class="md-fab-top-right custom-fab"
+	md-open="ctrl.isOpen">
+   	<md-fab-trigger>
+    	<md-button aria-label="menu" class="md-fab md-raised md-mini md-primary">
+            <md-icon md-svg-src="icons/ic_menu_white_48px.svg"></md-icon>
+        </md-button>
+    </md-fab-trigger>
+    <md-fab-actions>
+    	<md-menu>
+	     	<md-button aria-label="Task dependencies" class="md-raised" ng-click="$mdOpenMenu($event)">
+	       		<div layout="row" layout-align="space-around center">
+		          	<md-icon md-svg-src="icons/ic_folder_open_black_48px.svg" aria-label="File"></md-icon>
+		          	<span>File</span>
+	         	</div>
+	     	</md-button>
+	     	<md-menu-content width="2">
+	       		<md-menu-item>
+	          			<md-button ng-click="fileOpen($event)">
+	          				<span md-menu-align-target>Open...</span>
+	          			</md-button>
+	        		</md-menu-item>
+	        		<md-menu-item>
+	          			<md-button ng-click="fileSave($event)">
+	          				<span md-menu-align-target>Save...</span>
+	          			</md-button>
+	        		</md-menu-item>
+	        		<md-menu-item>
+	        			<md-button ng-click="asImage($event)">
+	          				<span md-menu-align-target>As image...</span>
+	          			</md-button>
+	        		</md-menu-item>
+	       	</md-menu-content> 
+   		</md-menu>
+	</md-fab-actions>
+</md-fab-speed-dial>
+</div>

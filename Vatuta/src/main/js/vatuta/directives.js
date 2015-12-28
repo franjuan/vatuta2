@@ -1,4 +1,10 @@
-define(["vatuta/shared/Canvas", "vatuta/directives/TaskEditorDirective", "vatuta/validators/DurationValidator", "vatuta/validators/TaskValidator", "vatuta/vatutaMod"], function(Canvas) {
+define(["vatuta/shared/Canvas",
+        "vatuta/directives/TaskEditorDirective",
+        "vatuta/directives/SpeedDialMenuDirective",
+        "vatuta/validators/DurationValidator",
+        "vatuta/validators/TaskValidator",
+        "vatuta/vatutaMod"
+        ], function(Canvas) {
 
 	angular.module('vatuta').directive('vatutaGantt', function($mdDialog) {
 		  return {

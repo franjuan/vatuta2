@@ -50,9 +50,9 @@
 <script
 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-cookies.js"></script>
 <link rel="stylesheet"
-	href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.1/angular-material.min.css">
+	href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.1/angular-material.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
 
@@ -72,39 +72,7 @@
 </head>
 
 <body ng-controller="projectCtrl as ctrl" layout="column" layout-align="space-between start" ng-cloak>
-	<md-fab-speed-dial md-direction="left" ng-class="md-fling" class="md-fab-top-right">
-    	<md-fab-trigger>
-	    	<md-button aria-label="menu" class="md-fab md-raised md-mini md-primary">
-	        	<md-tooltip md-direction="top">Menu</md-tooltip>
-	            <md-icon md-svg-src="icons/ic_menu_white_48px.svg"></md-icon>
-          	</md-button>
-        </md-fab-trigger>
-        <md-fab-actions>
-        	<md-menu ng-controller="menuBarCtrl as ctrl">
-	        	<md-button aria-label="Task dependencies" class="md-fab md-raised md-mini" ng-click="$mdOpenMenu($event)">
-	          		<md-tooltip md-direction="top">File</md-tooltip>
-	            	<md-icon md-svg-src="icons/ic_folder_open_black_48px.svg" aria-label="File"></md-icon>
-	        	</md-button>
-	        	<md-menu-content width="2">
-	          		<md-menu-item>
-              			<md-button ng-click="fileOpen($event)">
-              				<span md-menu-align-target>Open...</span>
-              			</md-button>
-            		</md-menu-item>
-            		<md-menu-item>
-              			<md-button ng-click="fileSave($event)">
-              				<span md-menu-align-target>Save...</span>
-              			</md-button>
-            		</md-menu-item>
-            		<md-menu-item>
-            			<md-button ng-click="asImage($event)">
-              				<span md-menu-align-target>As image...</span>
-              			</md-button>
-            		</md-menu-item>
-	          	</md-menu-content>
-	      	</md-menu>
-		</md-fab-actions>
-    </md-fab-speed-dial>
+	<vatuta-menu></vatuta-menu>
 	<div layout="row" flex>
 		<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
 			<div layout="column">
