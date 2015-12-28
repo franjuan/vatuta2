@@ -65,3 +65,10 @@ vatuta-task-editor .dependencyIcon {
 	padding-left: 16px;
     padding-right: 16px;
 }
+
+.dependencyTypeOption .rightSide .secondLine {
+    font-size: small;
+}
+.dependencyTypeOption .rightSide {
+    padding-left: 1em;
+}

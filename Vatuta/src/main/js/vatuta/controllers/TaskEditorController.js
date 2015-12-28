@@ -1,13 +1,17 @@
 define([ "vatuta/shared/Duration", "vatuta/vatutaApp"], function(DurationUtils) {	
 	angular.module('vatutaApp').controller('TaskEditorController', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav','Restrictions', 'Engine', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions, Engine) {
 		this.showTaskDependency = function(ev) {
+			var newDialogScope = $scope.$new(false, $scope);
+			newDialogScope.project = $scope.project;
+			newDialogScope.selectedTask = $scope.selectedTask;
+			
 		    $mdDialog.show({
 		      controller: 'TaskDependencyDialogController',
 		      templateUrl: 'vatuta/templates/TaskDependencyDialog.html',
 		      parent: angular.element(document.body),
 		      targetEvent: ev,
 		      clickOutsideToClose:false,
-		      scope: $scope.$new(false, $scope)
+		      scope: newDialogScope
 		    })
 		    .then(function(restriction) {
 		    	// TODO Si en task no se selecciona una tarea, aunque esté el texto de búsqueda, da error porque restriction.task es null
@@ -106,11 +110,6 @@ define([ "vatuta/shared/Duration", "vatuta/vatutaApp"], function(DurationUtils) 
 		        console.log('Removal of task ' + name + ' cancelled');
 		    });
 		 }
-
-		 this.querySearch = function(query) {
-			var results = query ? _.filter($scope.project.tasks(),filter(query)) : _.filter($scope.project.tasks(),function(task){return task.id()!==$scope.$parent.selectedTask.id();});
-			return results;
-		 }
 		 
 		 this.durationString= function(newDuration) {
 			     if (arguments.length) {
@@ -126,12 +125,6 @@ define([ "vatuta/shared/Duration", "vatuta/vatutaApp"], function(DurationUtils) 
 		 $scope.$watch('selectedTask', function(newP, oldP, $scope){
 			 $scope._durationString = newP?(newP.duration()?newP.duration().formatter():newP.actualDuration().humanize()):"";
 		 });
-	
-		 function filter(query){
-		      var lowercaseQuery = angular.lowercase(query);
-		      return function filterFn(task) {
-		        return task.id()!==$scope.$parent.selectedTask.id() && (task.index() === parseInt(query) || angular.lowercase(task.name()).indexOf(lowercaseQuery) !== -1);
-		      };
-		 }
+
 	}]);
 });

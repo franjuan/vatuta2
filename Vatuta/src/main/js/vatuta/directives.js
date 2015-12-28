@@ -1,4 +1,4 @@
-define(["vatuta/shared/Canvas", "vatuta/shared/Duration", "vatuta/directives/TaskEditorDirective", "vatuta/vatutaMod", "vatuta/vatutaApp"], function(Canvas, DurationUtils) {
+define(["vatuta/shared/Canvas", "vatuta/directives/TaskEditorDirective", "vatuta/validators/DurationValidator", "vatuta/validators/TaskValidator", "vatuta/vatutaMod"], function(Canvas) {
 
 	angular.module('vatuta').directive('vatutaGantt', function($mdDialog) {
 		  return {
@@ -77,19 +77,5 @@ define(["vatuta/shared/Canvas", "vatuta/shared/Duration", "vatuta/directives/Tas
 			    }
 			  };
 			}]);
-	
-	angular.module('vatutaApp').directive('duration', [function() {
-		  return {
-		    require: 'ngModel',
-		    link: function(scope, elm, attrs, ctrl) {
-		      ctrl.$validators.duration = function(modelValue, viewValue) {
-		    	if (ctrl.$isEmpty(modelValue)) {
-		            // consider empty models to be valid
-		            return true;
-		        }
-		        return typeof DurationUtils.validator(modelValue) == "object";
-		      };
-		    }
-		  };
-		}]);
+
 });

@@ -1,4 +1,4 @@
-<md-dialog aria-label="Create new task dependency" ng-cloak>
+<md-dialog aria-label="Create new task dependency" ng-cloak ng-controller="TaskDependencyDialogController as ctrl">
   <form name="taskDependencyForm" novalidate>
   <md-toolbar>
     <div class="md-toolbar-tools">
@@ -13,32 +13,49 @@
     <div class="md-dialog-content">
      <md-input-container>
         <label>Dependency type</label>
-        <md-select ng-model="ctrl.type">
-          <md-option value="FS" selected>
-          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
-            <span style="padding-left: 1em">Finish-Start</span>
-            <md-tooltip>This task should start after referred one is finished.</md-tooltip>
+        <md-select ng-model="ctrl.type" >
+          <md-option value="FS" selected class="dependencyTypeOption">
+          	<div layout="row" class="leftSide">
+	          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Finish-Start"></md-icon>
+	          	<div layout = "column" class="rightSide">
+		            <span class="topPart firstLine">Finish-Start. </span>
+		            <span class="bottomPart secondLine">This task should start after referred one is finished.</span>
+	            </div>
+            </div>
           </md-option>
-          <md-option value="FF">
-          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
-            <span style="padding-left: 1em">Finish-Finish</span>
-            <md-tooltip>This task should end after referred one is finished.</md-tooltip>
+          <md-option value="FF" class="dependencyTypeOption">
+          	<div layout="row" class="leftSide">
+	          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
+	          	<div layout = "column" class="rightSide">
+		            <span class="topPart firstLine">Finish-Finish. </span>
+		            <span class="bottomPart secondLine">This task should end after referred one is finished.</span>
+	            </div>
+            </div>
           </md-option>
-          <md-option value="SS">
-          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
-            <span style="padding-left: 1em">Start-Start</span>
-            <md-tooltip>This task should start after referred one has started.</md-tooltip>
+          <md-option value="SS" class="dependencyTypeOption">
+          	<div layout="row" class="leftSide">
+	          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
+	          	<div layout = "column" class="rightSide">
+		            <span class="topPart firstLine">Start-Start. </span>
+		            <span class="bottomPart secondLine">This task should start after referred one has started.</span>
+	            </div>
+            </div>
           </md-option>
-          <md-option value="SF" selected>
-          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
-            <span style="padding-left: 1em">Start-Finish</span>
-            <md-tooltip>This task should finish after referred one has started.</md-tooltip>
+          <md-option value="SF" class="dependencyTypeOption">
+          	<div layout="row" class="leftSide" >
+	          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
+	          	<div layout = "column" class="rightSide">
+		            <span class="topPart firstLine">Start-Finish. </span>
+		            <span class="bottomPart secondLine">This task should finish after referred one has started.</span>
+	            </div>
+            </div>
           </md-option>
         </md-select>
       </md-input-container>
       <md-input-container>
         <label>Task</label>
        	<md-autocomplete
+       	  md-input-name="taskSelector"
           md-selected-item="ctrl.task"
           md-search-text="ctrl.searchText"
           md-items="task in ctrl.querySearch(ctrl.searchText)"
@@ -52,6 +69,9 @@
 	          No tasks matching "{{ctrl.searchText}}" were found.
 	        </md-not-found>
         </md-autocomplete>
+        <div ng-messages="taskDependencyForm.taskSelector.$error" role="alert">
+			<div ng-message="task">Not valid task selected</div>
+		</div>
       </md-input-container>
       <md-input-container> <label>Delay</label>
 		<input name="delay" ng-model="delayString"
@@ -64,7 +84,7 @@
   <div class="md-actions" layout="row" layout-align="space-between center">
     <md-button ng-click="cancel()" class="md-raised md-primary">Cancel</md-button>
     <span flex></span>
-    <md-button ng-click="answer(ctrl.type, ctrl.task)" class="md-raised md-primary" style="margin-right:20px;" ng-disabled="taskDependencyForm.$invalid">Create</md-button>
+    <md-button ng-click="answer(ctrl.type, ctrl.task)" class="md-raised md-primary" style="margin-right:20px;" ng-disabled="taskDependencyForm.$invalid || ctrl.invalidTask">Create</md-button>
   </div>
   </form>
 </md-dialog>
