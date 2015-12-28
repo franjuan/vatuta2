@@ -1,6 +1,6 @@
-define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask", "vatuta/engine",
-		"vatuta/restriction", "vatuta/tactics", "vatuta/canvas", "moment", "vatuta/Duration" ], function(Project,
-		Task, baseTask, SummaryTask, Engine, Restrictions, Tactics, Canvas, moment, Duration) {
+define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask", "vatuta/shared/SummaryTask", "vatuta/shared/Engine",
+		"vatuta/shared/Restriction", "vatuta/shared/Tactics", "vatuta/shared/Canvas", "moment", "vatuta/shared/Duration" ], function(Project,
+		Task, BaseTask, SummaryTask, Engine, Restrictions, Tactics, Canvas, moment, Duration) {
 
 	var vatutaMod = angular.module('vatuta', [])
 		.config( ['$compileProvider', function( $compileProvider )
@@ -38,7 +38,7 @@ define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 			addTask: function(project, task, parent) {
 				var newTask;
 				if (task) {
-					if (task.isInstanceOf(baseTask)) {
+					if (task.isInstanceOf(BaseTask)) {
 						newTask = task;
 					} else {
 						newTask = new Task(task);
@@ -72,7 +72,7 @@ define([ "vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask
 	
 	vatutaMod.factory('ProjectSerializer', [ function() {
 		var namespace = {};
-		namespace.baseTask = baseTask;
+		namespace.BaseTask = BaseTask;
 		namespace.Task = Task;
 		namespace.Project = Project;
 		namespace.EndToStartDependency = Restrictions.EndToStart;

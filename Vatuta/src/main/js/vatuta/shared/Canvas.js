@@ -2,7 +2,7 @@
  * @module Canvas
  */
 define(
-		[ 'dojo/_base/declare', 'dojo/_base/lang', 'easeljs', 'lodash', 'moment', "vatuta/restriction", "vatuta/task", "vatuta/summaryTask" ],
+		[ 'dojo/_base/declare', 'dojo/_base/lang', 'easeljs', 'lodash', 'moment', "vatuta/shared/Restriction", "vatuta/shared/Task", "vatuta/shared/SummaryTask" ],
 		function(declare, lang, easeljs, _, moment, Restrictions, Task, SummaryTask) {
 			return declare(null, {
 				/**

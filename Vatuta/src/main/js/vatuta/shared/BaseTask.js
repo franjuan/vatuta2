@@ -1,6 +1,6 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Duration", "vatuta/tactics" ], function(declare,
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/shared/Duration", "vatuta/shared/Tactics" ], function(declare,
 		lang, _, moment, DurationUtils, Tactics) {
-	return declare("baseTask", null, {
+	return declare("BaseTask", null, {
 		/**
 		 * To allow this.inherited on constructor
 		 */

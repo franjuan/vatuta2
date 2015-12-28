@@ -1,6 +1,6 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/Duration", "vatuta/baseTask" ], function(declare,
-		lang, _, moment, DurationUtils, baseTask) {
-	return declare("summaryTask", baseTask, {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/shared/Duration", "vatuta/shared/BaseTask" ], function(declare,
+		lang, _, moment, DurationUtils, BaseTask) {
+	return declare("SummaryTask", BaseTask, {
 		constructor : function (/* Object */kwArgs) {
 			this._children = [];
 			this.inherited(arguments);

@@ -1,7 +1,7 @@
 /**
  * @module Restriction
  */
-define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/engine", "vatuta/Duration"], function(declare, lang, Engine, Duration) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatuta/shared/Duration"], function(declare, lang, Engine, Duration) {
 	/**
      * @exports Restriction
      */

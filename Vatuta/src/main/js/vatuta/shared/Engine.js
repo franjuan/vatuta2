@@ -2,7 +2,7 @@
  * @module Engine
  */
 define(
-		[ "lodash", "moment", "vatuta/Duration","vatuta/tactics"],
+		[ "lodash", "moment", "vatuta/shared/Duration","vatuta/shared/Tactics"],
 		function(_, moment, Duration, Tactics) {
 			/**
 			 * @constructor
@@ -341,6 +341,32 @@ define(
 					    		task._$lowlink  = Math.min(task._$lowlink, dependant._$index);
 					    	}
 					    }, task);
+					    
+//					    // Consider childrens of task
+//					    if (task.children) {
+//						    _.forEach(task.children(), function(child) {
+//						    	if (!child._$index) {
+//							        // Dependant has not yet been visited; recurse on it
+//							        strongConnect(child);
+//							        task._$lowlink  = Math.min(task._$lowlink, child._$lowlink);
+//						    	} else if (child._$onStack) {
+//							        // Successor w is in stack S and hence in the current SCC
+//						    		task._$lowlink  = Math.min(task._$lowlink, child._$index);
+//						    	}
+//						    }, task);
+//					    }
+//					    
+//					    // Consider parent of task
+//					    if (!task.parent().isInstanceOf(Project)) {
+//					    	if (!task.parent()._$index) {
+//						        // Dependant has not yet been visited; recurse on it
+//						        strongConnect(task.parent());
+//						        task._$lowlink  = Math.min(task._$lowlink, task.parent()._$lowlink);
+//					    	} else if (child._$onStack) {
+//						        // Successor w is in stack S and hence in the current SCC
+//					    		task._$lowlink  = Math.min(task._$lowlink, task.parent()._$index);
+//					    	}
+//					    }
 					    
 					    // If v is a root node, pop the stack and generate an SCC
 					    if (task._$lowlink == task._$index) {

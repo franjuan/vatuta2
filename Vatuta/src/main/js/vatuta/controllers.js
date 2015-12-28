@@ -1,8 +1,7 @@
-require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(vatuta, resurrect, moment, DurationUtils) {
-	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages','ngSanitize','ngCookies',
-			'vatuta' ]);
+require([ "vatuta/services", "resurrect", "moment", "vatuta/shared/Duration", "vatuta/controllers/TaskDependencyDialogController"], function(vatuta, resurrect, moment, DurationUtils) {
+	
 
-	vatutaApp
+	angular.module('vatutaApp')
 			.constant('config', {
 				policyVersion: 0.1,
 				version: 0.21})
@@ -10,7 +9,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 		        $rootScope.$config = config;
 		    });
 	
-	vatutaApp.controller('projectCtrl', [
+	angular.module('vatutaApp').controller('projectCtrl', [
 			'$scope',
 			'$mdSidenav',
 			'Project',
@@ -316,7 +315,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 				}
 			} ]);
 	
-	vatutaApp.controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', 'ProjectHandler', function($scope, $mdBottomSheet, Task, Engine, handler) {
+	angular.module('vatutaApp').controller('bottomSheetMenuCtrl', ['$scope', '$mdBottomSheet', 'Task', 'Engine', 'ProjectHandler', function($scope, $mdBottomSheet, Task, Engine, handler) {
 		$scope.addTask = function() {
 			$scope.$parent.selectedTask = handler.addTask($scope.project);
 			$scope.toggleSidenav('left');
@@ -344,7 +343,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 		}
 	}]);
 	
-	vatutaApp.controller('menuBarCtrl', ['$scope', '$mdDialog', '$mdToast' , 'Task', 'Project', 'ProjectSerializer', 'Engine', function($scope, $mdDialog, $mdToast, Task, Project, ProjectSerializer, Engine) {
+	angular.module('vatutaApp').controller('menuBarCtrl', ['$scope', '$mdDialog', '$mdToast' , 'Task', 'Project', 'ProjectSerializer', 'Engine', function($scope, $mdDialog, $mdToast, Task, Project, ProjectSerializer, Engine) {
 		$scope.fileOpen = function(event) {
 			if(typeof(Storage) !== "undefined") {
 				$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
@@ -413,10 +412,10 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 		
 		}]);
 
-	vatutaApp.controller('taskEditorCtrl', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav','Restrictions', 'Engine', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions, Engine) {
+	angular.module('vatutaApp').controller('taskEditorCtrl', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav','Restrictions', 'Engine', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions, Engine) {
 		this.showTaskDependency = function(ev) {
 		    $mdDialog.show({
-		      controller: DialogController,
+		      controller: 'taskDependencyDialogController',
 		      templateUrl: 'vatuta/templates/TaskDependencyDialog.html',
 		      parent: angular.element(document.body),
 		      targetEvent: ev,
@@ -549,7 +548,7 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 		 }
 	}]);
 	
-	vatutaApp.directive('duration', [function() {
+	angular.module('vatutaApp').directive('duration', [function() {
 		  return {
 		    require: 'ngModel',
 		    link: function(scope, elm, attrs, ctrl) {
@@ -565,28 +564,4 @@ require([ "vatuta/vatuta", "resurrect", "moment", "vatuta/Duration"], function(v
 		}]);
 	
 	angular.bootstrap(document, [ 'vatutaApp' ]);
-	
-	function DialogController($scope, $mdDialog) {
-		  $scope.hide = function() {
-		    $mdDialog.hide();
-		  };
-		  $scope.cancel = function() {
-		    $mdDialog.cancel();
-		  };
-		  $scope.answer = function(type, task) {
-		    $mdDialog.hide({type: type, task: task, delay: $scope.delay});
-		  };
-		  
-		  $scope._delayString="";
-		  $scope.delayString= function(newDuration) {
-			     if (arguments.length) {
-			    	 $scope._delayString = newDuration;
-			    	 var duration = DurationUtils.validator(newDuration);
-			    	 if (typeof duration == "object")
-			    		 $scope.delay = duration;
-			     } else {
-			    	 return $scope._delayString;
-			     }
-		 };
-		}
 });

@@ -1,4 +1,4 @@
-require(["vatuta/project", "vatuta/task", "vatuta/baseTask", "vatuta/summaryTask", "vatuta/engine", "vatuta/restriction", "vatuta/tactics", "moment", "vatuta/Duration"],
+require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask", "vatuta/shared/SummaryTask", "vatuta/shared/Engine", "vatuta/shared/Restriction", "vatuta/shared/Tactics", "moment", "vatuta/shared/Duration"],
 		function(Project, Task, BaseTask, SummaryTask, Engine, Restrictions, Tactics, Moment, Duration) {
 
 	var customMatchers = {
