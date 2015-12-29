@@ -3,5 +3,6 @@ define([ "vatuta/controllers/TaskDependencyDialogController",
          "vatuta/controllers/SpeedDialMenuController",
          "vatuta/controllers/DataTableController",
          "vatuta/controllers/GanttController",
-         "vatuta/controllers/BottomSheetMenuController"], function() {
+         "vatuta/controllers/BottomSheetMenuController",
+         "vatuta/controllers/ViewSelectorController"], function() {
 });

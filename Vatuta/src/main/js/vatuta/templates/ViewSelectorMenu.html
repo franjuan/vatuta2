@@ -1,0 +1,20 @@
+<div>
+<md-fab-speed-dial md-direction="left" ng-class="md-scale" class="md-fab-bottom-right custom-fab"
+	md-open="ctrl.isOpen">
+   	<md-fab-trigger>
+    	<md-button aria-label="menu" class="md-fab md-raised md-mini md-primary">
+            <md-icon md-svg-src="icons/ic_visibility_white_48px.svg"></md-icon>
+        </md-button>
+    </md-fab-trigger>
+    <md-fab-actions>
+     	<md-button aria-label="Gantt View" class="md-fab md-raised md-mini" ng-click="go('/gantt');">
+	          	<md-icon md-svg-src="icons/ic_clear_all_black_48px.svg" aria-label="Gantt view"></md-icon>
+				<md-tooltip md-direction="top">Gantt view</md-tooltip>
+     	</md-button>
+     	<md-button aria-label="DataTable View" class="md-fab md-raised md-mini" ng-click="go('/dataTable');">
+	          	<md-icon md-svg-src="icons/ic_view_list_black_48px.svg" aria-label="Table view"></md-icon>
+				<md-tooltip md-direction="top">Table view</md-tooltip>
+     	</md-button>
+	</md-fab-actions>
+</md-fab-speed-dial>
+</div>

@@ -87,6 +87,7 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 					return moment(value);
 				}
 		};
+		serializers["Moment"] = serializers["n"];
 		var necromancer = new Resurrect(
 				{
 					resolver: new Resurrect.NamespaceResolver(
