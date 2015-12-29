@@ -38,17 +38,19 @@
 <script
 	src="https://code.jquery.com/jquery-2.1.4.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-aria.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-messages.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-sanitize.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
 <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-cookies.js"></script>
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-sanitize.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-cookies.min.js"></script>
 <link rel="stylesheet"
 	href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
 <script
@@ -71,19 +73,7 @@
 
 </head>
 
-<body ng-controller="projectCtrl as ctrl" layout="column" layout-align="space-between start" ng-cloak>
-	<vatuta-menu></vatuta-menu>
-	<div layout="row" flex>
-		<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
-			<div layout="column">
-				<vatuta-task-editor project-data="project" selected-task="selectedTask"></vatuta-task-editor>
-			</div>
-		</md-sidenav>
-		<div layout="column" flex id="content">
-			<md-content layout="column" flex>
-				<vatuta-gantt project-data='project' listener="ganttListener" canvas-options='canvasOptions'></vatuta-gantt>
-			</md-content>
-		</div>
-	</div>
+<body layout="column" layout-align="space-between start" ng-cloak>
+	<div ng-view></div>
 </body>
 </html>

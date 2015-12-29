@@ -1,0 +1,13 @@
+<vatuta-menu></vatuta-menu>
+<div layout="row" flex>
+	<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+		<div layout="column">
+			<vatuta-task-editor project-data="project" selected-task="selectedTask"></vatuta-task-editor>
+		</div>
+	</md-sidenav>
+	<div layout="column" flex id="content">
+		<md-content layout="column" flex>
+			<vatuta-gantt project-data='project' listener="ganttListener" canvas-options='canvasOptions'></vatuta-gantt>
+		</md-content>
+	</div>
+</div>
