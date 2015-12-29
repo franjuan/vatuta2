@@ -4,6 +4,7 @@ define(["vatuta/vatutaApp"], function() {
 		  return {
 			    restrict: 'EAC',
 			    scope: {
+			    	project: '=projectData',
 			    },
 			    templateUrl: 'vatuta/templates/SpeedDialMenu.html'
 			  };

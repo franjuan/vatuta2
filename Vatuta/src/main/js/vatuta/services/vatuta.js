@@ -67,6 +67,7 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 		var namespace = {};
 		namespace.BaseTask = BaseTask;
 		namespace.Task = Task;
+		namespace.SummaryTask = SummaryTask;
 		namespace.Project = Project;
 		namespace.EndToStartDependency = Restrictions.EndToStart;
 		namespace.StartToEndDependency = Restrictions.StartToEnd;
@@ -78,9 +79,9 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 		namespace.Duration = Duration;
 		
 		var serializers = {};
-		serializers["Moment"]= {
+		serializers["n"]= {
 				serialize: function(object) {
-					return Resurrect.prototype.builder.bind(necromancer)("Moment", object.toISOString());
+					return Resurrect.prototype.builder.bind(necromancer)("n", object.toISOString());
 				},
 				deserialize: function(value) {
 					return moment(value);
