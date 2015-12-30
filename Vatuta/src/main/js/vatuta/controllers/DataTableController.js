@@ -1,5 +1,4 @@
-define(
-		[ "vatuta/vatutaApp" ],
+define([  "vatuta/vatutaApp"  ],
 		function() {
 			angular
 					.module('vatutaApp')
@@ -9,7 +8,25 @@ define(
 									'$scope',
 									'$mdDialog',
 									'$mdToast',
-									function($scope, $mdDialog, $mdToast) {
-										this.message =  "This is a test message in DataTable view";
+									'$project',
+									function($scope, $mdDialog, $mdToast, $project) {
+										$scope.message =  "This is a test message in DataTable view";$scope
+										$scope.project = $project;
+										$project.name("Other name");
+										$scope.dataTableOptions = {
+											getRowIdentity: function(row) {
+												return row.index();
+											},
+										    enableSorting: true,
+										    columnDefs: [
+											    { displayName: '#', field: 'index()' },
+											    { displayName: 'Name', field: 'name()' },
+											    { displayName: 'Duration', field: 'duration().shortFormatter()', enableSorting: false }
+										    ],
+										    data: $project.tasks(),
+										    onRegisterApi: function( gridApi ) {
+										    	$scope.dataTableGridApi = gridApi;
+										    }
+										};
 									} ]);
 		});

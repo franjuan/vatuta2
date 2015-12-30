@@ -1,6 +1,8 @@
-define([ "vatuta/services/vatuta" ], function(vatuta) {
+define([ "vatuta/services/vatuta",
+         "lib/css!https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.0.7/ui-grid.min.css",
+		 "ui-grid" ], function(vatuta) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages',
-			'ngSanitize', 'ngCookies', 'ngAnimate', 'ngRoute', 'vatuta' ]);
+			'ngSanitize', 'ngCookies', 'ngAnimate', 'ngRoute', 'ui.grid', 'vatuta' ]);
 
 	vatutaApp.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/gantt', {
@@ -18,7 +20,7 @@ define([ "vatuta/services/vatuta" ], function(vatuta) {
 
 	vatutaApp.constant('config', {
 		policyVersion : 0.1,
-		version : 0.21
+		version : 0.22
 	}).run(function($rootScope, config) {
 		$rootScope.$config = config;
 	});

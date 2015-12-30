@@ -86,3 +86,9 @@ vatuta-menu md-menu button md-icon {
 .custom-fab:not(.md-is-open) md-fab-actions {
   visibility: hidden;
 }
+
+/* Sets size to project dataTable */
+.dataTable {
+    width: 500px;
+    height: 250px;
+  }

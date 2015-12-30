@@ -125,4 +125,67 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 		};
 	} ]);
 	
+	angular.module('vatuta').factory('$project', [ function() {
+		var project = new Project({
+			_name : "Example Project"
+		});
+		// TODO Engine should be a service and use the $project service as a reference to it
+		Engine.currentProject(project);
+
+		// Start2End
+		var base = new Task({
+			_name : "Base",
+			_duration : new Duration({
+				days : 4
+			})
+		});
+		project.addTask(base);
+
+		var summary = new SummaryTask({
+			_name : "Summary"
+		});
+		project.addTask(summary);
+
+		var taskA = new Task({
+			_name : "A",
+			_duration : new Duration({
+				days : 5
+			})
+		});
+		project.addTask(taskA, summary);
+
+		var taskB = new Task({
+			_name : "B",
+			_duration : new Duration({
+				days : 4
+			})
+		});
+		project.addTask(taskB, summary);
+
+		var taskC = new Task({
+			_name : "C",
+			_duration : new Duration({
+				days : 6
+			})
+		});
+		project.addTask(taskC, summary);
+
+		new Restrictions.StartToStart({
+			_dependency : base,
+			_dependant : summary
+		});
+
+		new Restrictions.EndToStart({
+			_dependency : taskA,
+			_dependant : taskB
+		});
+
+		new Restrictions.StartToEnd({
+			_dependency : taskB,
+			_dependant : taskC
+		});
+		
+		return project;
+	} ]);
+	
 });
