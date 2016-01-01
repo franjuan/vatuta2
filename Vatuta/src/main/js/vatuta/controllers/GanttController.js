@@ -21,184 +21,20 @@ define(
 									'$cookies',
 									'config',
 									'$animate',
+									'$project',
 									function($scope, $mdSidenav, Project, Task,
 											SummaryTask, Engine, Canvas,
 											Restrictions, $mdDialog,
 											$mdBottomSheet, $mdToast,
 											ProjectSerializer, $cookies,
-											$config, $animate) {
+											$config, $animate, $project) {
 
 										$scope.toggleSidenav = function(menuId) {
 											$mdSidenav(menuId).toggle();
 										};
-
-										var project = new Project({
-											_name : "Example Project"
-										});
-										Engine.currentProject(project);
-
-										// Start2End
-										var base = new Task({
-											_name : "Base",
-											_duration : new Duration({
-												days : 4
-											})
-										});
-										project.addTask(base);
-
-										var summary = new SummaryTask({
-											_name : "Summary"
-										});
-										project.addTask(summary);
-
-										var taskA = new Task({
-											_name : "A",
-											_duration : new Duration({
-												days : 5
-											})
-										});
-										project.addTask(taskA, summary);
-
-										var taskB = new Task({
-											_name : "B",
-											_duration : new Duration({
-												days : 4
-											})
-										});
-										project.addTask(taskB, summary);
-
-										var taskC = new Task({
-											_name : "C",
-											_duration : new Duration({
-												days : 6
-											})
-										});
-										project.addTask(taskC, summary);
-
-										new Restrictions.StartToStart({
-											_dependency : base,
-											_dependant : summary
-										});
-
-										new Restrictions.EndToStart({
-											_dependency : taskA,
-											_dependant : taskB
-										});
-
-										new Restrictions.StartToEnd({
-											_dependency : taskB,
-											_dependant : taskC
-										});
-
-										// // End2Start
-										// var base2 = new Task({
-										// _name : "Base",
-										// _duration : new Duration({days: 3})
-										// });
-										// project.addTask(base2);
-										//			                                               				
-										// var summary2 = new SummaryTask({
-										// _name : "Summary"
-										// });
-										// project.addTask(summary2);
-										//			                                               				
-										// var taskA2 = new Task({
-										// _name : "A",
-										// _duration :new Duration({days: 5})
-										// });
-										// project.addTask(taskA2);
-										// summary.addTask(taskA2);
-										//			                                               				
-										// var taskB2 = new Task({
-										// _name : "B",
-										// _duration :new Duration({days: 4})
-										// });
-										// project.addTask(taskB2);
-										// summary.addTask(taskB2);
-										//			                                               				
-										// var taskC2 = new Task({
-										// _name : "C",
-										// _duration :new Duration({days: 6})
-										// });
-										// project.addTask(taskC2);
-										// summary.addTask(taskC2);
-										//			                                               				
-										// new Restrictions.EndToEnd({
-										// _dependency : base2,
-										// _dependant : summary2
-										// });
-										//			                                               				
-										// new Restrictions.EndToStart({
-										// _dependency : taskA2,
-										// _dependant : taskB2
-										// });
-										//			                                               				
-										// new Restrictions.EndToStart({
-										// _dependency : taskB2,
-										// _dependant : taskC2
-										// });
-
-										// var taskA = new Task({
-										// _name : "A",
-										// _duration : new Duration({days: 3})
-										// });
-										// project.addTask(taskA);
-										//			                                               				
-										// var taskB = new Task({
-										// _name : "B",
-										// _duration :new Duration({days: 5})
-										// });
-										// project.addTask(taskB);
-										//			                                               				
-										// var taskC = new Task({
-										// _name : "C",
-										// _duration : new Duration({days: 7})
-										// });
-										// project.addTask(taskC);
-										//			                                               				
-										// var taskD = new Task({
-										// _name : "D",
-										// _duration : new Duration({days: 2})
-										// });
-										// project.addTask(taskD);
-										//			                                               				
-										// new Restrictions.EndToStart({
-										// _dependency : taskA,
-										// _dependant : taskB
-										// });
-										// new Restrictions.EndToStart({
-										// _dependency : taskA,
-										// _dependant : taskC
-										// });
-										// new Restrictions.EndToStart({
-										// _dependency : taskB,
-										// _dependant : taskD
-										// });
-										// new Restrictions.EndToStart({
-										// _dependency : taskC,
-										// _dependant : taskD
-										// });
-										//			                                               				
-										// var taskE = new Task({
-										// _name : "E",
-										// _duration : new Duration({days: 3})
-										// });
-										// project.addTask(taskE);
-										// var taskF = new Task({
-										// _name : "F",
-										// _duration : new Duration({days: 5})
-										// });
-										// project.addTask(taskF);
-										// new Restrictions.StartToStart({
-										// _dependency : taskE,
-										// _dependant : taskF
-										// });
-										// new Restrictions.EndToStart({
-										// _dependency : taskB,
-										// _dependant : taskE
-										// });
-
-										$scope.project = project;
+										
+										$scope.project = $project;
+										
 										$scope.canvasOptions = {
 											_dayWidth : 30,
 											_rulerHeight : 35,
