@@ -89,6 +89,6 @@ vatuta-menu md-menu button md-icon {
 
 /* Sets size to project dataTable */
 .dataTable {
-    width: 500px;
-    height: 250px;
-  }
+    width: 100vw;
+	height: 100vh;
+}

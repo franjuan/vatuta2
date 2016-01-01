@@ -26,6 +26,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang"], function(declare, lang) {
 		constructor: function(/* Object */kwArgs) {
 			this.inherited(arguments);
 		},
+		name: function() {
+			return "ASAP";
+		},
+		description: function() {
+			return "Start task as soon as possible";
+		},
 		getActualStart4Task: function(task) {
 			return task.earlyStart();
 		},

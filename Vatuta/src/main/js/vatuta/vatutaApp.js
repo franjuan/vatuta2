@@ -2,7 +2,9 @@ define([ "vatuta/services/vatuta",
          "lib/css!https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.0.7/ui-grid.min.css",
 		 "ui-grid" ], function(vatuta) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages',
-			'ngSanitize', 'ngCookies', 'ngAnimate', 'ngRoute', 'ui.grid', 'vatuta' ]);
+			'ngSanitize', 'ngCookies', 'ngAnimate', 'ngRoute',
+			'ui.grid', 'ui.grid.moveColumns', 'ui.grid.autoResize', 'ui.grid.resizeColumns', 'ui.grid.pinning', 'ui.grid.cellNav', 'ui.grid.edit',
+			'vatuta' ]);
 
 	vatutaApp.config([ '$routeProvider', function($routeProvider) {
 		$routeProvider.when('/gantt', {
