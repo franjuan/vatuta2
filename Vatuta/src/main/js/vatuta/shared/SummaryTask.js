@@ -169,9 +169,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 					}
 				}, 0, this);
 		},
-		actualDuration: function(newActualDuration) {
-			return moment.duration(this.actualEnd().diff(this.actualStart()));
-		},
 		watchHash: function() {
 			// TODO Include duration in watch function
 			return this.id() + this.index() + this.name() + this.description() + //this.duration().shortFormatter() +

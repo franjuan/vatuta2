@@ -185,6 +185,8 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 			_dependant : taskC
 		});
 		
+		Engine.calculateEarlyStartLateEnding();
+		
 		return project;
 	} ]);
 	

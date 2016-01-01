@@ -130,7 +130,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			return arguments.length ? this._actualEnd = newActualEnd : this._actualEnd;
 		},
 		actualDuration: function(newActualDuration) {
-			return arguments.length ? this._actualDuration = newActualDuration : this._actualDuration;
+			return moment.duration(this.actualEnd().diff(this.actualStart()));
 		},
 		iterateDepthForProperty: function(property) {
 			var value = this[property]();
