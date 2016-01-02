@@ -23,12 +23,22 @@ vatuta-gantt {
 	height: 100vh;
 }
 
-vatuta-gantt #ganttCanvas{
-	overflow: auto;
+/*vatuta-gantt #ganttRuler{
+	position: fixed;
+}*/
+
+vatuta-gantt #container{
+    position: absolute;
+    top: 35px;
+    bottom: 0;
+    overflow-x: auto;
+    overflow-y: auto;
+    width: 100vw;
 }
 
-vatuta-gantt #ganttRuler{
-	position: fixed;
+vatuta-gantt #ganttCanvas {
+    overflow-x: visible;
+    overflow-y: visible;
 }
 
 #tasksGrid {

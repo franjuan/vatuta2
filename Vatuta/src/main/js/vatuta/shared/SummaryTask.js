@@ -169,6 +169,19 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 					}
 				}, 0, this);
 		},
+		actualDuration: function(newActualDuration) {
+			if (!this.actualEnd() || !this.actualStart()) {
+				return NaN;
+			}
+			var max = _.reduce(this.children(), function(max, child) {
+				return Math.max(max, child.actualDuration().getBiggestUnit());
+				}, 0, this);
+			var unit = Duration.units[max];
+			var value = this.actualEnd().diff(this.actualStart(), unit, true);
+			var duration = new Duration();
+			duration[unit] = value;
+			return duration
+		},
 		watchHash: function() {
 			// TODO Include duration in watch function
 			return this.id() + this.index() + this.name() + this.description() + //this.duration().shortFormatter() +

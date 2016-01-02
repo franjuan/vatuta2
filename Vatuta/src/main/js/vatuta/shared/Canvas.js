@@ -45,25 +45,27 @@ define(
 					this._sideMargins = this._arrowWidth  + this._arrowCornerR;
 					/* @member {String} */
 					this._earlyLateLimitsColor = "#607D8B";
+					/* @member {Number} */
+					this._rulerHeightOffset = 0; //Height offset if ruler is drawn in the same canvas than gantt
 					
 					lang.mixin(this, kwArgs);
 					
 					/* @member {Number} */
-					var parent = angular.element(element)[0];
+					this._parent = angular.element(element)[0];
 					
-					parent.addEventListener("click", 
-							_.bind(
-									function(event) {
-										if (this._listener && event.target.localName != 'canvas') {
-											this._listener.onClickOnTaskContainer(event);
-										};
-									}, this),
-									false
-						);
+//					parent.addEventListener("click", 
+//							_.bind(
+//									function(event) {
+//										if (this._listener && event.target.localName != 'canvas') {
+//											this._listener.onClickOnTaskContainer(event);
+//										};
+//									}, this),
+//									false
+//						);
 					
-					this._width = parent.offsetWidth;
+					this._width = this._parent.offsetWidth;
 					/* @member {Number} */
-					this._height = parent.offsetHeight;
+					this._height = this._parent.offsetHeight;
 					
 					this._taskRowHeight= this._taskTopHeight + this._taskHeight + this._taskBottomHeight;
 					
@@ -81,6 +83,7 @@ define(
 					
 					this._listener = null;
 					
+					// To scroll horizontally ruler and gantt at the same time
 					$('#content > md-content').scroll(function(){
 						  $('vatuta-gantt #ganttRuler').css('left',-$('#content > md-content').scrollLeft());
 					});
@@ -88,8 +91,8 @@ define(
 				listener: function(newListener) {
 					return arguments.length ? (this._listener = newListener) : this._listener;
 				},
-				drawTimeRuler: function(project) {
-					this._rulerCanvas.width = this._canvas.width;
+				drawTimeRuler: function(project, $window) {
+					this._rulerCanvas.width = Math.max(project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins, $window.innerWidth);
 					this._rulerCanvas.height = this._rulerHeight;
 					
 					var ruler = new createjs.Container();
@@ -117,16 +120,16 @@ define(
 					ruler.x = 0;
 					ruler.y = 0;
 					this._rulerStage.addChild(ruler);
-					this._stage.addChild(ruler); // TODO Verificar que pintar dos veces el ruler no afecta al rendimiento
+					//this._stage.addChild(ruler); // TODO Verificar que pintar dos veces el ruler no afecta al rendimiento
 
 					this._rulerStage.update();
-					this._stage.update();
+					//this._stage.update();
 			
 				},
-				drawProject: function(project, selectedTask) {
-					
-					this._width = project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins;
-					this._height = this._rulerHeight + this._taskRowHeight * project.tasks().length;
+				drawProject: function(project, selectedTask, $window) {
+					this._width = Math.max(project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins, $window.innerWidth - this._dayWidth);
+					this._height = Math.max(this._rulerHeightOffset + this._taskRowHeight * project.tasks().length, $window.innerHeight - this._rulerHeightOffset - 2*this._dayWidth);
+
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
 
@@ -207,7 +210,7 @@ define(
 						);
 					
 					taskContainer.x = 0;
-					taskContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeight;
+					taskContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeightOffset;
 					
 					return taskContainer;
 				},
@@ -231,7 +234,7 @@ define(
 					
 					return taskContainer;
 				},
-				drawSelectedTask: function(task, project){
+				drawSelectedTask: function(task, project, $window){
 					if (this._selectedTaskContainer) {
 						this._selectedTaskContainer.removeAllChildren();
 					} else {
@@ -301,7 +304,7 @@ define(
 					earlyLateLimitsContainer.addChild(startShape, endShape);
 					
 					earlyLateLimitsContainer.x = this._sideMargins;
-					earlyLateLimitsContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeight;
+					earlyLateLimitsContainer.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeightOffset;
 					
 					return earlyLateLimitsContainer;
 				},
@@ -331,19 +334,19 @@ define(
 					if (x1==x2) x2+=this._arrowCornerR;
 					
 					if (!backwards) {
-						var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
+						var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeightOffset + this._taskTopHeight + this._taskHeight/2;
 					} else {
 						if (!downwards) {
-							var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight;
+							var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeightOffset + this._taskTopHeight;
 						} else {
-							var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight;
+							var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeightOffset + this._taskTopHeight + this._taskHeight;
 						}
 					}
 					
 					if (downwards) {
-						var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeight + this._taskTopHeight;
+						var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeightOffset + this._taskTopHeight;
 					} else {
-						var y2 = this._taskRowHeight * (restriction.dependant().index()) + this._rulerHeight - this._taskBottomHeight;
+						var y2 = this._taskRowHeight * (restriction.dependant().index()) + this._rulerHeightOffset - this._taskBottomHeight;
 					}
 					
 					var base = new createjs.Shape();
@@ -404,19 +407,19 @@ define(
 					if (x1==x2) x2-=this._arrowCornerR;
 					
 					if (backwards) {
-						var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
+						var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeightOffset + this._taskTopHeight + this._taskHeight/2;
 					} else {
 						if (!downwards) {
-							var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight;
+							var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeightOffset + this._taskTopHeight;
 						} else {
-							var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight;
+							var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeightOffset + this._taskTopHeight + this._taskHeight;
 						}
 					}
 					
 					if (downwards) {
-						var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeight + this._taskTopHeight;
+						var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeightOffset + this._taskTopHeight;
 					} else {
-						var y2 = this._taskRowHeight * (restriction.dependant().index()) + this._rulerHeight - this._taskBottomHeight;
+						var y2 = this._taskRowHeight * (restriction.dependant().index()) + this._rulerHeightOffset - this._taskBottomHeight;
 					}
 					
 					var base = new createjs.Shape();
@@ -475,8 +478,8 @@ define(
 					var backwards = x2 < x1;
 					
 					// Y position
-					var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
-					var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
+					var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeightOffset + this._taskTopHeight + this._taskHeight/2;
+					var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeightOffset + this._taskTopHeight + this._taskHeight/2;
 					
 					var base = new createjs.Shape();
 					base.graphics
@@ -537,8 +540,8 @@ define(
 					var backwards = x2 < x1;
 					
 					// Y position
-					var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
-					var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeight + this._taskTopHeight + this._taskHeight/2;
+					var y1 = this._taskRowHeight * (restriction.dependency().index() - 1) + this._rulerHeightOffset + this._taskTopHeight + this._taskHeight/2;
+					var y2 = this._taskRowHeight * (restriction.dependant().index() - 1) + this._rulerHeightOffset + this._taskTopHeight + this._taskHeight/2;
 					
 					var base = new createjs.Shape();
 					base.graphics

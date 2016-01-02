@@ -137,6 +137,16 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 				}, this);
 			}
 			return this._$moment;
+		},
+		getBiggestUnit: function() {
+			var biggestUnit = 4; //days
+			_.forEach(Duration.units, function(unit, index) {
+				if (this[unit] && this[unit] != 0) {
+					biggestUnit = index;
+					return false;
+				}
+			}, this);
+			return biggestUnit;
 		}
 	});
 	

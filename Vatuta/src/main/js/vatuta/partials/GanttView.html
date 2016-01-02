@@ -5,10 +5,6 @@
 			<vatuta-task-editor project-data="project" selected-task="selectedTask"></vatuta-task-editor>
 		</div>
 	</md-sidenav>
-	<div layout="column" flex id="content">
-		<md-content layout="column" flex>
-			<vatuta-gantt project-data='project' listener="ganttListener" canvas-options='canvasOptions'></vatuta-gantt>
-		</md-content>
-	</div>
+	<vatuta-gantt project-data='project' listener="ganttListener" canvas-options='canvasOptions'></vatuta-gantt>
 </div>
 <View-Selector></View-Selector>

@@ -130,6 +130,14 @@ define(
 														$scope.selectedTask);
 											}
 										}
+										
+										$(window).resize(function(){
+										    $scope.$apply(function(){
+										    	$scope.$root.$broadcast(
+														'windowResize',
+														$scope.selectedTask);
+										    });
+										});
 
 										function watchSelectedTask() {
 											return $scope.selectedTask ? $scope.selectedTask
@@ -204,7 +212,7 @@ define(
 																				.hide();
 																	};
 																},
-																templateUrl : 'vatuta/templates/versionInfo.tmpl.html',
+																templateUrl : 'vatuta/templates/VersionInfo.html',
 																parent : angular
 																		.element(document.body),
 																clickOutsideToClose : true,
