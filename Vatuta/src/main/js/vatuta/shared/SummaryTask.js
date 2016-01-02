@@ -5,18 +5,15 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			this._children = [];
 			this.inherited(arguments);
 		},
-		index: function(newIndex) {
-		     if (arguments.length) {
-		    	 this._index = newIndex;
-		    	 var index = newIndex;
-		    	 _.forEach(this.children(), function(task) {
-			    		 index++;	
-			    		 index = task.index(index);
-					}, this);
-		    	 return index;
-		     } else {
-		    	 return this._index;
-		     }
+		setViewIndexes: function(index, treeLevel) {
+	    	 this._index = index;
+	    	 this.index(index);
+	    	 this.treeLevel(treeLevel);
+	    	 _.forEach(this.children(), function(task) {
+		    		 index++;	
+		    		 index = task.setViewIndexes(index, treeLevel + 1);
+				}, this);
+	    	 return this.index();
 		},
 		maxIndex: function() {
 			return _.reduce(this.children(), function(max, child) {

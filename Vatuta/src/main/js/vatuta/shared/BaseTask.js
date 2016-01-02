@@ -40,9 +40,15 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				this.restrictionsFromDependants()[0].remove();
 			};
 		},
-		// TODO change name as it does not behaviour as a property, last index used is returned in set (for summary), not the value set to the task
 		index: function(newIndex) {
 		     return arguments.length ? (this._index = newIndex) : this._index;
+		},
+		treeLevel: function(newTreeLevel) {
+		     return arguments.length ? (this.$$treeLevel = newTreeLevel) : this.$$treeLevel;
+		},
+		setViewIndexes: function(index, treeLevel) {
+			 this.treeLevel(treeLevel);
+			 return this.index(index);
 		},
 		id: function(newId) {
 		     return arguments.length ? (this._id = newId) : this._id;

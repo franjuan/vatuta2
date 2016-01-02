@@ -44,16 +44,16 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Task", "lodash"
 					}
 					this.tasks().push(task);
 					this._tasksIndex()[task.id()] = task;
-					this.setIndexToAllTasks();
+					this.setViewIndexes();
 					return task;
 				},
 				// TODO take out index from here, is part of the view or representation of the project. Tasks are not ordered in project
-				setIndexToAllTasks: function() {
+				setViewIndexes: function() {
 					var index = 1;
 					_.forEach(this.tasks(), function(task) {
 						// Only set index to direct children, index of task own by other parent will be set with parent's index
 						if (task.parent().isInstanceOf(Project)) {
-							index = task.index(index);
+							index = task.setViewIndexes(index, 0);
 							index++;
 						}
 					}, this);
@@ -69,7 +69,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Task", "lodash"
 						}, this);
 					}
 					// Update ordinal indexes
-					this.setIndexToAllTasks();
+					this.setViewIndexes();
 				},
 				replaceTask: function(task) {
 					 // Find element in project
@@ -77,7 +77,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Task", "lodash"
 					 this.tasks()[index] = task;
 					 this._tasksIndex()[task.id()] = task;
 					 task.parent().replaceTask(task);
-					 this.setIndexToAllTasks();
+					 this.setViewIndexes();
 					 return task;
 				},
 				/**

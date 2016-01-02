@@ -67,9 +67,9 @@
 							<!-- this is relative to the pom.xml directory -->
 							<directory>src/main/js</directory>
 						</resource>
-						<resource>
+						<!-- <resource>
 							<directory>${project.build.directory}/min</directory>
-						</resource>
+						</resource> -->
 					</webResources>
 				</configuration>
 			</plugin>

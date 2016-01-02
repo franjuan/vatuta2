@@ -23,6 +23,8 @@ define([  "vatuta/vatutaApp"  ],
 										    enableRowSelection: true,
 										    enableSelectAll: true,
 										    selectionRowHeaderWidth: 35,
+										    treeRowHeaderWidth: 35,
+										    showTreeExpandNoChildren: false,
 										    columnDefs: [
 											    { displayName: '#', field: 'index()', enableCellEdit: false, width: '*' },
 											    { displayName: 'Id', field: 'id()', enableCellEdit: false, visible: false, width: '*' },

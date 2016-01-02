@@ -3,7 +3,8 @@ define([ "vatuta/services/vatuta",
 		 "ui-grid" ], function(vatuta) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages',
 			'ngSanitize', 'ngCookies', 'ngAnimate', 'ngRoute',
-			'ui.grid', 'ui.grid.moveColumns', 'ui.grid.autoResize', 'ui.grid.resizeColumns', 'ui.grid.pinning', 'ui.grid.cellNav', 'ui.grid.edit', 'ui.grid.selection',
+			'ui.grid', 'ui.grid.moveColumns', 'ui.grid.autoResize', 'ui.grid.resizeColumns',
+			'ui.grid.pinning', 'ui.grid.cellNav', 'ui.grid.edit', 'ui.grid.selection', 'ui.grid.treeView', 'ui.grid.treeBase',
 			'vatuta' ]);
 
 	vatutaApp.config([ '$routeProvider', function($routeProvider) {
