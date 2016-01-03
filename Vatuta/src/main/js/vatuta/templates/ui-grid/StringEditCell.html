@@ -1,11 +1,12 @@
 <div class="stringEditCell">
   <form
-    name="inputForm">
+    name="form">
     <input
       type="INPUT_TYPE"
+      name="input"
       ng-class="'colt' + col.uid + ' stringEditInput'"
       ui-grid-editor
       ng-model="MODEL_COL_FIELD"
-      ng-model-options="{ getterSetter: true }" />
+      ng-model-options="{ getterSetter: true }"/>
   </form>
 </div>

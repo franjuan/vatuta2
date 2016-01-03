@@ -1,0 +1,14 @@
+<div class="stringEditCell" style="position:relative">
+  <form
+    name="form">
+    <input
+      type="INPUT_TYPE"
+      name="input"
+      ng-class="'colt' + col.uid + ' stringEditInput'"
+      ui-grid-editor
+      ng-model="grid.appScope.durationString"
+      ng-model-options="{ getterSetter: true }" required duration cell-validator
+      title="y=years, q=quarters, M=months, w=weeks, d=days, h=hours, m=minutes, ms=milliseconds"/>
+      <span class="error" ng-show="!form.$valid" title="Value missing or formar invalid" style="position:absolute;color:red;right:0;top:0;"><i class="material-icons">error</i></span>
+  </form>
+</div>

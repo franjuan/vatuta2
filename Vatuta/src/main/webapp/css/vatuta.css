@@ -105,8 +105,8 @@ vatuta-menu md-menu button md-icon {
 
 /*.ui-grid-cell .stringEditCell {
 	color: red;
-}
-
-.ui-grid-cell .stringEditInput {
-	color: green;
 }*/
+
+.ui-grid-cell form .stringEditInput {
+	border:0;
+}

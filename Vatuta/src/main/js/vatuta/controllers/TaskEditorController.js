@@ -123,6 +123,7 @@ define([ "vatuta/shared/Duration", "vatuta/vatutaApp"], function(DurationUtils) 
 		 }
 		 
 		 $scope.$watch('selectedTask', function(newP, oldP, $scope){
+			 // TODO este humanize da problemas, simplificar
 			 $scope._durationString = newP?(newP.duration()?newP.duration().formatter():newP.actualDuration().humanize()):"";
 		 });
 

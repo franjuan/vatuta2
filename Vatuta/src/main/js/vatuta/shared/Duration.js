@@ -197,5 +197,25 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 		return duration;
 	}
 	
+	/**
+	 * Compares two durations
+	 * @param a moment.duration
+	 * @param b moment.duration
+	 * @returns Returns 0 if equals, 1 if a > b and -1 if b > a 
+	 */
+	Duration.compare = function(a, b) {
+		if (!a.isInstanceOf(Duration) || !b.isInstanceOf(Duration)) {
+			return null;
+		} else {
+			if (a.moment().asMilliseconds() == b.moment().asMilliseconds()) {
+				return 0;
+			} else if (a.moment().asMilliseconds() > b.moment().asMilliseconds()) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+	}
+	
 	return Duration;
 });
