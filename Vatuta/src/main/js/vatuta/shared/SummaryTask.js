@@ -171,7 +171,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				return NaN;
 			}
 			var max = _.reduce(this.children(), function(max, child) {
-				return Math.max(max, child.actualDuration().getBiggestUnit());
+				return Math.max(max, child.actualDuration().getSmallestUnit());
 				}, 0, this);
 			var unit = Duration.units[max];
 			var value = this.actualEnd().diff(this.actualStart(), unit, true);

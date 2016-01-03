@@ -139,7 +139,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			if (!this.actualEnd() || !this.actualStart()) {
 				return NaN;
 			}
-			var unit = Duration.units[this.duration().getBiggestUnit()];
+			var unit = Duration.units[this.duration().getSmallestUnit()];
 			var value = this.actualEnd().diff(this.actualStart(), unit, true);
 			var duration = new Duration();
 			duration[unit] = value;
