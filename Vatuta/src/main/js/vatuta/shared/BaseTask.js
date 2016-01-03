@@ -28,7 +28,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				});
 			}
 			if (!this._tactic) {
-				this._tactic = new Tactics.ASAP();
+				this._tactic = Tactics.getDefaultTactic();
 			}
 		},
 		remove: function() {

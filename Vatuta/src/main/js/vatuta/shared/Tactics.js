@@ -1,7 +1,7 @@
 /**
  * @module Restriction
  */
-define([ "dojo/_base/declare", "dojo/_base/lang"], function(declare, lang) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, lang, _) {
 	/**
      * @exports Restriction
      */
@@ -19,6 +19,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang"], function(declare, lang) {
 			lang.mixin(this, kwArgs);
 		}
 	});
+
 	/**
      * @exports PlanningTactics
      */
@@ -57,5 +58,19 @@ define([ "dojo/_base/declare", "dojo/_base/lang"], function(declare, lang) {
 		}
 	});
 	
-	return {ASAP: ASAPTactic};
+
+	PlanningTactic._tactics = [{name:'ASAP', tactic: new ASAPTactic(), defaultTactic: true}];
+	PlanningTactic.getTactics = function() {
+		return PlanningTactic._tactics;
+	};
+	PlanningTactic.getDefaultTactic = function() {
+		return _.result(_.find(PlanningTactic._tactics, 'defaultTactic'), 'tactic');
+	};
+	PlanningTactic.getTacticInstanceByName = function(name) {
+		return _.result(_.find(PlanningTactic._tactics, 'name', name), 'tactic');
+	};
+	PlanningTactic.getTacticConstructorByName = function(name) {
+		return PlanningTactic.getTacticInstanceByName(name).__proto__.constructor;
+	};
+	return PlanningTactic;
 });

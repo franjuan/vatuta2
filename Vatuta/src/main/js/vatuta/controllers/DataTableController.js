@@ -1,5 +1,5 @@
-define([  "vatuta/shared/Duration", "vatuta/vatutaApp"  ],
-		function(Duration) {
+define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "vatuta/vatutaApp"  ],
+		function(Duration, Tactics) {
 			angular
 					.module('vatutaApp')
 					.controller(
@@ -43,9 +43,9 @@ define([  "vatuta/shared/Duration", "vatuta/vatutaApp"  ],
 											    		return !!$scope.row.entity.duration();
 											    	},
 											    	editableCellTemplate: 'vatuta/templates/ui-grid/DurationEditCell.html', width: '*'},
-											    { displayName: 'Tactic', field: 'tactic()', enableCellEdit: false, editableCellTemplate: 'ui-grid/dropdownEditor',
-											        editDropdownOptionsArray: [{id: 'ASAP', tactic: 'ASAP'}, {id: 'ALAP', tactic: 'ALAP'}, {id: 'Manual', tactic: 'Manual'}],
-											        editDropdownIdLabel: 'id', editDropdownValueLabel: 'tactic', cellTemplate: 'vatuta/templates/ui-grid/TacticCell.html', width: '*' },
+											    { displayName: 'Tactic', field: 'tactic()', cellTemplate: 'vatuta/templates/ui-grid/TacticCell.html',
+											        editDropdownOptionsArray: Tactics.getTactics(), editDropdownIdLabel: 'name', editDropdownValueLabel: 'tactic',
+											        enableCellEdit: true, editableCellTemplate: 'ui-grid/dropdownEditor', width: '*' },
 											    { displayName: 'Restrictions', field: 'restrictions()', cellTemplate: 'vatuta/templates/ui-grid/RestrictionsCell.html', enableCellEdit: false, enableSorting: false, width: '*' },
 											    { displayName: 'Early Start', field: 'earlyStart().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, visible: false, width: '*' },
 											    { displayName: 'Early End', field: 'earlyEnd().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, visible: false, width: '*' },

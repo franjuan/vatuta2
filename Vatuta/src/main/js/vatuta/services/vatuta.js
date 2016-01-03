@@ -75,7 +75,7 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 		namespace.EndToEndDependency = Restrictions.EndToEnd;
 		namespace.Restriction = Restriction;
 		namespace.PlanningTactic = PlanningTactic;
-		namespace.ASAPTactic = Tactics.ASAP;
+		namespace.ASAPTactic = Tactics.getTacticConstructorByName('ASAP');
 		namespace.Duration = Duration;
 		
 		var serializers = {};
