@@ -38,6 +38,7 @@ define(
 				 * 
 				 */
 				calculateEarlyStartLateEnding : function() {
+					// TODO Review project before calculating values, i.e. duration() is a valid value for every task
 					// Remove old values
 					delete this.currentProject()._actualStart, this.currentProject()._actualEnd;
 					_.forEach(this.currentProject().tasks(), function(task) {

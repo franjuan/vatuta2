@@ -165,10 +165,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 	 * @returns Duration object or string if error while validating
 	 */
 	Duration.validator= function(s) {
-		var re = /(\-?\d+)\s*([a-zA-Z]+)\s*/gi; 
+		var reAll = /^((\-?\d+)\s*([a-zA-Z]+)\s*)+$/gi;
+		if (!reAll.test(s)) return "It is not a valid duration";
+		var re = /(\-?\d+)\s*([a-zA-Z]+)\s*/gi;
 		var duration = new Duration();
 		var match;
-		while (match = re.exec(s)) {
+		while (match = re.exec(s.trim())) {
 			var unit = _.find(Duration.units, function(unit) {
 				return unit.indexOf(match[2].toLowerCase()) == 0;
 			})
@@ -182,10 +184,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment" ], function
 			if (!unit) {
 				return match[2] + " is not a valid time unit (y, M, w, d, h, m, s, ms)"; 
 			} else {
-				duration[unit] = value;
+				duration[unit] = (duration[unit]?duration[unit]:0) + value;
 			}
 		}
-		if (!re.test(s)) return "It is not a valid duration";
 		return duration;
 	};
 	Duration.units= ['years', 'quarters', 'months', 'weeks', 'days', 'hours', 'minutes', 'milliseconds'];

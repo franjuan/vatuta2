@@ -111,21 +111,21 @@ define([ "vatuta/shared/Duration", "vatuta/vatutaApp"], function(DurationUtils) 
 		    });
 		 }
 		 
-		 this.durationString= function(newDuration) {
-			     if (arguments.length) {
-			    	 $scope._durationString = newDuration;
-			    	 var duration = DurationUtils.validator(newDuration);
-			    	 if (typeof duration == "object")
-			    		 $scope.selectedTask.duration(duration);
-			     } else {
-			    	 return $scope._durationString;
-			     }
-		 }
-		 
-		 $scope.$watch('selectedTask', function(newP, oldP, $scope){
-			 // TODO este humanize da problemas, simplificar
-			 $scope._durationString = newP?(newP.duration()?newP.duration().formatter():newP.actualDuration().humanize()):"";
-		 });
+//		 this.durationString= function(newDuration) {
+//			     if (arguments.length) {
+//			    	 $scope._durationString = newDuration;
+//			    	 var duration = DurationUtils.validator(newDuration);
+//			    	 if (typeof duration == "object")
+//			    		 $scope.selectedTask.duration(duration);
+//			     } else {
+//			    	 return $scope._durationString;
+//			     }
+//		 }
+//		 
+//		 $scope.$watch('selectedTask', function(newP, oldP, $scope){
+//			 // TODO este humanize da problemas, simplificar
+//			 $scope._durationString = newP?(newP.duration()?newP.duration().formatter():newP.actualDuration().humanize()):"";
+//		 });
 
 	}]);
 });
