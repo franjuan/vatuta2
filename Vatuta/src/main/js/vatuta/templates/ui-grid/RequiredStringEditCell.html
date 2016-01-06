@@ -1,6 +1,6 @@
 <div class="stringEditCell" style="position:relative">
   <form
-    name="form">
+    name="inputForm">
     <input
       type="INPUT_TYPE"
       name="input"
@@ -8,6 +8,6 @@
       ui-grid-editor
       ng-model="MODEL_COL_FIELD"
       ng-model-options="{ getterSetter: true }" required cell-validator/>
-      <span class="error" ng-show="!form.$valid" title="Required value" style="position:absolute;color:red;right:0;top:0;"><i class="material-icons">error</i></span>
+      <span class="error" ng-show="!inputForm.$valid" title="Required value" style="position:absolute;color:red;right:0;top:0;"><i class="cell-error-icons material-icons">error</i></span>
   </form>
 </div>

@@ -18,14 +18,15 @@ body, html {
 	height: 100%;*/
 }
 
-vatuta-gantt {
+.allViewPort {
 	width: 100vw;
 	height: 100vh;
 }
 
-/*vatuta-gantt #ganttRuler{
-	position: fixed;
-}*/
+vatuta-gantt {
+	width: 100%;
+	height: 100%;
+}
 
 vatuta-gantt #container{
     position: absolute;
@@ -98,10 +99,10 @@ vatuta-menu md-menu button md-icon {
 }
 
 /* Sets size to project dataTable */
-.dataTable {
-    width: 100vw;
-	height: 100vh;
-}
+/*.dataTable {
+    width: 100%;
+	height: 100%;
+}*/
 
 /*.ui-grid-cell .stringEditCell {
 	color: red;
@@ -109,4 +110,8 @@ vatuta-menu md-menu button md-icon {
 
 .ui-grid-cell form .stringEditInput {
 	border:0;
+}
+
+.cell-error-icons {
+	font-size: 20px;
 }

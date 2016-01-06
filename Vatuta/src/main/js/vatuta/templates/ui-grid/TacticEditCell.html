@@ -1,0 +1,9 @@
+<div>
+	<form name="inputForm">
+		<select ng-class="'colt' + col.uid"
+			ui-grid-edit-dropdown ng-model="MODEL_COL_FIELD" ng-model-options="{ getterSetter: true }" ng-input="MODEL_COL_FIELD"
+			ng-options="field[editDropdownIdLabel] as field[editDropdownValueLabel] CUSTOM_FILTERS for field in editDropdownOptionsArray track by COL_FIELD.name()">
+			<!-- <option ng-repeat="tactic in editDropdownOptionsArray" ng-value="tactic[editDropdownIdLabel]" ng-selected="tactic[editDropdownValueLabel] === COL_FIELD.name()">{{tactic[editDropdownValueLabel]}}</option> -->
+		</select>
+	</form>
+</div>

@@ -63,7 +63,16 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		     return arguments.length ? (this._description = newDescription) : this._description;
 		},
 		tactic: function(newTactic) {
-			return arguments.length ? (this._tactic = newTactic) : this._tactic;
+			if (arguments.length) {
+				if (_.isString(newTactic)) {
+					this._tactic = Tactics.getTacticInstanceByName(newTactic);
+				} else {
+					this._tactic = newTactic;
+				}
+				return this._tactic; 
+			} else {
+				return this._tactic;
+			}
 		},
 		restrictions : function() {
 			if (!this._restrictions) {
