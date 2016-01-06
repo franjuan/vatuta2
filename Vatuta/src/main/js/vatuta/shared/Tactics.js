@@ -99,5 +99,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 	PlanningTactic.getTacticConstructorByName = function(name) {
 		return PlanningTactic.getTacticInstanceByName(name).__proto__.constructor;
 	};
+	PlanningTactic.isTactic = function(tactic) {
+		return tactic && tactic.isInstanceOf && tactic.isInstanceOf(PlanningTactic);
+	};
 	return PlanningTactic;
 });

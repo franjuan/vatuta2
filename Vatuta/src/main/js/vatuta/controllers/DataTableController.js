@@ -14,16 +14,6 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "vatuta/vatutaApp" 
 										$scope.project = $project;
 										$project.name("Other name");
 										
-										this.durationString = function(newDuration) {
-										     if (arguments.length) {
-										    	 this._durationString = newDuration;
-										    	 var duration = Duration.validator(newDuration);
-										    	 if (typeof duration == "object")
-										    		 this.duration(duration);
-										     } else {
-										    	 return this._durationString;
-										     }
-										}
 										this.durationSort = function(a, b, rowA, rowB, direction) {
 								    		var nulls = $scope.dataTableGridApi.core.sortHandleNulls(a, b);
 								            if( nulls !== null ) {
@@ -54,11 +44,11 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "vatuta/vatutaApp" 
 											    	sortingAlgorithm: this.durationSort,
 											    	cellEditableCondition: function ($scope) {
 											    		return !!$scope.row.entity.duration();
-											    	},
-											    	editableCellTemplate: 'vatuta/templates/ui-grid/DurationEditCell.html', editModelField: 'durationString', width: '*'},
+											    	}, enableCellEdit: true,
+											    	editableCellTemplate: 'vatuta/templates/ui-grid/DurationEditCell.html', editModelField: 'duration', width: '*'},
 											    { displayName: 'Tactic', field: 'tactic()', cellTemplate: 'vatuta/templates/ui-grid/TacticCell.html',
 											        editDropdownOptionsArray: Tactics.getTactics(), editDropdownIdLabel: 'name', editDropdownValueLabel: 'name',
-											        editModelField: 'tactic', enableCellEdit: false, editableCellTemplate: 'vatuta/templates/ui-grid/TacticEditCell.html', width: '*' },
+											        editModelField: 'tactic', enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/TacticEditCell.html', width: '*' },
 											    { displayName: 'Restrictions', field: 'restrictions()', cellTemplate: 'vatuta/templates/ui-grid/RestrictionsCell.html', enableCellEdit: false, enableSorting: false, width: '*' },
 											    { displayName: 'Early Start', field: 'earlyStart().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, visible: false, width: '*' },
 											    { displayName: 'Early End', field: 'earlyEnd().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, visible: false, width: '*' },
@@ -73,17 +63,11 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "vatuta/vatutaApp" 
 										    onRegisterApi: function( gridApi ) {
 										    	$scope.dataTableGridApi = gridApi;
 										    	gridApi.edit.on.beginCellEdit($scope, function(rowEntity, colDef){
-										    		if (colDef.displayName == 'Planned Duration') {
-										    			rowEntity.durationString = _.bind(this.grid.appScope.ctrl.durationString, rowEntity);
-										    			rowEntity._durationString = rowEntity.duration()?rowEntity.duration().shortFormatter():"";
-										    		}
+										    		
 										    	});
 										    	gridApi.edit.on.afterCellEdit($scope,function(rowEntity, colDef, newValue, oldValue){
-										    		if (colDef.displayName == 'Planned Duration') {
-										    			delete rowEntity.durationString;
-										    			delete rowEntity._durationString;
-										    		}
-										    	})
+										    		
+										    	});
 										    }
 										};
 										

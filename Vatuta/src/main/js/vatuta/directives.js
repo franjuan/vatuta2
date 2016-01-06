@@ -5,6 +5,7 @@ define(["vatuta/directives/VatutaGanttDirective",
         "vatuta/directives/SpeedDialMenuDirective",
         "vatuta/validators/DurationValidator",
         "vatuta/validators/CellValidator",
+        "vatuta/validators/TacticValidator",
         "vatuta/filters/DurationFilter"
         ], function() {
 
