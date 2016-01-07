@@ -43,12 +43,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 			if (other.isInstanceOf && other.isInstanceOf(this.constructor)) {
 				return true;
 			} else return false; 
-		},
-		shortDescription: function() {
-			return "ASAP";
-		},
-		longDescription: function() {
-			return "Start task ASAP";
 		}
 	});
 	
@@ -75,18 +69,39 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 			if (other.isInstanceOf && other.isInstanceOf(this.constructor)) {
 				return true;
 			} else return false; 
+		}
+	});
+	
+	/**
+     * @exports PlanningTactics
+     */
+	var ALAPTactic = declare("ManualTactic", PlanningTactic, {
+		constructor: function(/* Object */kwArgs) {
+			this.inherited(arguments);
 		},
-		shortDescription: function() {
-			return "ALAP";
+		name: function() {
+			return "Manual";
 		},
-		longDescription: function() {
-			return "Start task ALAP";
+		description: function() {
+			return "Task start and end are set";
+		},
+		getActualStart4Task: function(task) {
+			return task.actualStart();
+		},
+		getActualEnd4Task: function(task) {
+			return task.actualEnd();
+		},
+		equals: function(other) {
+			if (other.isInstanceOf && other.isInstanceOf(this.constructor)) {
+				return true;
+			} else return false; 
 		}
 	});
 	
 
 	PlanningTactic._tactics = [{name:'ASAP', tactic: new ASAPTactic(), defaultTactic: true},
-	                           {name:'ALAP', tactic: new ALAPTactic(), defaultTactic: false}];
+	                           {name:'ALAP', tactic: new ALAPTactic(), defaultTactic: false},
+	                           {name:'Manual', tactic: new ManualTactic(), defaultTactic: false}];
 	PlanningTactic.getTactics = function() {
 		return PlanningTactic._tactics;
 	};

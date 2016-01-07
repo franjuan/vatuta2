@@ -1,5 +1,5 @@
-define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "vatuta/vatutaApp"  ],
-		function(Duration, Tactics) {
+define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "moment", "vatuta/vatutaApp"  ],
+		function(Duration, Tactics, moment) {
 			angular
 					.module('vatutaApp')
 					.controller(
@@ -20,6 +20,23 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "vatuta/vatutaApp" 
 								              return nulls;
 								            } else {
 								              return Duration.compare(a,b);
+								            }
+								    	}
+										
+										this.momentSort = function(a, b, rowA, rowB, direction) {
+								    		var nulls = $scope.dataTableGridApi.core.sortHandleNulls(a, b);
+								            if( nulls !== null ) {
+								              return nulls;
+								            } else {
+								              var da = moment.isMoment(a)?a:moment(a);
+								              var db = moment.isMoment(b)?b:moment(b);
+								              if (da > db) {
+								            	  return 1;
+								              } else if (da < db) {
+								            	  return -1;
+								              } else {
+								            	  return 0;
+								              }
 								            }
 								    	}
 										
@@ -54,8 +71,16 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "vatuta/vatutaApp" 
 											    { displayName: 'Early End', field: 'earlyEnd().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, visible: false, width: '*' },
 											    { displayName: 'Late Start', field: 'lateStart().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, visible: false, width: '*' },
 											    { displayName: 'Late End', field: 'lateEnd().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, visible: false, width: '*' },
-											    { displayName: 'Actual Start', field: 'actualStart().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, width: '*' },
-											    { displayName: 'Actual End', field: 'actualEnd().format("DD-MM-YYYY")',  enableCellEdit: false, enableSorting: false, width: '*' },
+											    { displayName: 'Actual Start', field: 'actualStart()', cellFilter: 'moment: "DD-MM-YYYY"', type: "date",
+											    	enableSorting: true, sortingAlgorithm: this.momentSort,
+											    	cellEditableCondition: function ($scope) {
+											    		return $scope.row.entity.tactic().name()=="Manual";
+											    	}, enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/MomentEditCell.html', editModelField: 'actualStart',
+											    	width: '*' },
+											    { displayName: 'Actual End', field: 'actualEnd().format("DD-MM-YYYY")', type: 'date' , enableSorting: true, 
+										    		cellEditableCondition: function ($scope) {
+											    		return $scope.row.entity.tactic().name()=="Manual";
+											    	}, enableCellEdit: true,  width: '*' },
 											    { displayName: 'Actual Duration', field: 'actualDuration().shortFormatter()',  enableCellEdit: false,
 											    	sortingAlgorithm: this.durationSort, enableSorting: true, width: '*' }
 										    ],

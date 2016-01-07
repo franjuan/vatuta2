@@ -8,7 +8,7 @@ define(["vatuta/vatutaApp"], function() {
 
 	            element.bind('blur', function(evt) {
 
-	              if (scope.form && !scope.form.$valid) {
+	              if (scope.inputForm && !scope.inputForm.$valid) {
 
 	                // Stops the rest of the event handlers from being executed
 	                evt.stopImmediatePropagation();

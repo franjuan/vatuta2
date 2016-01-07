@@ -6,7 +6,9 @@ define(["vatuta/directives/VatutaGanttDirective",
         "vatuta/validators/DurationValidator",
         "vatuta/validators/CellValidator",
         "vatuta/validators/TacticValidator",
-        "vatuta/filters/DurationFilter"
+        "vatuta/validators/MomentValidator",
+        "vatuta/filters/DurationFilter",
+        "vatuta/filters/MomentFilter"
         ], function() {
 
 });
