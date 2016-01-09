@@ -75,7 +75,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 	/**
      * @exports PlanningTactics
      */
-	var ALAPTactic = declare("ManualTactic", PlanningTactic, {
+	var ManualTactic = declare("ManualTactic", PlanningTactic, {
 		constructor: function(/* Object */kwArgs) {
 			this.inherited(arguments);
 		},
