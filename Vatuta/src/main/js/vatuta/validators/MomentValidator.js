@@ -1,4 +1,4 @@
-define(["moment", "vatuta/vatutaApp"], function(moment) {
+define(["moment", "lodash", "vatuta/vatutaApp"], function(moment, _) {
 	
 	angular.module('vatutaApp').directive('moment', [function() {
 		  return {
@@ -6,7 +6,7 @@ define(["moment", "vatuta/vatutaApp"], function(moment) {
 			    require: 'ngModel',
 			    link: function(scope, elm, attrs, ctrl) {
 				      ctrl.$parsers.unshift(function (viewValue) {
-				    	  var value = moment.isMoment(viewValue)?viewValue:moment(viewValue);
+				    	  var value = _.isString(viewValue)?moment(viewValue, "DD-MM-YYYY"):(moment.isMoment(viewValue)?viewValue:moment.invalid());
 				    	  if (value.isValid()) { 
 				              ctrl.$setValidity('moment', true);
 				              return value;
@@ -23,7 +23,7 @@ define(["moment", "vatuta/vatutaApp"], function(moment) {
 				    		  return "";
 				    	  } else if (moment.isMoment(modelValue) && modelValue.isValid()) { 
 				    		  ctrl.$setValidity('moment', true);
-				              return modelValue.toDate();
+				              return modelValue.format("DD-MM-YYYY");
 				          } else {
 				              ctrl.$setValidity('moment', false);
 				              // if invalid, return undefined

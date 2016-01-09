@@ -137,7 +137,10 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 			_name : "Base",
 			_duration : new Duration({
 				days : 4
-			})
+			}),
+			_tactic: Tactics.getTacticInstanceByName("Manual"),
+			_actualStart: moment(),
+			_actualEnd: moment().add(4, 'days')
 		});
 		project.addTask(base);
 

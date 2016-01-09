@@ -1,7 +1,8 @@
 define([ "vatuta/services/vatuta",
+         "lib/css!css/pikaday/pikaday.css",
          "lib/css!https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.0.7/ui-grid.min.css",
          "lib/css!https://fonts.googleapis.com/icon?family=Material+Icons",
-		 "ui-grid" ], function(vatuta) {
+		 "ui-grid"], function(vatuta) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages',
 			'ngSanitize', 'ngCookies', 'ngAnimate', 'ngRoute',
 			'ui.grid', 'ui.grid.moveColumns', 'ui.grid.autoResize', 'ui.grid.resizeColumns',

@@ -2,12 +2,39 @@
   <form
     name="inputForm">
     <input
-      type="date"
+      type="text"
+      id="datepicker"
       ng-class="'colt' + col.uid"
       ui-grid-editor
       ng-model="MODEL_COL_FIELD"
       ng-model-options="{ getterSetter: true }"
-      required moment cell-validator/>
+      required moment />
       <span class="error" ng-show="!inputForm.$valid" title="Required value" style="position:absolute;color:red;right:0;top:0;"><i class="cell-error-icons material-icons">error</i></span>
+      
+<script>
+require(['pikaday'], function(Pikaday)
+{
+	var picker = new Pikaday({ field: document.getElementById('datepicker'), format: "DD-MM-YYYY", firstDay: 1, showWeekNumber: true });
+	// Prevent blur event that closes the edition if date picker is still open
+	$.fn.preBind = function (type, data, fn) {
+	    this.each(function () {
+	        var $this = $(this);
+
+	        $this.bind(type, data, fn);
+
+	        var currentBindings = $._data(this, 'events')[type];
+	        if ($.isArray(currentBindings)) {
+	            currentBindings.unshift(currentBindings.pop());
+	        }
+	    });
+	    return this;
+	};
+	$('#datepicker').preBind('blur', function(evt) {
+		if (picker.isVisible()) {
+			evt.stopImmediatePropagation();
+		}
+	});
+});
+</script>
   </form>
 </div>

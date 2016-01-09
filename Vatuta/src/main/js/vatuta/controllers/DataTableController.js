@@ -63,6 +63,11 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "moment", "vatuta/v
 											    		return !!$scope.row.entity.duration();
 											    	}, enableCellEdit: true,
 											    	editableCellTemplate: 'vatuta/templates/ui-grid/DurationEditCell.html', editModelField: 'duration', width: '*'},
+//											    { displayName: 'Estimated', field: 'isEstimated()', type:'boolean',
+//												    	cellEditableCondition: function ($scope) {
+//												    		return !!$scope.row.entity.duration();
+//												    	}, enableCellEdit: true,
+//												    	editModelField: 'isEstimated', width: '*'},
 											    { displayName: 'Tactic', field: 'tactic()', cellTemplate: 'vatuta/templates/ui-grid/TacticCell.html',
 											        editDropdownOptionsArray: Tactics.getTactics(), editDropdownIdLabel: 'name', editDropdownValueLabel: 'name',
 											        editModelField: 'tactic', enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/TacticEditCell.html', width: '*' },
@@ -77,11 +82,13 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "moment", "vatuta/v
 											    		return $scope.row.entity.tactic().name()=="Manual";
 											    	}, enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/MomentEditCell.html', editModelField: 'actualStart',
 											    	width: '*' },
-											    { displayName: 'Actual End', field: 'actualEnd().format("DD-MM-YYYY")', type: 'date' , enableSorting: true, 
-										    		cellEditableCondition: function ($scope) {
+										    	{ displayName: 'Actual End', field: 'actualEnd()', cellFilter: 'moment: "DD-MM-YYYY"', type: "date",
+											    	enableSorting: true, sortingAlgorithm: this.momentSort,
+											    	cellEditableCondition: function ($scope) {
 											    		return $scope.row.entity.tactic().name()=="Manual";
-											    	}, enableCellEdit: true,  width: '*' },
-											    { displayName: 'Actual Duration', field: 'actualDuration().shortFormatter()',  enableCellEdit: false,
+											    	}, enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/MomentEditCell.html', editModelField: 'actualEnd',
+											    	width: '*' },
+											    { displayName: 'Actual Duration', field: 'actualDuration()', cellFilter: 'duration: false: "-"', enableCellEdit: false,
 											    	sortingAlgorithm: this.durationSort, enableSorting: true, width: '*' }
 										    ],
 										    data: $project.tasks(),
