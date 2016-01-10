@@ -46,7 +46,7 @@ define(
 						delete task._earlyEnd;
 						delete task._lateStart;
 						delete task._lateEnd;
-						if (task.tactic().name() != "Manual") {
+						if (task.tactic().equals(Tactics.MANUAL)) {
 							delete task._actualStart;
 							delete task._actualEnd;
 						}
@@ -57,7 +57,7 @@ define(
 
 					// Calculate early start and ending
 					var alreadyCalculatedIndex = -1;
-					var startOfProject = moment(this.currentProject().earlyStart());
+					var startOfProject = 0;
 					var endOfProject = moment(this.currentProject().earlyStart());
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						var unknownResolvedInIteration = false;
@@ -87,7 +87,7 @@ define(
 									if (!isNaN(earlyStart) && earlyStart != 0) {
 										unknownResolvedInIteration = true;
 										task.earlyStart(earlyStart);
-										startOfProject = moment.min(startOfProject, task.earlyStart());
+										startOfProject = startOfProject==0?task.earlyStart():moment.min(startOfProject, task.earlyStart());
 									} else {
 										earlyStart = NaN;
 									}

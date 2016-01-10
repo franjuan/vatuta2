@@ -102,6 +102,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 	PlanningTactic._tactics = [{name:'ASAP', tactic: new ASAPTactic(), defaultTactic: true},
 	                           {name:'ALAP', tactic: new ALAPTactic(), defaultTactic: false},
 	                           {name:'Manual', tactic: new ManualTactic(), defaultTactic: false}];
+	
+	PlanningTactic.MANUAL = _.result(_.find(PlanningTactic._tactics, 'name', 'Manual'), 'tactic');
+	
 	PlanningTactic.getTactics = function() {
 		return PlanningTactic._tactics;
 	};
