@@ -83,7 +83,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 			return "Manual";
 		},
 		description: function() {
-			return "Task start and end are set";
+			return "Start and end are manually set for task";
 		},
 		getActualStart4Task: function(task) {
 			return task.actualStart();

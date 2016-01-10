@@ -241,6 +241,8 @@ define(
 						}
 					}
 					
+					// TODO Recalculate early/late start/end while actual values (ALAP tactic compress the schedulling)
+					
 					// TODO Mover los actual a última fase de cálculo
 					this.currentProject().actualStart(startOfProject);
 					this.currentProject().actualEnd(endOfProject);

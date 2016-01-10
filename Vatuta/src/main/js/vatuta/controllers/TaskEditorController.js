@@ -1,5 +1,11 @@
-define([ "vatuta/shared/Duration", "vatuta/vatutaApp"], function(DurationUtils) {	
+define([ "vatuta/shared/Tactics", "vatuta/shared/Duration", "vatuta/shared/SummaryTask", "vatuta/vatutaApp"], function(Tactics, DurationUtils, SummaryTask) {	
 	angular.module('vatutaApp').controller('TaskEditorController', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav','Restrictions', 'Engine', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions, Engine) {
+		//this.isNaN = isNaN; // To allow use isNaN in template expressions
+		
+		this.showDurationFields = function(task) {
+			return !task || !task.isInstanceOf(SummaryTask);
+		}
+		
 		this.showTaskDependency = function(ev) {
 			var newDialogScope = $scope.$new(false, $scope);
 			newDialogScope.project = $scope.project;
@@ -109,6 +115,36 @@ define([ "vatuta/shared/Duration", "vatuta/vatutaApp"], function(DurationUtils) 
 		    }, function() {
 		        console.log('Removal of task ' + name + ' cancelled');
 		    });
+		 }
+		 
+		 this.tactics = Tactics.getTactics();
+		 
+		 this.durationChanged = function (task, event)  {
+			 if (task.tactic().equals(Tactics.MANUAL) && task.duration()) {
+				 if (!task.isEstimated()) {
+					 task.actualEnd(task.duration().addTo(task.actualStart()));
+				 }
+			 }
+		 };
+		 
+		 this.actualStartChanged = function (task, event)  {
+			 if (task.tactic().equals(Tactics.MANUAL)) {
+				 if (task.isEstimated()) {
+					 task.duration(task.actualDuration());
+				 } else {
+					 task.actualEnd(task.duration().addTo(task.actualStart()));
+				 }
+			 }
+		 };
+		 
+		 this.actualEndChanged = function (task, event)  {
+			 if (task.tactic().equals(Tactics.MANUAL)) {
+				 if (task.isEstimated()) {
+					 task.duration(task.actualDuration());
+				 } else {
+					 task.actualStart(task.duration().subtractFrom(task.actualEnd()));
+				 }
+			 }
 		 }
 		 
 //		 this.durationString= function(newDuration) {

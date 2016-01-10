@@ -63,9 +63,14 @@ vatuta-gantt #ganttCanvas {
 }
 
 md-sidenav, md-sidenav.md-locked-open, md-sidenav.md-closed.md-locked-open-add-active {
- min-width: 400px !important;
+ min-width: 450px !important;
  width: 50vw !important;
  max-width: 600px !important;
+}
+
+/* To disable x-axis scrollbar on sidenav */ 
+vatuta-task-editor md-content {
+    overflow-x: hidden;
 }
 
 vatuta-task-editor form {

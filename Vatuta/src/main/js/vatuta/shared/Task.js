@@ -56,7 +56,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			return !this.isEstimated();
 		},
 		watchHash: function() {
-			return this.id() + this.index() + this.name() + this.description() + (this.duration()?this.duration().shortFormatter():"") +
+			return this.id() + this.index() + this.name() + this.description() + (this.duration()?this.duration().shortFormatter():"") + this.tactic().name() +
+				(this.tactic().name() == 'Manual'?(this.actualStart().toString() + this.actualEnd().toString()):"") +
 				_.reduce(
 						_.map(this.restrictions(), function(restriction) {
 														return restriction.watchHash();

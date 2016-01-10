@@ -1,34 +1,46 @@
 <md-content ng-controller="TaskEditorController as ctrl">
-	<section layout="column">
+	<section layout="column" layout-align="start start">
       <md-subheader class="md-primary">Properties</md-subheader>
 		<form name="taskForm" novalidate layout="column">
-			<md-input-container flex> <label>Name</label> <input
+			<md-input-container> <label>Name</label> <input
 				name="name" ng-model="selectedTask.name"
 				ng-model-options="{ getterSetter: true }" required></input>
 			<div ng-messages="taskForm.name.$error" role="alert">
 				<div ng-message="required">Task must have a name</div>
 			</div>
 			</md-input-container>
-			<md-input-container flex> <label>Description</label> <textarea
+			<md-input-container> <label>Description</label> <textarea
 				name="description" column="1" ng-model="selectedTask.description"
 				ng-model-options="{ getterSetter: true }"></textarea>
 			<div ng-messages="taskForm.name.$error" role="alert">
 			</div>
 			</md-input-container>
-			<div flex layout="row" layout-align="space-between center">
+			<div layout="row" layout-align="space-between center" ng-show="ctrl.showDurationFields(selectedTask)">
 			<md-input-container flex>
 				<label>Duration</label>
-				<input name="duration" ng-model="selectedTask.duration"
+				<input name="duration" ng-model="selectedTask.duration" ng-change="ctrl.durationChanged(selectedTask, $event)"
 					ng-model-options="{ getterSetter: true, debounce: { 'default': 500, 'blur': 0 } }" required duration md-sidenav-focus></input>
 				<div ng-messages="taskForm.duration.$error" role="alert">
 					<div ng-message="required">Task must have a duration</div>
 					<div ng-message="duration">Duration does not have a valid value, please check time units and values</div>
 				</div>
 			</md-input-container>
-			<md-checkbox ng-model="selectedTask.duration.isEstimated" class="md-primary">
+			<md-checkbox ng-model="selectedTask.isEstimated" class="md-primary" ng-model-options="{ getterSetter: true }">
               Estimated<md-tooltip md-direction="bottom">If estimated the duration will not be considered the main and first restriction, but an estimation that will change in accordance with other restrictions</md-tooltip>
             </md-checkbox>
             </div>
+            <md-input-container>
+		        <label>Planning Tactic</label>
+		        <md-select ng-model="selectedTask.tactic" ng-model-options="{ getterSetter: true }" tactic>
+		          <md-option ng-repeat="tactic in ctrl.tactics" value="{{tactic.name}}">
+		            {{tactic.name + ': ' + tactic.tactic.description()}}
+		          </md-option>
+		        </md-select>
+		    </md-input-container>
+	        <md-datepicker ng-model="selectedTask.actualStart" ng-model-options="{ getterSetter: true }" ng-change="ctrl.actualStartChanged(selectedTask, $event)"
+	        				md-placeholder="Enter date" moment ng-hide="selectedTask.tactic().name() != 'Manual'" required moment-date></md-datepicker>
+			<md-datepicker ng-model="selectedTask.actualEnd" ng-model-options="{ getterSetter: true }" ng-change="ctrl.actualEndChanged(selectedTask, $event)"
+							md-placeholder="Enter date" moment ng-hide="selectedTask.tactic().name() != 'Manual'" required moment-date></md-datepicker>
 		</form>
 	</section>
 	<section layout="column">
