@@ -1,7 +1,7 @@
 <md-content ng-controller="TaskEditorController as ctrl">
 	<section layout="column" layout-align="start start">
       <md-subheader class="md-primary">Properties</md-subheader>
-		<form name="taskForm" novalidate layout="column">
+		<form name="taskForm" novalidate layout="column" layout-align="start start">
 			<md-input-container> <label>Name</label> <input
 				name="name" ng-model="selectedTask.name"
 				ng-model-options="{ getterSetter: true }" required></input>

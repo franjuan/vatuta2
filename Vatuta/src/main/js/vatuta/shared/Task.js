@@ -55,6 +55,16 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		hasFixedDuration: function() {
 			return !this.isEstimated();
 		},
+		applyTacticToPlannedRange4Start: function(plannedStartRange) {
+			this.earlyStart(plannedStartRange[0]);
+			this.lateStart(plannedStartRange[1]);
+			this.actualStart(this.tactic().getPlannedStartInRange4Task(this, plannedStartRange));
+		},
+		applyTacticToPlannedRange4End: function(plannedEndRange) {
+			this.earlyEnd(plannedEndRange[0]);
+			this.lateEnd(plannedEndRange[1]);
+			this.actualEnd(this.tactic().getPlannedEndInRange4Task(this, plannedEndRange));
+		},
 		watchHash: function() {
 			return this.id() + this.index() + this.name() + this.description() + (this.duration()?this.duration().shortFormatter():"") + this.tactic().name() +
 				(this.tactic().name() == 'Manual'?(this.actualStart().toString() + this.actualEnd().toString()):"") +

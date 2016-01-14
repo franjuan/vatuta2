@@ -409,7 +409,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 	        
 	    });
 	    
-	    it("Start2Start + Start2Finish + ALAP&Actual values", function () {
+	    xdescribe("Start2Start + Start2Finish + ALAP&Actual values", function () {
 	    	var project = new Project({
 				_name : "Example Project"
 			});

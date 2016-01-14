@@ -1,7 +1,7 @@
 /**
  * @module Restriction
  */
-define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatuta/shared/Duration"], function(declare, lang, Engine, Duration) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatuta/shared/Duration", "moment"], function(declare, lang, Engine, Duration, moment) {
 	/**
      * @exports Restriction
      */
@@ -155,6 +155,26 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //				return false;
 //			}
 //		},
+		restrictPlannedStartRange: function(task, plannedStartRange) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().actualEnd()) {
+					return [moment.max(plannedStartRange[0], this.delay().addTo(this.dependency().actualEnd())),
+					        plannedStartRange[1]];
+				} else {
+					return false;
+				}
+			} else return plannedStartRange;
+		},
+		restrictPlannedEndRange: function(task, plannedEndRange) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().actualEnd()) {
+					return [moment.max(plannedEndRange[0], this.dependant().duration().addTo(this.delay().addTo(this.dependency().actualEnd()))),
+					        plannedEndRange[1]];
+				} else {
+					return false;
+				}
+			} else return plannedEndRange;
+		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
 		},
@@ -234,6 +254,27 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //				return true;
 //			}
 //		},
+		restrictPlannedStartRange: function(task, plannedStartRange) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().actualStart()) {
+					return [moment.max(plannedStartRange[0], this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().actualStart()))),
+					        plannedStartRange[1]];
+				} else {
+					return false;
+				}
+			} else return plannedStartRange;
+		},
+		restrictPlannedEndRange: function(task, plannedEndRange) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().actualStart()) {
+					return [moment.max(plannedEndRange[0], this.delay().addTo(this.dependency().actualStart())),
+					        plannedEndRange[1]];
+				} else {
+					return false;
+				}
+			} else return plannedEndRange;
+			
+		},
 		dependantDescription: function() {
 			return "This task finishes " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -305,6 +346,26 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //		onFinish: function(task) {
 //			return false;
 //		},
+		restrictPlannedStartRange: function(task, plannedStartRange) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().actualStart()) {
+					return [moment.max(plannedStartRange[0], this.delay().addTo(this.dependency().actualStart())),
+					        plannedStartRange[1]];
+				} else {
+					return false;
+				}
+			} else return plannedStartRange;
+		},
+		restrictPlannedEndRange: function(task, plannedEndRange) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().actualStart()) {
+					return [moment.max(plannedEndRange[0], this.dependant().duration().addTo(this.delay().addTo(this.dependency().actualStart()))),
+					        plannedEndRange[1]];
+				} else {
+					return false;
+				}
+			} else return plannedEndRange;
+		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
 		},
@@ -376,6 +437,27 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //		onFinish: function(task) {
 //			return true;
 //		},
+		restrictPlannedStartRange: function(task, plannedStartRange) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().actualEnd()) {
+					return [moment.max(plannedStartRange[0], this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().actualEnd()))),
+					        plannedStartRange[1]];
+				} else {
+					return false;
+				}
+			} else return plannedStartRange;
+		},
+		restrictPlannedEndRange: function(task, plannedEndRange) {
+			if (!task || task.id()===this.dependant().id()) {
+				if (this.dependency().actualEnd()) {
+					return [moment.max(plannedEndRange[0], this.delay().addTo(this.dependency().actualEnd())),
+					        plannedEndRange[1]];
+				} else {
+					return false;
+				}
+			} else return plannedEndRange;
+			
+		},
 		dependantDescription: function() {
 			return "This task ends " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " ends.";
 		},

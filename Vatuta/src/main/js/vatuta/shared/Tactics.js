@@ -33,11 +33,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 		description: function() {
 			return "Start task as soon as possible";
 		},
-		getActualStart4Task: function(task) {
-			return task.earlyStart();
+		getPlannedStartInRange4Task: function(task, startRange) {
+			return startRange[0];
 		},
-		getActualEnd4Task: function(task) {
-			return task.earlyEnd();
+		getPlannedEndInRange4Task: function(task, endRange) {
+			return endRange[0];
 		},
 		equals: function(other) {
 			if (other.isInstanceOf && other.isInstanceOf(this.constructor)) {
@@ -59,11 +59,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 		description: function() {
 			return "Start task as late as possible";
 		},
-		getActualStart4Task: function(task) {
-			return task.lateStart();
+		getPlannedStartInRange4Task: function(task, startRange) {
+			return startRange[1];
 		},
-		getActualEnd4Task: function(task) {
-			return task.lateEnd();
+		getPlannedEndInRange4Task: function(task, endRange) {
+			return endRange[1];
 		},
 		equals: function(other) {
 			if (other.isInstanceOf && other.isInstanceOf(this.constructor)) {
@@ -85,10 +85,10 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 		description: function() {
 			return "Start and end are manually set for task";
 		},
-		getActualStart4Task: function(task) {
+		getPlannedStartInRange4Task: function(task, startRange) {
 			return task.actualStart();
 		},
-		getActualEnd4Task: function(task) {
+		getPlannedEndInRange4Task: function(task, endRange) {
 			return task.actualEnd();
 		},
 		equals: function(other) {

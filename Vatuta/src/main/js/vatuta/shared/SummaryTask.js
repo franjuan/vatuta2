@@ -5,6 +5,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			this._children = [];
 			this.inherited(arguments);
 		},
+		// TODO Repasar, no funciona
 		setViewIndexes: function(index, treeLevel) {
 	    	 this._index = index;
 	    	 this.index(index);
@@ -179,6 +180,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			duration[unit] = value;
 			return duration
 		},
+		applyTacticToPlannedRange4Start: function(plannedStartRange) {
+			var plannedStart = this.tactic().getPlannedStartInRange4Task(this, plannedStartRange);
+			 _.forEach(this.children(), function(task) {
+	    		 if (task.earlyStart().isBefore(plannedStart)) {
+	    			 task.earlyStart(plannedStart);
+	    		 }
+	    		 // TODO Revisar que early no sea posterior a late
+			}, this);
+		}, 
+		applyTacticToPlannedRange4End: function(plannedStartRange) {
+			var plannedEnd = this.tactic().getPlannedEndInRange4Task(this, plannedStartRange);
+			 _.forEach(this.children(), function(task) {
+	    		 if (task.earlyEnd().isBefore(plannedEnd)) {
+	    			 task.earlyEnd(plannedEnd);
+	    		 }
+	    		 // TODO Revisar que early no sea posterior a late
+			}, this);
+		}, 
 		watchHash: function() {
 			// TODO Include duration in watch function
 			return this.id() + this.index() + this.name() + this.description() + //this.duration().shortFormatter() +

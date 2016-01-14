@@ -243,39 +243,70 @@ define(
 					
 					// TODO Recalculate early/late start/end while actual values (ALAP tactic compress the schedulling)
 					
-					// TODO Mover los actual a última fase de cálculo
-					this.currentProject().actualStart(startOfProject);
-					this.currentProject().actualEnd(endOfProject);
 					
-					// Calculate actual start and ending
+					
+					// Calculate planned start and ending
+					var plannedProjectStart = 0;
+					var plannedProjectEnd = 0;
 					var alreadyCalculatedIndex = -1;
 					while (alreadyCalculatedIndex < tasks.length - 1) {
 						var unknownResolvedInIteration = false;
 						for (var i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
 							
-							// Calculate EarlyStart
-							if (task.actualStart()) {
-								actualStart = task.actualStart()
-							} else {
-								actualStart = task.tactic().getActualStart4Task(task);
-								if (!isNaN(actualStart)) {
+							// Calculate ActualStart
+							var plannedStartRange;
+							if (!task.actualStart()) {
+								plannedStartRange = [task.earlyStart(), task.lateStart()];
+								_.forEach(this.getPlannedStartConstraints(task), function(restrictPlannedStartRange) {
+									plannedStartRange = restrictPlannedStartRange(plannedStartRange);
+									if (!plannedStartRange) {
+										return false;
+									} else {
+										//plannedStartRange[0] = moment.max(plannedStartRange[0], newRange[0]);
+										//plannedStartRange[1] = moment.min(plannedStartRange[1], newRange[1]);
+										// Chequear si el rango es válido
+										if (plannedStartRange[1].isBefore(plannedStartRange[0])) {
+											throw "Task " + task.name() + " wrong planned range [" + + ', ' +  +"] (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for actual stage";
+										}
+									}
+								}, task);
+
+							
+								if (plannedStartRange) {
 									unknownResolvedInIteration = true;
-									task.actualStart(actualStart);
+									task.applyTacticToPlannedRange4Start(plannedStartRange);
+									plannedProjectStart = plannedProjectStart == 0 ? task.actualStart() : moment.min(plannedProjectStart, task.actualStart());
 								}
 							}
 							
 							// Calculate EarlyEnd
-							if (task.actualEnd()) {
-								actualEnd = task.actualEnd()
-							} else {
-								actualEnd = task.tactic().getActualEnd4Task(task);
-								if (!isNaN(actualEnd)) {
+							var plannedEndRange;
+							if (!task.actualEnd()) {
+								plannedEndRange = [task.earlyEnd(), task.lateEnd()];
+								_.forEach(this.getPlannedEndConstraints(task), function(restrictPlannedEndRange) {
+									plannedEndRange = restrictPlannedEndRange(plannedEndRange);
+									if (!plannedEndRange) {
+										return false;
+									} else {
+										//plannedStartRange[0] = moment.max(plannedStartRange[0], newRange[0]);
+										//plannedStartRange[1] = moment.min(plannedStartRange[1], newRange[1]);
+										// Chequear si el rango es válido
+										if (plannedEndRange[1].isBefore(plannedEndRange[0])) {
+											throw "Task " + task.name() + " wrong planned range [" + + ', ' +  +"] (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for actual stage";
+										}
+									}
+								}, task);
+
+							
+								if (plannedEndRange) {
 									unknownResolvedInIteration = true;
-									task.actualEnd(actualEnd);
+									task.applyTacticToPlannedRange4End(plannedEndRange);
+									plannedProjectEnd = plannedProjectEnd == 0 ? task.actualEnd() : moment.min(plannedProjectEnd, task.actualEnd());
 								}
 							}
-							if (!isNaN(earlyStart) && !isNaN(earlyEnd)) {
+							
+							if (task.actualStart() && task.actualEnd()) {
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
 									tasks[i] = tasks[alreadyCalculatedIndex + 1];
@@ -290,38 +321,59 @@ define(
 						}
 					}
 					this.showState(this.currentProject(), tasks);
+					
+					// Set the actual start and end for project
+					this.currentProject().actualStart(plannedProjectStart);
+					this.currentProject().actualEnd(plannedProjectEnd);
 				},
 				showState: function(project, tasks) {
 					console.log('                      EarlyStart EarlyEnd   LateStart  LateEnd');
 					console.log(('Project             : ' + (project.earlyStart()?project.earlyStart().format('DD/MM/YYYY'):'          ') + ' '
 														 + (project.earlyEnd()?project.earlyEnd().format('DD/MM/YYYY'):'          ') + ' '
 														 + (project.lateStart()?project.lateStart().format('DD/MM/YYYY'):'          ') + ' '
-														 + (project.lateEnd()?project.lateEnd().format('DD/MM/YYYY'):'          ') + ' ' ));
+														 + (project.lateEnd()?project.lateEnd().format('DD/MM/YYYY'):'          ') + ' '
+														 + (project.actualStart()?project.actualStart().format('DD/MM/YYYY'):'          ') + ' '
+														 + (project.actualEnd()?project.actualEnd().format('DD/MM/YYYY'):'          ') + ' '));
 					_.forEach(tasks, function(task) {
 						console.log((('                   ' + task.name()).slice(-20)+': '
 								 + (task.earlyStart()?task.earlyStart().format('DD/MM/YYYY'):'          ') + ' '
 								 + (task.earlyEnd()?task.earlyEnd().format('DD/MM/YYYY'):'          ') + ' '
 								 + (task.lateStart()?task.lateStart().format('DD/MM/YYYY'):'          ') + ' '
-								 + (task.lateEnd()?task.lateEnd().format('DD/MM/YYYY'):'          ') + ' ' ));
+								 + (task.lateEnd()?task.lateEnd().format('DD/MM/YYYY'):'          ') + ' '
+								 + (task.actualStart()?task.actualStart().format('DD/MM/YYYY'):'          ') + ' '
+								 + (task.actualEnd()?task.actualEnd().format('DD/MM/YYYY'):'          ') + ' '));
 					});
 				},
 				getMinEarlyStartConstraints: function(task) {
-					return this.getConstraintsOnTask(task, "getMinEarlyStart4Task");
+					return this.getAllConstraintsOnTask(task, "getMinEarlyStart4Task");
 				},
 				getMinEarlyEndConstraints: function(task) {
-					return this.getConstraintsOnTask(task, "getMinEarlyEnd4Task");
+					return this.getAllConstraintsOnTask(task, "getMinEarlyEnd4Task");
 				},
 				getMaxLateStartConstraints: function(task) {
-					return this.getConstraintsOnTask(task, "getMaxLateStart4Task");
+					return this.getAllConstraintsOnTask(task, "getMaxLateStart4Task");
 				},
 				getMaxLateEndConstraints: function(task) {
-					return this.getConstraintsOnTask(task, "getMaxLateEnd4Task");
+					return this.getAllConstraintsOnTask(task, "getMaxLateEnd4Task");
 				},
-				getConstraintsOnTask: function(task, f, constraints) {
+				getAllConstraintsOnTask: function(task, f) {
+					return this.getConstraintsOnTask(task, f, [task.restrictions(), task.restrictionsFromDependants()]);
+				},
+				getPlannedStartConstraints: function(task, f) {
+					return this.getDependenciesConstraintsOnTask(task, "restrictPlannedStartRange");
+				},
+				getPlannedEndConstraints: function(task, f) {
+					return this.getDependenciesConstraintsOnTask(task, "restrictPlannedEndRange");
+				},
+				getDependenciesConstraintsOnTask: function(task, f) {
+					return this.getConstraintsOnTask(task, f, [task.restrictions()]);
+				},
+				
+				getConstraintsOnTask: function(task, f, restrictions, constraints) {
 					if (!constraints) {
 						var constraints = [];
 					}
-					_.forEach([task.restrictions(), task.restrictionsFromDependants()], function(restrictions) {
+					_.forEach(restrictions, function(restrictions) {
 						_.forEach(restrictions, function(restriction) {
 							constraints.push(_.bind(restriction[f], restriction, task));
 						}, task);
@@ -331,6 +383,8 @@ define(
 					//}
 					return constraints;
 				},
+
+				
 				/**
 				 * Detect circular dependencies on project, based on Tarjan algorithm
 				 * 
