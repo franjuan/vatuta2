@@ -168,8 +168,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 		restrictPlannedEndRange: function(task, plannedEndRange) {
 			if (!task || task.id()===this.dependant().id()) {
 				if (this.dependency().actualEnd()) {
-					return [moment.max(plannedEndRange[0], this.dependant().duration().addTo(this.delay().addTo(this.dependency().actualEnd()))),
-					        plannedEndRange[1]];
+					if (this.dependant().duration()) {
+						return [moment.max(plannedEndRange[0], this.dependant().duration().addTo(this.delay().addTo(this.dependency().actualEnd()))),
+						        plannedEndRange[1]];
+					} else {
+						return plannedEndRange;
+					}
 				} else {
 					return false;
 				}
@@ -257,8 +261,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 		restrictPlannedStartRange: function(task, plannedStartRange) {
 			if (!task || task.id()===this.dependant().id()) {
 				if (this.dependency().actualStart()) {
-					return [moment.max(plannedStartRange[0], this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().actualStart()))),
-					        plannedStartRange[1]];
+					if (this.dependant().duration()) {
+						return [moment.max(plannedStartRange[0], this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().actualStart()))),
+						        plannedStartRange[1]];
+					} else {
+						return plannedStartRange;
+					}
 				} else {
 					return false;
 				}
@@ -359,8 +367,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 		restrictPlannedEndRange: function(task, plannedEndRange) {
 			if (!task || task.id()===this.dependant().id()) {
 				if (this.dependency().actualStart()) {
-					return [moment.max(plannedEndRange[0], this.dependant().duration().addTo(this.delay().addTo(this.dependency().actualStart()))),
-					        plannedEndRange[1]];
+					if (this.dependant().duration()) {
+						return [moment.max(plannedEndRange[0], this.dependant().duration().addTo(this.delay().addTo(this.dependency().actualStart()))),
+						        plannedEndRange[1]];
+					} else {
+						return plannedEndRange;
+					}
 				} else {
 					return false;
 				}
@@ -440,8 +452,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 		restrictPlannedStartRange: function(task, plannedStartRange) {
 			if (!task || task.id()===this.dependant().id()) {
 				if (this.dependency().actualEnd()) {
-					return [moment.max(plannedStartRange[0], this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().actualEnd()))),
+					if (this.dependant().duration()) {
+						return [moment.max(plannedStartRange[0], this.dependant().duration().subtractFrom(this.delay().addTo(this.dependency().actualEnd()))),
 					        plannedStartRange[1]];
+					} else {
+						return plannedStartRange;
+					}
 				} else {
 					return false;
 				}

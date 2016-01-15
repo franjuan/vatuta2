@@ -40,16 +40,22 @@ define(
 				calculateEarlyStartLateEnding : function() {
 					// TODO Review project before calculating values, i.e. duration() is a valid value for every task
 					// Remove old values
-					delete this.currentProject()._actualStart, this.currentProject()._actualEnd;
+					delete this.currentProject()._actualStart;
+					delete this.currentProject()._actualEnd;
+					delete this.currentProject()._$actualCalculated;
 					_.forEach(this.currentProject().tasks(), function(task) {
 						delete task._earlyStart;
 						delete task._earlyEnd;
 						delete task._lateStart;
 						delete task._lateEnd;
+						// TODO Hay que hacer esto un poco más elegante
 						if (!task.tactic().equals(Tactics.MANUAL)) {
 							delete task._actualStart;
 							delete task._actualEnd;
 						}
+						delete task._$actualStartCalculated;
+						delete task._$actualEndCalculated;
+						delete task._$actualCalculated;
 					});
 					
 					// We clone the tasks array
@@ -246,6 +252,7 @@ define(
 					
 					
 					// Calculate planned start and ending
+					this.currentProject()._$actualCalculated = true; // For root task to be considered
 					var plannedProjectStart = 0;
 					var plannedProjectEnd = 0;
 					var alreadyCalculatedIndex = -1;
@@ -256,7 +263,7 @@ define(
 							
 							// Calculate ActualStart
 							var plannedStartRange;
-							if (!task.actualStart()) {
+							if (!task._$actualStartCalculated && task.parent()._$actualCalculated) {
 								plannedStartRange = [task.earlyStart(), task.lateStart()];
 								_.forEach(this.getPlannedStartConstraints(task), function(restrictPlannedStartRange) {
 									plannedStartRange = restrictPlannedStartRange(plannedStartRange);
@@ -274,15 +281,16 @@ define(
 
 							
 								if (plannedStartRange) {
+									task._$actualStartCalculated = true;
 									unknownResolvedInIteration = true;
-									task.applyTacticToPlannedRange4Start(plannedStartRange);
-									plannedProjectStart = plannedProjectStart == 0 ? task.actualStart() : moment.min(plannedProjectStart, task.actualStart());
+									var plannedStart = task.applyTacticToPlannedRange4Start(plannedStartRange);
+									plannedProjectStart = plannedProjectStart == 0 ? plannedStart : moment.min(plannedProjectStart, plannedStart);
 								}
 							}
 							
 							// Calculate EarlyEnd
 							var plannedEndRange;
-							if (!task.actualEnd()) {
+							if (!task._$actualEndCalculated && task.parent()._$actualCalculated) {
 								plannedEndRange = [task.earlyEnd(), task.lateEnd()];
 								_.forEach(this.getPlannedEndConstraints(task), function(restrictPlannedEndRange) {
 									plannedEndRange = restrictPlannedEndRange(plannedEndRange);
@@ -300,13 +308,15 @@ define(
 
 							
 								if (plannedEndRange) {
+									task._$actualEndCalculated = true;
 									unknownResolvedInIteration = true;
-									task.applyTacticToPlannedRange4End(plannedEndRange);
-									plannedProjectEnd = plannedProjectEnd == 0 ? task.actualEnd() : moment.min(plannedProjectEnd, task.actualEnd());
+									var plannedEnd = task.applyTacticToPlannedRange4End(plannedEndRange);
+									plannedProjectEnd = plannedProjectEnd == 0 ? plannedEnd : moment.max(plannedProjectEnd, plannedEnd);
 								}
 							}
 							
-							if (task.actualStart() && task.actualEnd()) {
+							if (task._$actualStartCalculated && task._$actualEndCalculated) {
+								task._$actualCalculated = true;
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
 									tasks[i] = tasks[alreadyCalculatedIndex + 1];
@@ -320,11 +330,20 @@ define(
 							throw "Lock on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for actual stage";
 						}
 					}
-					this.showState(this.currentProject(), tasks);
 					
 					// Set the actual start and end for project
 					this.currentProject().actualStart(plannedProjectStart);
 					this.currentProject().actualEnd(plannedProjectEnd);
+					
+					this.showState(this.currentProject(), tasks);
+					
+					// Remove temp vars
+					delete this.currentProject()._$actualCalculated;
+					_.forEach(this.currentProject().tasks(), function(task) {
+						delete task._$actualStartCalculated;
+						delete task._$actualEndCalculated;
+						delete task._$actualCalculated;
+					});
 				},
 				showState: function(project, tasks) {
 					console.log('                      EarlyStart EarlyEnd   LateStart  LateEnd');

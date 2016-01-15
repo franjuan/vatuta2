@@ -56,14 +56,34 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			return !this.isEstimated();
 		},
 		applyTacticToPlannedRange4Start: function(plannedStartRange) {
-			this.earlyStart(plannedStartRange[0]);
-			this.lateStart(plannedStartRange[1]);
-			this.actualStart(this.tactic().getPlannedStartInRange4Task(this, plannedStartRange));
+			if (!this.earlyStart().isSame(plannedStartRange[0])) {
+				this.earlyStart(plannedStartRange[0]);
+				if (!this.isEstimated()) {
+					this.earlyEnd(this.duration().addTo(plannedStartRange[0]))
+				}
+			}
+			if (!this.lateStart().isSame(plannedStartRange[1])) {
+				this.lateStart(plannedStartRange[1]);
+				if (!this.isEstimated()) {
+					this.lateEnd(this.duration().addTo(plannedStartRange[1]))
+				}
+			}
+			return this.actualStart(this.tactic().getPlannedStartInRange4Task(this, plannedStartRange));
 		},
 		applyTacticToPlannedRange4End: function(plannedEndRange) {
-			this.earlyEnd(plannedEndRange[0]);
-			this.lateEnd(plannedEndRange[1]);
-			this.actualEnd(this.tactic().getPlannedEndInRange4Task(this, plannedEndRange));
+			if (!this.earlyEnd().isSame(plannedEndRange[0])) {
+				this.earlyEnd(plannedEndRange[0]);
+				if (!this.isEstimated()) {
+					this.earlyStart(this.duration().subtractFrom(plannedEndRange[0]))
+				}
+			}
+			if (!this.lateEnd().isSame(plannedEndRange[1])) {
+				this.lateEnd(plannedEndRange[1]);
+				if (!this.isEstimated()) {
+					this.lateStart(this.duration().subtractFrom(plannedEndRange[1]))
+				}
+			}
+			return this.actualEnd(this.tactic().getPlannedEndInRange4Task(this, plannedEndRange));
 		},
 		watchHash: function() {
 			return this.id() + this.index() + this.name() + this.description() + (this.duration()?this.duration().shortFormatter():"") + this.tactic().name() +

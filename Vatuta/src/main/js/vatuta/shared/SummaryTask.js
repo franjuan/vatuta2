@@ -14,7 +14,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		    		 index++;	
 		    		 index = task.setViewIndexes(index, treeLevel + 1);
 				}, this);
-	    	 return this.index();
+	    	 return index;
 		},
 		maxIndex: function() {
 			return _.reduce(this.children(), function(max, child) {
@@ -185,18 +185,25 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			 _.forEach(this.children(), function(task) {
 	    		 if (task.earlyStart().isBefore(plannedStart)) {
 	    			 task.earlyStart(plannedStart);
+	    			 // TODO Sacar esto de aquí y meterlo en un método común junto con Task.applyTacticToPlannedRange4Start y Task.applyTacticToPlannedRange4End
+//	    			 if (!task.isEstimated() && task.duration()) {
+//	 					this.earlyEnd(task.duration().addTo(plannedStart))
+//	 				}
 	    		 }
 	    		 // TODO Revisar que early no sea posterior a late
 			}, this);
+			return plannedStart;
 		}, 
 		applyTacticToPlannedRange4End: function(plannedStartRange) {
+			// TODO las restricciones de finalizar después de no pueden aplicar a hijas una Summary (ojo, las de finalizar antes de sí)
 			var plannedEnd = this.tactic().getPlannedEndInRange4Task(this, plannedStartRange);
-			 _.forEach(this.children(), function(task) {
-	    		 if (task.earlyEnd().isBefore(plannedEnd)) {
-	    			 task.earlyEnd(plannedEnd);
-	    		 }
-	    		 // TODO Revisar que early no sea posterior a late
-			}, this);
+//			 _.forEach(this.children(), function(task) {
+//	    		 if (task.earlyEnd().isBefore(plannedEnd)) {
+//	    			 task.earlyEnd(plannedEnd);
+//	    		 }
+//	    		 // TODO Revisar que early no sea posterior a late
+//			}, this);
+			return plannedEnd;
 		}, 
 		watchHash: function() {
 			// TODO Include duration in watch function
