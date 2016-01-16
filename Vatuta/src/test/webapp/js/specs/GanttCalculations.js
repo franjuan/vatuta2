@@ -409,7 +409,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 	        
 	    });
 	    
-	    xdescribe("Start2Start + Start2Finish + ALAP&Actual values", function () {
+	    it("Start2Start + Start2Finish + ALAP&Actual values", function () {
 	    	var project = new Project({
 				_name : "Example Project"
 			});
@@ -433,7 +433,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 			var taskA = new Task({
 				_name : "A",
 				_duration : new Duration({
-					days : 5
+					days : 4
 				})
 			});
 			project.addTask(taskA, summary);
@@ -476,14 +476,96 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 			
 			expect(summary.earlyStart()).toBeSameDay(base.earlyStart());
 			
+			expect(taskB.earlyStart()).toBeSameDay(taskA.earlyEnd());
+	        expect(taskC.earlyStart()).toBeSameDay(taskA.earlyStart());
+	        expect(taskB.earlyStart()).toBeAfter(taskC.earlyStart());
+	        expect(taskC.earlyEnd()).toBeAfter(taskB.earlyStart());
+	        
+	        expect(taskB.actualStart().diff(taskA.actualEnd(),'days')).toEqual(0);
+	        
+	        expect(taskA.actualStart()).toBeSameDay(base.actualStart());
+	    });
+	    
+	    it("Start2Start + Start2Finish + ALAP&Manual&Actual values", function () {
+	    	var project = new Project({
+				_name : "Example Project"
+			});
+			Engine.currentProject(project);
+
+			// Start2End
+			var base = new Task({
+				_name : "Base",
+				_duration : new Duration({
+					days : 4
+				}),
+				_tactic: Tactics.getTacticInstanceByName("ASAP")
+			});
+			project.addTask(base);
+
+			var summary = new SummaryTask({
+				_name : "Summary"
+			});
+			project.addTask(summary);
+
+			var taskA = new Task({
+				_name : "A",
+				_duration : new Duration({
+					days : 5
+				}),
+				_tactic: Tactics.getTacticInstanceByName("ALAP")
+			});
+			project.addTask(taskA, summary);
+
+			var taskB = new Task({
+				_name : "B",
+				_duration : new Duration({
+					days : 4
+				}),
+				_tactic: Tactics.MANUAL,
+				_actualStart: Moment().add(10, 'days'),
+				_actualEnd: Moment().add(14, 'days')
+			});
+			project.addTask(taskB, summary);
+
+			var taskC = new Task({
+				_name : "C",
+				_duration : new Duration({
+					days : 6
+				}),
+				_tactic: Tactics.getTacticInstanceByName("ASAP")
+			});
+			project.addTask(taskC, summary);
+
+			new Restrictions.StartToStart({
+				_dependency : base,
+				_dependant : summary
+			});
+
+			new Restrictions.EndToStart({
+				_dependency : taskA,
+				_dependant : taskB
+			});
+
+			new Restrictions.StartToEnd({
+				_dependency : taskB,
+				_dependant : taskC
+			});
+			
+			Engine.calculateEarlyStartLateEnding();
+			
+			expect(summary.actualStart()).toBeAfter(base.actualStart());
+			expect(summary.earlyStart()).toBeSameDay(base.earlyStart());
+			expect(summary.actualStart().diff(base.actualStart(),'days')).toEqual(4);
+			
 			expect(taskB.earlyStart()).toBeAfter(taskA.earlyEnd());
 	        expect(taskC.earlyStart()).toBeAfter(taskA.earlyStart());
 	        expect(taskB.earlyStart()).toBeAfter(taskC.earlyStart());
 	        expect(taskC.earlyEnd()).toBeSameDay(taskB.earlyStart());
 	        
-	        expect(taskB.actualStart().diff(taskA.actualEnd(),'days')).toEqual(1);
+	        expect(taskA.actualStart().diff(taskC.actualStart(),'days')).toEqual(1);
 	        
-	        expect(taskA.actualStart()).toBeSameDay(base.actualStart());
+	        expect(taskA.actualStart()).toBeAfter(base.actualStart());
+	        expect(taskC.actualStart()).toBeSameDay(summary.actualStart());
 	    });
 	});
 });

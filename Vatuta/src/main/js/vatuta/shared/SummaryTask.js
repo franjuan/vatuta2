@@ -180,31 +180,29 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			duration[unit] = value;
 			return duration
 		},
-		applyTacticToPlannedRange4Start: function(plannedStartRange) {
+		applyPlannedStartRange2Task: function(plannedStartRange) {
 			var plannedStart = this.tactic().getPlannedStartInRange4Task(this, plannedStartRange);
-			 _.forEach(this.children(), function(task) {
-	    		 if (task.earlyStart().isBefore(plannedStart)) {
-	    			 task.earlyStart(plannedStart);
-	    			 // TODO Sacar esto de aquí y meterlo en un método común junto con Task.applyTacticToPlannedRange4Start y Task.applyTacticToPlannedRange4End
-//	    			 if (!task.isEstimated() && task.duration()) {
-//	 					this.earlyEnd(task.duration().addTo(plannedStart))
-//	 				}
-	    		 }
+			_.forEach(this.children(), function(task) {
+				task.applyPlannedStartRange2Task([plannedStart, Infinity])
 	    		 // TODO Revisar que early no sea posterior a late
 			}, this);
 			return plannedStart;
-		}, 
-		applyTacticToPlannedRange4End: function(plannedStartRange) {
+		},
+		applyPlannedEndRange2Task: function(plannedEndRange) {
 			// TODO las restricciones de finalizar después de no pueden aplicar a hijas una Summary (ojo, las de finalizar antes de sí)
-			var plannedEnd = this.tactic().getPlannedEndInRange4Task(this, plannedStartRange);
-//			 _.forEach(this.children(), function(task) {
-//	    		 if (task.earlyEnd().isBefore(plannedEnd)) {
-//	    			 task.earlyEnd(plannedEnd);
-//	    		 }
-//	    		 // TODO Revisar que early no sea posterior a late
-//			}, this);
+			var plannedEnd = this.tactic().getPlannedEndInRange4Task(this, plannedEndRange);
+			_.forEach(this.children(), function(task) {
+				task.applyPlannedEndRange2Task([0, plannedEnd])
+	    		 // TODO Revisar que early no sea posterior a late
+			}, this);
 			return plannedEnd;
-		}, 
+		},
+		applyTactic2PlannedStartRange4PlannedStart: function(plannedStartRange) {
+			return this.tactic().getPlannedStartInRange4Task(this, plannedStartRange);
+		},
+		applyTactic2PlannedEndRange4PlannedEnd: function(plannedEndRange) {
+			return this.tactic().getPlannedEndInRange4Task(this, plannedEndRange);
+		},
 		watchHash: function() {
 			// TODO Include duration in watch function
 			return this.id() + this.index() + this.name() + this.description() + //this.duration().shortFormatter() +

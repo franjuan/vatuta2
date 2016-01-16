@@ -261,17 +261,15 @@ define(
 						for (var i = alreadyCalculatedIndex + 1; i < tasks.length; i++) {
 							var task = tasks[i];
 							
-							// Calculate ActualStart
+							// Calculate PlannedStart
 							var plannedStartRange;
 							if (!task._$actualStartCalculated && task.parent()._$actualCalculated) {
 								plannedStartRange = [task.earlyStart(), task.lateStart()];
-								_.forEach(this.getPlannedStartConstraints(task), function(restrictPlannedStartRange) {
+								_.forEach(this.getConstraints4PlannedStart(task), function(restrictPlannedStartRange) {
 									plannedStartRange = restrictPlannedStartRange(plannedStartRange);
 									if (!plannedStartRange) {
 										return false;
 									} else {
-										//plannedStartRange[0] = moment.max(plannedStartRange[0], newRange[0]);
-										//plannedStartRange[1] = moment.min(plannedStartRange[1], newRange[1]);
 										// Chequear si el rango es válido
 										if (plannedStartRange[1].isBefore(plannedStartRange[0])) {
 											throw "Task " + task.name() + " wrong planned range [" + + ', ' +  +"] (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for actual stage";
@@ -283,22 +281,21 @@ define(
 								if (plannedStartRange) {
 									task._$actualStartCalculated = true;
 									unknownResolvedInIteration = true;
-									var plannedStart = task.applyTacticToPlannedRange4Start(plannedStartRange);
+									task.applyPlannedStartRange2Task(plannedStartRange);
+									var plannedStart = task.applyTactic2PlannedStartRange4PlannedStart(plannedStartRange);
 									plannedProjectStart = plannedProjectStart == 0 ? plannedStart : moment.min(plannedProjectStart, plannedStart);
 								}
 							}
 							
-							// Calculate EarlyEnd
+							// Calculate PlannedEnd
 							var plannedEndRange;
 							if (!task._$actualEndCalculated && task.parent()._$actualCalculated) {
 								plannedEndRange = [task.earlyEnd(), task.lateEnd()];
-								_.forEach(this.getPlannedEndConstraints(task), function(restrictPlannedEndRange) {
+								_.forEach(this.getConstraints4PlannedEnd(task), function(restrictPlannedEndRange) {
 									plannedEndRange = restrictPlannedEndRange(plannedEndRange);
 									if (!plannedEndRange) {
 										return false;
 									} else {
-										//plannedStartRange[0] = moment.max(plannedStartRange[0], newRange[0]);
-										//plannedStartRange[1] = moment.min(plannedStartRange[1], newRange[1]);
 										// Chequear si el rango es válido
 										if (plannedEndRange[1].isBefore(plannedEndRange[0])) {
 											throw "Task " + task.name() + " wrong planned range [" + + ', ' +  +"] (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for actual stage";
@@ -310,7 +307,8 @@ define(
 								if (plannedEndRange) {
 									task._$actualEndCalculated = true;
 									unknownResolvedInIteration = true;
-									var plannedEnd = task.applyTacticToPlannedRange4End(plannedEndRange);
+									task.applyPlannedEndRange2Task(plannedEndRange);
+									var plannedEnd = task.applyTactic2PlannedEndRange4PlannedEnd(plannedEndRange);
 									plannedProjectEnd = plannedProjectEnd == 0 ? plannedEnd : moment.max(plannedProjectEnd, plannedEnd);
 								}
 							}
@@ -378,10 +376,10 @@ define(
 				getAllConstraintsOnTask: function(task, f) {
 					return this.getConstraintsOnTask(task, f, [task.restrictions(), task.restrictionsFromDependants()]);
 				},
-				getPlannedStartConstraints: function(task, f) {
+				getConstraints4PlannedStart: function(task, f) {
 					return this.getDependenciesConstraintsOnTask(task, "restrictPlannedStartRange");
 				},
-				getPlannedEndConstraints: function(task, f) {
+				getConstraints4PlannedEnd: function(task, f) {
 					return this.getDependenciesConstraintsOnTask(task, "restrictPlannedEndRange");
 				},
 				getDependenciesConstraintsOnTask: function(task, f) {

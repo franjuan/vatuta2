@@ -161,6 +161,7 @@ define(
 					}
 				},
 				drawBasicTask: function (task, project) {
+					// Consider hours in drawing, not whole days
 					var taskContainer = new createjs.Container();
 					
 					var element = new createjs.Shape();

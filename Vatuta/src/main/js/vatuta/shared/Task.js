@@ -55,34 +55,30 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		hasFixedDuration: function() {
 			return !this.isEstimated();
 		},
-		applyTacticToPlannedRange4Start: function(plannedStartRange) {
-			if (!this.earlyStart().isSame(plannedStartRange[0])) {
+		applyPlannedStartRange2Task: function(plannedStartRange) {
+			if (plannedStartRange[0]!=0 && this.earlyStart().isBefore(plannedStartRange[0])) {
 				this.earlyStart(plannedStartRange[0]);
-				if (!this.isEstimated()) {
-					this.earlyEnd(this.duration().addTo(plannedStartRange[0]))
-				}
+				this.earlyEnd(this.duration().addTo(plannedStartRange[0]))
 			}
-			if (!this.lateStart().isSame(plannedStartRange[1])) {
+			if (isFinite(plannedStartRange[1]) && this.lateStart().isAfter(plannedStartRange[1])) {
 				this.lateStart(plannedStartRange[1]);
-				if (!this.isEstimated()) {
-					this.lateEnd(this.duration().addTo(plannedStartRange[1]))
-				}
+				this.lateEnd(this.duration().addTo(plannedStartRange[1]))
 			}
+		},
+		applyPlannedEndRange2Task: function(plannedEndRange) {
+			if (plannedEndRange[0]!=0 && this.earlyEnd().isBefore(plannedEndRange[0])) {
+				this.earlyEnd(plannedEndRange[0]);
+				this.earlyStart(this.duration().subtractFrom(plannedEndRange[0]))
+			}
+			if (isFinite(plannedEndRange[1]) && this.lateEnd().isAfter(plannedEndRange[1])) {
+				this.lateEnd(plannedEndRange[1]);
+				this.lateStart(this.duration().subtractFrom(plannedEndRange[1]))
+			}
+		},
+		applyTactic2PlannedStartRange4PlannedStart: function(plannedStartRange) {
 			return this.actualStart(this.tactic().getPlannedStartInRange4Task(this, plannedStartRange));
 		},
-		applyTacticToPlannedRange4End: function(plannedEndRange) {
-			if (!this.earlyEnd().isSame(plannedEndRange[0])) {
-				this.earlyEnd(plannedEndRange[0]);
-				if (!this.isEstimated()) {
-					this.earlyStart(this.duration().subtractFrom(plannedEndRange[0]))
-				}
-			}
-			if (!this.lateEnd().isSame(plannedEndRange[1])) {
-				this.lateEnd(plannedEndRange[1]);
-				if (!this.isEstimated()) {
-					this.lateStart(this.duration().subtractFrom(plannedEndRange[1]))
-				}
-			}
+		applyTactic2PlannedEndRange4PlannedEnd: function(plannedEndRange) {
 			return this.actualEnd(this.tactic().getPlannedEndInRange4Task(this, plannedEndRange));
 		},
 		watchHash: function() {
