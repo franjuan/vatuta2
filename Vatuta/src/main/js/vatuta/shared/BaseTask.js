@@ -28,7 +28,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				});
 			}
 			if (!this._tactic) {
-				this._tactic = Tactics.getDefaultTactic();
+				this._tactic = Tactics.getDefaultTactic().name();
 			}
 		},
 		remove: function() {
@@ -65,13 +65,13 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		tactic: function(newTactic) {
 			if (arguments.length) {
 				if (_.isString(newTactic)) {
-					this._tactic = Tactics.getTacticInstanceByName(newTactic);
-				} else {
 					this._tactic = newTactic;
+				} else {
+					this._tactic = newTactic.name();
 				}
-				return this._tactic; 
+				return Tactics.getTacticInstanceByName(this._tactic); 
 			} else {
-				return this._tactic;
+				return Tactics.getTacticInstanceByName(this._tactic);
 			}
 		},
 		restrictions : function() {

@@ -343,7 +343,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				_duration : new Duration({
 					days : 4
 				}),
-				_tactic: Tactics.MANUAL,
+				_tactic: Tactics.MANUAL.name(),
 				_actualStart: Moment().add(2, 'days'),
 				_actualEnd: Moment().add(6, 'days')
 			});
@@ -367,7 +367,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				_duration : new Duration({
 					days : 4
 				}),
-				_tactic: Tactics.MANUAL,
+				_tactic: Tactics.MANUAL.name(),
 				_actualStart: Moment().add(8, 'days'),
 				_actualEnd: Moment().add(12, 'days')
 			});
@@ -421,7 +421,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				_duration : new Duration({
 					days : 4
 				}),
-				_tactic: Tactics.getTacticInstanceByName("ALAP")
+				_tactic: Tactics.getTacticInstanceByName("ALAP").name()
 			});
 			project.addTask(base);
 
@@ -443,7 +443,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				_duration : new Duration({
 					days : 4
 				}),
-				_tactic: Tactics.MANUAL,
+				_tactic: Tactics.MANUAL.name(),
 				_actualStart: Moment().add(8, 'days'),
 				_actualEnd: Moment().add(12, 'days')
 			});
@@ -498,7 +498,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				_duration : new Duration({
 					days : 4
 				}),
-				_tactic: Tactics.getTacticInstanceByName("ASAP")
+				_tactic: Tactics.getTacticInstanceByName("ASAP").name()
 			});
 			project.addTask(base);
 
@@ -512,7 +512,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				_duration : new Duration({
 					days : 5
 				}),
-				_tactic: Tactics.getTacticInstanceByName("ALAP")
+				_tactic: Tactics.getTacticInstanceByName("ALAP").name()
 			});
 			project.addTask(taskA, summary);
 
@@ -521,7 +521,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				_duration : new Duration({
 					days : 4
 				}),
-				_tactic: Tactics.MANUAL,
+				_tactic: Tactics.MANUAL.name(),
 				_actualStart: Moment().add(10, 'days'),
 				_actualEnd: Moment().add(14, 'days')
 			});
@@ -532,7 +532,7 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				_duration : new Duration({
 					days : 6
 				}),
-				_tactic: Tactics.getTacticInstanceByName("ASAP")
+				_tactic: Tactics.getTacticInstanceByName("ASAP").name()
 			});
 			project.addTask(taskC, summary);
 
