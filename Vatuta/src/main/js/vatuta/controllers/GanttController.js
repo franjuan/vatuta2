@@ -1,6 +1,6 @@
 define(
-		[ "resurrect", "moment", "vatuta/vatutaApp" ],
-		function(resurrect, moment) {
+		[ "moment", "vatuta/vatutaApp" ],
+		function(moment) {
 			angular
 					.module('vatutaApp')
 					.controller(

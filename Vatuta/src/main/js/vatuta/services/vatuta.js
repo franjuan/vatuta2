@@ -76,6 +76,8 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 		namespace.Restriction = Restriction;
 		namespace.PlanningTactic = PlanningTactic;
 		namespace.ASAPTactic = Tactics.getTacticConstructorByName('ASAP');
+		namespace.ALAPTactic = Tactics.getTacticConstructorByName('ALAP');
+		namespace.ManualTactic = Tactics.getTacticConstructorByName('Manual');
 		namespace.Duration = Duration;
 		
 		var serializers = {};
