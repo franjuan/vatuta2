@@ -132,6 +132,13 @@ define(
 
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
+					
+					this._leftMoment =
+						(project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins < this._width) ?
+									moment(project.actualStart()).subtract(
+											(this._width - 2*this._sideMargins - (project.actualDuration().asDays() * this._dayWidth))/(2*this._dayWidth),
+											"days"):
+									moment(project.actualStart());
 
 					// Draw in Z order, biggest first, from top to bottom
 					// Dependencies
@@ -600,7 +607,7 @@ define(
 					this._stage.update();
 				},
 				daysFromProjectStart: function(moment, project) {
-					return moment.diff(project.actualStart(), 'days', true);
+					return moment.diff(this._leftMoment, 'days', true);
 				}
 			});
 		}
