@@ -91,6 +91,21 @@ define(
 				listener: function(newListener) {
 					return arguments.length ? (this._listener = newListener) : this._listener;
 				},
+				drawRulerRange: function(ruler, start, end, level, unit) {
+					var currentLocaleData = moment.localeData();
+					var element = new createjs.Shape();
+					element.graphics.beginStroke("White").beginFill("#C5CAE9").drawRoundRect(this.getXbyMoment(start), level*this._rulerHeight/3, this.getXbyMoment(end) - this.getXbyMoment(start), this._rulerHeight/3, 5);
+					
+					var text = new createjs.Text(start.get(unit), "bold " + this._dayFontSize + "px " + this._dayFont);
+					text.color = "White";
+					text.maxWidth = this.getXbyMoment(start) + this.getXbyMoment(end);
+					text.textBaseline = "middle";
+					text.textAlign = "center";
+					text.x = (this.getXbyMoment(start) + this.getXbyMoment(end))/2;
+					text.y = (2*level+1)*this._rulerHeight/6;
+					
+					ruler.addChild(element, text);
+				},
 				drawTimeRuler: function(project, $window) {
 					this._rulerCanvas.width = Math.max(project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins, $window.innerWidth);
 					this._rulerCanvas.height = this._rulerHeight;
@@ -101,21 +116,42 @@ define(
 					background.graphics.beginFill("#FFF").drawRect(0,0, this._canvas.width, this._rulerHeight);
 					ruler.addChild(background);
 					
-					var dayCounter = moment(project.actualStart()).subtract(1,"day");
-					for (i=-1; i*this._dayWidth < this._width; i++) {
-						var element = new createjs.Shape();
-						element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth + this._sideMargins, 0, this._dayWidth, this._rulerHeight, 5);
-
-						var text = new createjs.Text(dayCounter.date(), "bold " + this._dayFontSize + "px " + this._dayFont);
-						text.color = "White";
-						text.maxWidth = this._dayWidth;
-						text.textBaseline = "middle";
-						text.textAlign = "center";
-						text.x = this._dayWidth*(i + 1/2) + this._sideMargins;
-						text.y = this._rulerHeight/2;
-						
-						ruler.addChild(element, text);
-						dayCounter.add(1,"day");
+					var rulerLevels = ["month", "week", "day"]
+					for (var h = 0; h < 2; h++) {
+						var start = moment(this._leftMoment).startOf(rulerLevels[h]);
+						var end = moment(this._leftMoment).endOf(rulerLevels[h]);
+						do {
+							this.drawRulerRange(ruler, start, end, h, rulerLevels[h]);
+							
+							end = start;
+							start = moment(end).subtract(1, rulerLevels[h]);
+						} while (this.getXbyMoment(start) >= 0);
+						endX = moment(this._leftMoment).endOf(rulerLevels[h]);
+						do {
+							start = end;
+							end = moment(start).add(1, rulerLevels[h]);
+							
+							this.drawRulerRange(ruler, start, end, h, rulerLevels[h]);
+						} while (this.getXbyMoment(end) <= this._rulerCanvas.width);
+					}
+					
+					for (var h = 2; h < 3; h++) {
+						var dayCounter = moment(this._leftMoment).subtract(1,"day");
+						for (i=-1; i*this._dayWidth < this._width; i++) {
+							var element = new createjs.Shape();
+							element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth + this._sideMargins, h*this._rulerHeight/3, this._dayWidth, this._rulerHeight/3, 5);
+	
+							var text = new createjs.Text(dayCounter.date(), "bold " + this._dayFontSize + "px " + this._dayFont);
+							text.color = "White";
+							text.maxWidth = this._dayWidth;
+							text.textBaseline = "middle";
+							text.textAlign = "center";
+							text.x = this._dayWidth*(i + 1/2) + this._sideMargins;
+							text.y = (2*h+1)*this._rulerHeight/6;
+							
+							ruler.addChild(element, text);
+							dayCounter.add(1,"day");
+						}
 					}
 					ruler.x = 0;
 					ruler.y = 0;
@@ -137,8 +173,8 @@ define(
 						(project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins < this._width) ?
 									moment(project.actualStart()).subtract(
 											(this._width - 2*this._sideMargins - (project.actualDuration().asDays() * this._dayWidth))/(2*this._dayWidth),
-											"days"):
-									moment(project.actualStart());
+											"days").startOf("day"):
+									moment(project.actualStart()).startOf("day");
 
 					// Draw in Z order, biggest first, from top to bottom
 					// Dependencies
@@ -608,6 +644,9 @@ define(
 				},
 				daysFromProjectStart: function(moment, project) {
 					return moment.diff(this._leftMoment, 'days', true);
+				},
+				getXbyMoment: function(moment) {
+					return moment.diff(this._leftMoment, 'days', true) * this._dayWidth + this._sideMargins;
 				}
 			});
 		}

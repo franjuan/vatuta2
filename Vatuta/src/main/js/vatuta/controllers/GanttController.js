@@ -37,7 +37,7 @@ define(
 										
 										$scope.canvasOptions = {
 											_dayWidth : 30,
-											_rulerHeight : 35,
+											_rulerHeight : 45, // TODO Meter este valor con less en vatuta.css
 											_dayFontSize : 15,
 											_dayFont : "Roboto, sans-serif",
 											_taskFontSize : 15,

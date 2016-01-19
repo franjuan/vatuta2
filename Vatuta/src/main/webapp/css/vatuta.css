@@ -30,7 +30,7 @@ vatuta-gantt {
 
 vatuta-gantt #container{
     position: absolute;
-    top: 35px;
+    top: 45px;
     bottom: 0;
     overflow-x: auto;
     overflow-y: auto;
