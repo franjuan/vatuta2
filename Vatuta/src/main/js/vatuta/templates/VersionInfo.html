@@ -11,16 +11,19 @@
     </md-toolbar>
     <md-dialog-content>
       <div class="md-dialog-content">
+      	<div ng-hide="version >= 0.24">
+	        <h2>Version 0.24</h2>
+	        <p>
+	        	<ul>
+	        	  <li>Top ruler now shows three levels of details of dates</li>
+				</ul>
+	        </p>
+        </div>
       	<div ng-hide="version >= 0.23">
 	        <h2>Version 0.23</h2>
 	        <p>
 	        	<ul>
 	        	  <li>Planned with tactics calculation improvement</li>
-				  <li>Minor bugs:
-				  		<ul>
-				  			<li>Hours of the day not being considered when drawing.</li>
-				  		</ul>
-				  </li>
 				</ul>
 	        </p>
         </div>
