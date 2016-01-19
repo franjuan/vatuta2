@@ -91,12 +91,12 @@ define(
 				listener: function(newListener) {
 					return arguments.length ? (this._listener = newListener) : this._listener;
 				},
-				drawRulerRange: function(ruler, start, end, level, unit) {
+				drawRulerRange: function(ruler, start, end, level, rulerLevel) {
 					var currentLocaleData = moment.localeData();
 					var element = new createjs.Shape();
 					element.graphics.beginStroke("White").beginFill("#C5CAE9").drawRoundRect(this.getXbyMoment(start), level*this._rulerHeight/3, this.getXbyMoment(end) - this.getXbyMoment(start), this._rulerHeight/3, 5);
 					
-					var text = new createjs.Text(start.get(unit), "bold " + this._dayFontSize + "px " + this._dayFont);
+					var text = new createjs.Text(start.format(rulerLevel.format), "bold " + this._dayFontSize + "px " + this._dayFont);
 					text.color = "White";
 					text.maxWidth = this.getXbyMoment(start) + this.getXbyMoment(end);
 					text.textBaseline = "middle";
@@ -105,6 +105,8 @@ define(
 					text.y = (2*level+1)*this._rulerHeight/6;
 					
 					ruler.addChild(element, text);
+					
+					//this._rulerStage.update();
 				},
 				drawTimeRuler: function(project, $window) {
 					this._rulerCanvas.width = Math.max(project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins, $window.innerWidth);
@@ -116,43 +118,27 @@ define(
 					background.graphics.beginFill("#FFF").drawRect(0,0, this._canvas.width, this._rulerHeight);
 					ruler.addChild(background);
 					
-					var rulerLevels = ["month", "week", "day"]
-					for (var h = 0; h < 2; h++) {
-						var start = moment(this._leftMoment).startOf(rulerLevels[h]);
-						var end = moment(this._leftMoment).endOf(rulerLevels[h]);
+					var rulerLevels = [{unit: "month", steps: 1, format: "MMMM"},
+					                   {unit: "week", steps: 1, format: "wo"},
+					                   {unit: "day", steps: 1, format: "D"}];
+					for (var h = 0; h < 3; h++) {
+						var start = moment(this._leftMoment).startOf(rulerLevels[h].unit);
+						var end = moment(start).add(rulerLevels[h].steps, rulerLevels[h].unit);
 						do {
 							this.drawRulerRange(ruler, start, end, h, rulerLevels[h]);
 							
 							end = start;
-							start = moment(end).subtract(1, rulerLevels[h]);
-						} while (this.getXbyMoment(start) >= 0);
-						endX = moment(this._leftMoment).endOf(rulerLevels[h]);
+							start = moment(end).subtract(rulerLevels[h].steps, rulerLevels[h].unit);
+						} while (this.getXbyMoment(end) >= 0);
+						end = moment(this._leftMoment).startOf(rulerLevels[h].unit).add(rulerLevels[h].steps, rulerLevels[h].unit);
 						do {
 							start = end;
-							end = moment(start).add(1, rulerLevels[h]);
+							end = moment(start).add(rulerLevels[h].steps, rulerLevels[h].unit);
 							
 							this.drawRulerRange(ruler, start, end, h, rulerLevels[h]);
-						} while (this.getXbyMoment(end) <= this._rulerCanvas.width);
+						} while (this.getXbyMoment(start) <= this._rulerCanvas.width);
 					}
 					
-					for (var h = 2; h < 3; h++) {
-						var dayCounter = moment(this._leftMoment).subtract(1,"day");
-						for (i=-1; i*this._dayWidth < this._width; i++) {
-							var element = new createjs.Shape();
-							element.graphics.beginFill("#C5CAE9").drawRoundRect(i*this._dayWidth + this._sideMargins, h*this._rulerHeight/3, this._dayWidth, this._rulerHeight/3, 5);
-	
-							var text = new createjs.Text(dayCounter.date(), "bold " + this._dayFontSize + "px " + this._dayFont);
-							text.color = "White";
-							text.maxWidth = this._dayWidth;
-							text.textBaseline = "middle";
-							text.textAlign = "center";
-							text.x = this._dayWidth*(i + 1/2) + this._sideMargins;
-							text.y = (2*h+1)*this._rulerHeight/6;
-							
-							ruler.addChild(element, text);
-							dayCounter.add(1,"day");
-						}
-					}
 					ruler.x = 0;
 					ruler.y = 0;
 					this._rulerStage.addChild(ruler);
