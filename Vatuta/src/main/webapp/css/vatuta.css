@@ -23,6 +23,11 @@ body, html {
 	height: 100vh;
 }
 
+/* To disable horizontal overflow of md-content*/
+div#content > md-content {
+    overflow: hidden;
+}
+
 vatuta-gantt {
 	width: 100%;
 	height: 100%;

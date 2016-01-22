@@ -79,6 +79,7 @@ define(
 					
 				    /* @member {Object} */
 					this._stage = new createjs.Stage(this._canvas);
+					this._stage.enableMouseOver(20);
 					this._rulerStage = new createjs.Stage(this._rulerCanvas);
 					
 					this._listener = null;
@@ -87,6 +88,7 @@ define(
 					$('#content > md-content').scroll(function(){
 						  $('vatuta-gantt #ganttRuler').css('left',-$('#content > md-content').scrollLeft());
 					});
+					
 				},
 				listener: function(newListener) {
 					return arguments.length ? (this._listener = newListener) : this._listener;
@@ -141,6 +143,7 @@ define(
 					
 					ruler.x = 0;
 					ruler.y = 0;
+					
 					this._rulerStage.addChild(ruler);
 					//this._stage.addChild(ruler); // TODO Verificar que pintar dos veces el ruler no afecta al rendimiento
 
@@ -228,6 +231,21 @@ define(
 								}, this),
 								false
 					);
+					taskShape.on("rollover", 
+									function(event) {
+										if (this._listener) {
+											this._listener.onRollOverTask(event, task);
+										};
+										this.drawOverTask(task, project);
+										event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true)
+									}, this, false, null, false
+						);
+					taskShape.on("rollout", 
+									function(event) {
+										this.drawOutTask(task, project);
+										event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true)
+									}, this, false, null, false
+						);
 					element.on("click", 
 							_.bind(
 									function(event) {
@@ -281,6 +299,51 @@ define(
 					this._stage.update();
 					
 					return this._selectedTaskContainer;
+				},
+				drawOverTask: function(task, project, $window){
+					if (this._overTaskContainer) {
+						this._overTaskContainer.removeAllChildren();
+					} else {
+						this._overTaskContainer = new createjs.Container();
+						this._stage.addChild(this._overTaskContainer);
+					}
+
+					console.log("in");
+					
+					var image = new Image();
+		            image.src = "/icons/ic_add_circle_outline_black_48px.svg";
+		            image.onload = _.bind(handleImageLoad,this);
+					
+		            function handleImageLoad(event) {
+		                var image = event.target;
+		                var bitmap = new createjs.Bitmap(image);
+		                bitmap.scaleX=0.5;
+		                bitmap.scaleY=0.5;
+		                bitmap.x = this.getXbyMoment(task.actualStart());
+		                bitmap.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeightOffset;
+		                var circle = new createjs.Shape();
+		            	circle.graphics.beginFill(this._earlyLateLimitsColor).drawCircle(bitmap.x, bitmap.y, 30);
+		                this._overTaskContainer.addChild(circle, bitmap);
+		                this._stage.update();
+		            }
+		            
+					this._stage.update();
+					
+					return this._overTaskContainer;
+				},
+				drawOutTask: function(task, project, $window){
+					if (this._overTaskContainer) {
+						this._overTaskContainer.removeAllChildren();
+					} else {
+						this._overTaskContainer = new createjs.Container();
+						this._stage.addChild(this._overTaskContainer);
+					}
+					
+					console.log("out");
+					
+					this._stage.update();
+					
+					return this._overTaskContainer;
 				},
 				drawEarlyLateLimits: function(task, project){
 					var earlyLateLimitsContainer = new createjs.Container();

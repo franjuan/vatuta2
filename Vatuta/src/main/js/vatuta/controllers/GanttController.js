@@ -111,7 +111,8 @@ define(
 																											1500));
 																			});
 														});
-											}
+											},
+											onRollOverTask: function (event, task) {}
 										};
 
 										function taskChanged(newP, oldP, $scope) {
