@@ -2,13 +2,15 @@
  * @module Canvas
  */
 define(
-		[ 'dojo/_base/declare', 'dojo/_base/lang', 'easeljs', 'lodash', 'moment', "vatuta/shared/Restriction", "vatuta/shared/Task", "vatuta/shared/SummaryTask" ],
-		function(declare, lang, easeljs, _, moment, Restrictions, Task, SummaryTask) {
+		[ 'dojo/_base/declare', 'dojo/_base/lang', 'dojox/image', 'easeljs', 'lodash', 'moment', "vatuta/shared/Restriction", "vatuta/shared/Task", "vatuta/shared/SummaryTask" ],
+		function(declare, lang, dojoImage, easeljs, _, moment, Restrictions, Task, SummaryTask) {
 			return declare(null, {
 				/**
 				 * @constructs CanvasDrawer
 				 */
 				constructor : function(element, /* Object */kwArgs) {
+					dojox.image.preload(["/icons/ic_add_circle_outline_black_48px.svg"]);
+					
 					/* @member {Number} */
 					this._dayWidth = this._width/60;
 					/* @member {Number} */
@@ -322,7 +324,8 @@ define(
 		                bitmap.x = this.getXbyMoment(task.actualStart());
 		                bitmap.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeightOffset;
 		                var circle = new createjs.Shape();
-		            	circle.graphics.beginFill(this._earlyLateLimitsColor).drawCircle(bitmap.x, bitmap.y, 30);
+		                var r = bitmap.width / 2;
+		            	circle.graphics.beginFill(this._earlyLateLimitsColor).drawCircle(bitmap.x + r/2, bitmap.y + r/2, r);
 		                this._overTaskContainer.addChild(circle, bitmap);
 		                this._stage.update();
 		            }
