@@ -26,7 +26,7 @@ define(["vatuta/shared/Canvas", "vatuta/vatutaApp"], function(Canvas) {
 		            };
 		            var onTaskSelection = function(event, task) {
 		                console.log('selected Task');
-		                $scope.canvas.drawSelectedTask(task, $scope.project, $window);
+		                $scope.canvas.drawClickedTask(task, $scope.project, $window);
 		            };
 		            $scope.$on('addTask', onTaskChange);
 		            $scope.$on('deleteTask', onTaskChange);

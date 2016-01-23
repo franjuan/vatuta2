@@ -9,7 +9,13 @@ define(
 				 * @constructs CanvasDrawer
 				 */
 				constructor : function(element, /* Object */kwArgs) {
-					dojox.image.preload(["/icons/ic_add_circle_outline_black_48px.svg"]);
+					dojox.image.preload(["/icons/ic_add_circle_outline_black_48px.svg",
+					                     "/icons/ic_info_outline_black_48px.svg",
+					                     "/icons/ic_keyboard_arrow_up_black_48px.svg",
+					                     "/icons/ic_keyboard_arrow_down_black_48px.svg",
+					                     "icons/ic_delete_black_48px.svg",
+					                     "/icons/ic_control_point_duplicate_black_48px.svg"
+					                     ]);
 					
 					/* @member {Number} */
 					this._dayWidth = this._width/60;
@@ -47,6 +53,8 @@ define(
 					this._sideMargins = this._arrowWidth  + this._arrowCornerR;
 					/* @member {String} */
 					this._earlyLateLimitsColor = "#607D8B";
+					/* @member {String} */
+					this._rulerColor = "#C5CAE9";
 					/* @member {Number} */
 					this._rulerHeightOffset = 0; //Height offset if ruler is drawn in the same canvas than gantt
 					
@@ -54,16 +62,6 @@ define(
 					
 					/* @member {Number} */
 					this._parent = angular.element(element)[0];
-					
-//					parent.addEventListener("click", 
-//							_.bind(
-//									function(event) {
-//										if (this._listener && event.target.localName != 'canvas') {
-//											this._listener.onClickOnTaskContainer(event);
-//										};
-//									}, this),
-//									false
-//						);
 					
 					this._width = this._parent.offsetWidth;
 					/* @member {Number} */
@@ -78,10 +76,10 @@ define(
 					this._canvas = angular.element("#ganttCanvas")[0];
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;
-					
-				    /* @member {Object} */
+
 					this._stage = new createjs.Stage(this._canvas);
 					this._stage.enableMouseOver(20);
+					
 					this._rulerStage = new createjs.Stage(this._rulerCanvas);
 					
 					this._listener = null;
@@ -91,6 +89,8 @@ define(
 						  $('vatuta-gantt #ganttRuler').css('left',-$('#content > md-content').scrollLeft());
 					});
 					
+					this._overTaskContainer = new createjs.Container();
+					this._selectedTaskContainer = new createjs.Container();
 				},
 				listener: function(newListener) {
 					return arguments.length ? (this._listener = newListener) : this._listener;
@@ -98,7 +98,7 @@ define(
 				drawRulerRange: function(ruler, start, end, level, rulerLevel) {
 					var currentLocaleData = moment.localeData();
 					var element = new createjs.Shape();
-					element.graphics.beginStroke("White").beginFill("#C5CAE9").drawRoundRect(this.getXbyMoment(start), level*this._rulerHeight/3, this.getXbyMoment(end) - this.getXbyMoment(start), this._rulerHeight/3, 5);
+					element.graphics.beginStroke("White").beginFill(this._rulerColor).drawRoundRect(this.getXbyMoment(start), level*this._rulerHeight/3, this.getXbyMoment(end) - this.getXbyMoment(start), this._rulerHeight/3, 5);
 					
 					var text = new createjs.Text(start.format(rulerLevel.format), "bold " + this._dayFontSize + "px " + this._dayFont);
 					text.color = "White";
@@ -181,9 +181,11 @@ define(
 						this._stage.addChildAt(taskContainer); // Tasks firstlevel
 					}, this);
 					
-					if (selectedTask) {
-						this.drawSelectedTask(selectedTask, project);
-					}
+//					if (selectedTask) {
+//						this.drawSelectedTask(selectedTask, project);
+//					}
+					
+					this._stage.addChild(this._overTaskContainer, this._selectedTaskContainer);
 					
 					this._stage.update();
 				},
@@ -226,6 +228,7 @@ define(
 					taskShape.on("click", 
 						_.bind(
 								function(event) {
+									this.drawClickedTask(task, project);
 									if (this._listener) {
 										this._listener.onClickOnTask(event, task);
 									};
@@ -235,9 +238,6 @@ define(
 					);
 					taskShape.on("rollover", 
 									function(event) {
-										if (this._listener) {
-											this._listener.onRollOverTask(event, task);
-										};
 										this.drawOverTask(task, project);
 										event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true)
 									}, this, false, null, false
@@ -251,10 +251,12 @@ define(
 					element.on("click", 
 							_.bind(
 									function(event) {
+										this._selectedTaskContainer.removeAllChildren();
 										if (this._listener) {
 											this._listener.onClickOnTaskContainer(event, task);
 										};
 										event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true)
+										this._stage.update();
 									}, this),
 									false
 						);
@@ -284,63 +286,143 @@ define(
 					
 					return taskContainer;
 				},
-				drawSelectedTask: function(task, project, $window){
-					if (this._selectedTaskContainer) {
-						this._selectedTaskContainer.removeAllChildren();
-					} else {
-						this._selectedTaskContainer = new createjs.Container();
-						this._stage.addChild(this._selectedTaskContainer);
-					}
+				drawClickedTask: function(task, project){
+					this._selectedTaskContainer.removeAllChildren();
 					
-					if (task) {
-						var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
-						
-						this._selectedTaskContainer.addChild(earlyLateLimitsContainer);
-					}
+					var scale = 0.40;
 					
-					this._stage.update();
+					this.drawTaskOperation(
+							"moveUpTask",
+							"/icons/ic_keyboard_arrow_up_black_48px.svg",
+							this._rulerColor,
+							scale - 0.10,
+							task,
+							"center",
+							"top");
+					
+					this.drawTaskOperation(
+							"moveUpTask",
+							"/icons/ic_keyboard_arrow_down_black_48px.svg",
+							this._rulerColor,
+							scale - 0.10,
+							task,
+							"center",
+							"bottom");
+					
+					this.drawTaskOperation(
+							"showTaskInfo",
+							"/icons/ic_info_outline_black_48px.svg",
+							this._rulerColor,
+							scale + 0.10,
+							task,
+							"center",
+							"center");
+					
+					this.drawTaskOperation(
+							"deleteTask",
+							"icons/ic_delete_black_48px.svg",
+							"#FF5252",
+							scale,
+							task,
+							"right",
+							"top");
+					
+					this.drawTaskOperation(
+							"addChild",
+							"/icons/ic_control_point_duplicate_black_48px.svg",
+							this._rulerColor,
+							scale,
+							task,
+							"right",
+							"bottom");
+					
+					this.drawTaskOperation(
+							"addSiblingBefore",
+							"/icons/ic_add_circle_outline_black_48px.svg",
+							this._rulerColor,
+							scale,
+							task,
+							"left",
+							"top");
+					
+					this.drawTaskOperation(
+							"addSiblingAfter",
+							"/icons/ic_add_circle_outline_black_48px.svg",
+							this._rulerColor,
+							scale,
+							task,
+							"left",
+							"bottom");
 					
 					return this._selectedTaskContainer;
 				},
-				drawOverTask: function(task, project, $window){
-					if (this._overTaskContainer) {
-						this._overTaskContainer.removeAllChildren();
-					} else {
-						this._overTaskContainer = new createjs.Container();
-						this._stage.addChild(this._overTaskContainer);
-					}
-
-					console.log("in");
-					
+				drawTaskOperation: function(operation, icon, color, scale, task, horizontal, vertical) {
 					var image = new Image();
-		            image.src = "/icons/ic_add_circle_outline_black_48px.svg";
+		            image.src = icon;
 		            image.onload = _.bind(handleImageLoad,this);
 					
 		            function handleImageLoad(event) {
 		                var image = event.target;
 		                var bitmap = new createjs.Bitmap(image);
-		                bitmap.scaleX=0.5;
-		                bitmap.scaleY=0.5;
-		                bitmap.x = this.getXbyMoment(task.actualStart());
-		                bitmap.y = this._taskRowHeight * (task.index() - 1) + this._rulerHeightOffset;
+		                bitmap.scaleX = scale;
+		                bitmap.scaleY = scale;
+		                var r = bitmap.getBounds().width * scale / 2;
+		                var x = 0;
+		                if (horizontal == "left") {
+		                	x = Math.min(this.getXbyMoment(task.actualStart()), (this.getXbyMoment(task.actualEnd()) + this.getXbyMoment(task.actualStart()))/2 - 3*r);
+		                } else if (horizontal == "right") {
+		                	x = Math.max(this.getXbyMoment(task.actualEnd()) - 2*r, (this.getXbyMoment(task.actualEnd()) + this.getXbyMoment(task.actualStart()))/2 + r);
+		                } else {
+		                	x = (this.getXbyMoment(task.actualEnd()) + this.getXbyMoment(task.actualStart()))/2 - r; 
+		                }
+		                bitmap.x = x;
+		                var y = 0;
+		                if (vertical == "top") {
+		                	y = this._taskRowHeight * (task.index() - 1) + this._rulerHeightOffset + this._taskTopHeight - 2*r;
+		                } else if (vertical == "bottom") {
+		                	y = this._taskRowHeight * (task.index()) + this._rulerHeightOffset - this._taskBottomHeight;
+		                } else {
+		                	y = this._taskRowHeight * (task.index() - 1) + this._rulerHeightOffset + this._taskTopHeight + (this._taskHeight - 2*r)/2;
+		                }
+		                bitmap.y = y;
 		                var circle = new createjs.Shape();
-		                var r = bitmap.width / 2;
-		            	circle.graphics.beginFill(this._earlyLateLimitsColor).drawCircle(bitmap.x + r/2, bitmap.y + r/2, r);
-		                this._overTaskContainer.addChild(circle, bitmap);
+		            	circle.graphics.beginFill(color).drawCircle(x + r, y + r, r);
+		            	circle.shadow = new createjs.Shadow("#000000", 1, 1, 5);
+		                this._selectedTaskContainer.addChild(circle, bitmap);
+		                
+		                circle.on("click", 
+								_.bind(
+										function(event) {
+											if (this._listener) {
+												this._listener.onClickTaskOperation(event, task, operation);
+											};
+											event.stopPropagation ? event.stopPropagation() : (event.cancelBubble=true)
+											this._selectedTaskContainer.removeAllChildren();
+											this._stage.update();
+										}, this),
+										false
+							);
+		                
 		                this._stage.update();
 		            }
-		            
+				},
+				drawOverTask: function(task, project){
+					this._overTaskContainer.removeAllChildren();
+
+					console.log("in");
+					
+					if (task) {
+						var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
+						
+						this._overTaskContainer.addChild(earlyLateLimitsContainer);
+					}
+					
 					this._stage.update();
 					
 					return this._overTaskContainer;
 				},
-				drawOutTask: function(task, project, $window){
-					if (this._overTaskContainer) {
-						this._overTaskContainer.removeAllChildren();
-					} else {
-						this._overTaskContainer = new createjs.Container();
-						this._stage.addChild(this._overTaskContainer);
-					}
+				drawOutTask: function(task, project){
+					this._overTaskContainer.removeAllChildren();
 					
 					console.log("out");
 					
@@ -688,10 +770,8 @@ define(
 				clear: function() {
 					this._stage.clear();
 					this._stage.removeAllChildren();
-					if (this._selectedTaskContainer) {
-						this._selectedTaskContainer.removeAllChildren();
-						delete this._selectedTaskContainer;
-					}
+					this._selectedTaskContainer.removeAllChildren();
+					this._overTaskContainer.removeAllChildren();
 					this._stage.update();
 				},
 				daysFromProjectStart: function(moment, project) {

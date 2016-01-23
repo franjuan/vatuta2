@@ -50,6 +50,7 @@ define(
 											_arrowColor : "#CFD8DC",
 											_taskBgColor : "#607D8B",
 											_taskNameColor : "White",
+											_rulerColor : "#C5CAE9",
 											_arrowCornerR : 6,
 											_connectorRatio : 5 / 3,
 											_sideMargins : 20,
@@ -75,44 +76,49 @@ define(
 												$scope
 														.$apply(function() {
 															$scope.selectedTask = task;
-															$scope
-																	.toggleSidenav('left');
+															//$scope.toggleSidenav('left');
 														});
 											},
 											onClickOnTaskContainer : function(
 													event, task) {
-												$scope
-														.$apply(function() {
-															$scope.selectedTask = task;
-															$mdBottomSheet
-																	.show(
-																			{
-																				templateUrl : 'vatuta/templates/BottomSheetMenu.html',
-																				controller : 'BottomSheetMenuController',
-																				clickOutsideToClose : true,
-																				escapeToClose : true,
-																				scope : $scope
-																						.$new(
-																								false,
-																								$scope)
-																			})
-																	.then(
-																			function(
-																					promise) {
-																				if (promise.show)
-																					$mdToast
-																							.show($mdToast
-																									.simple()
-																									.content(
-																											promise.message)
-																									.position(
-																											'top right')
-																									.hideDelay(
-																											1500));
-																			});
-														});
+//												$scope
+//														.$apply(function() {
+//															$scope.selectedTask = task;
+//															$mdBottomSheet
+//																	.show(
+//																			{
+//																				templateUrl : 'vatuta/templates/BottomSheetMenu.html',
+//																				controller : 'BottomSheetMenuController',
+//																				clickOutsideToClose : true,
+//																				escapeToClose : true,
+//																				scope : $scope
+//																						.$new(
+//																								false,
+//																								$scope)
+//																			})
+//																	.then(
+//																			function(
+//																					promise) {
+//																				if (promise.show)
+//																					$mdToast
+//																							.show($mdToast
+//																									.simple()
+//																									.content(
+//																											promise.message)
+//																									.position(
+//																											'top right')
+//																									.hideDelay(
+//																											1500));
+//																			});
+//														});
 											},
-											onRollOverTask: function (event, task) {}
+											onClickTaskOperation: function (event, task, operation) {
+												switch (operation) {
+													case "showTaskInfo":
+														$scope.toggleSidenav('left');
+														break;
+												}
+											}
 										};
 
 										function taskChanged(newP, oldP, $scope) {
