@@ -59,11 +59,15 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Task", "lodash"
 					}, this);
 				},
 				removeTask: function(task) {
+					task.remove();
 					// Remove task from project
 					_.remove(this.tasks(), "_id", task.id());
 					// Remove index
 					delete this._tasksIndex()[task.id()];
-					if (task.children()) {
+					if (!task.parent().isInstanceOf(Project)){
+						task.parent().removeTask(task);
+					}
+					if (task.children) {
 						_.forEach(task.children(), function(child) {
 							this.removeTask(child);
 						}, this);
@@ -76,7 +80,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Task", "lodash"
 					 var index = _.findIndex(this.tasks(), "_id", task.id());
 					 this.tasks()[index] = task;
 					 this._tasksIndex()[task.id()] = task;
-					 task.parent().replaceTask(task);
+					 if (!task.parent().isInstanceOf(Project)) {
+						 task.parent().replaceTask(task);
+					 }
 					 this.setViewIndexes();
 					 return task;
 				},

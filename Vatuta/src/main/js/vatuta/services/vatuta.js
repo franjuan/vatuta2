@@ -1,5 +1,5 @@
 define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask", "vatuta/shared/SummaryTask", "vatuta/shared/Engine",
-		"vatuta/shared/Restriction", "vatuta/shared/Tactics", "vatuta/shared/Canvas", "moment", "vatuta/shared/Duration", "vatuta/vatutaMod" ], function(Project,
+		"vatuta/shared/Restriction", "vatuta/shared/Tactics", "vatuta/shared/Canvas", "moment", "vatuta/shared/Duration", "vatuta/vatutaMod"  ], function(Project,
 		Task, BaseTask, SummaryTask, Engine, Restrictions, Tactics, Canvas, moment, Duration) {
 
 	angular.module('vatuta').service('Project', [ function() {
@@ -26,7 +26,7 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 		return Restrictions;
 	} ]);
 	
-	angular.module('vatuta').factory('ProjectHandler', [ function() {
+	angular.module('vatuta').factory('ProjectHandler', ["$q", function($q) {
 		return {
 			addTask: function(project, task, parent) {
 				var newTask;
@@ -57,8 +57,42 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				var keys = _.filter(_.keysIn(task), function(key){return key.startsWith("_") && !key.endsWith("inherited")});
 				var properties = _.pick(task, keys);
 				var newTask = new SummaryTask(properties);
-				project.replaceTask(newTask);
 				return newTask;
+			},
+			convertSummaryToTask: function(project, task) {
+				var keys = _.filter(_.keysIn(task), function(key){return key.startsWith("_") && !key.endsWith("inherited")});
+				var properties = _.pick(task, keys);
+				if (!properties._duration) {
+					properties._duration = new Duration({days : 1});
+				}
+				var newTask = new Task(properties);
+				return newTask;
+			},
+			deleteTask: function(project, task) {
+				var deferred = $q.defer();
+				
+				var name = task.name();
+				
+			    deferred.notify('About to delete ' + name + '.');
+			    
+			    try {
+			    	var parent = task.parent();
+			    	
+			    	project.removeTask(task);
+			    	
+			    	if (parent.isInstanceOf(SummaryTask) && parent.children().length == 0) {
+			    		var newTask = this.convertSummaryToTask(project, parent);
+			    		project.replaceTask(newTask);
+			    	}
+			    	
+			    	Engine.calculateEarlyStartLateEnding();
+			    	
+			    	deferred.resolve(task);
+			    } catch (err) {
+			    	deferred.reject(err);
+			    }
+
+			    return deferred.promise;
 			}
 		}
 	} ]);

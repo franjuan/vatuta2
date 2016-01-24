@@ -22,12 +22,13 @@ define(
 									'config',
 									'$animate',
 									'$project',
+									'VatutaHandler',
 									function($scope, $mdSidenav, Project, Task,
 											SummaryTask, Engine, Canvas,
 											Restrictions, $mdDialog,
 											$mdBottomSheet, $mdToast,
 											ProjectSerializer, $cookies,
-											$config, $animate, $project) {
+											$config, $animate, $project, VatutaHandler) {
 
 										$scope.toggleSidenav = function(menuId) {
 											$mdSidenav(menuId).toggle();
@@ -116,6 +117,21 @@ define(
 												switch (operation) {
 													case "showTaskInfo":
 														$scope.toggleSidenav('left');
+														break;
+													case "moveUpTask":
+														break;
+													case "moveDownTask":
+														break;
+													case "deleteTask":
+														VatutaHandler.deleteTask(task)
+													 	.then (function(){},
+													 			function(){});
+														break;
+													case "addChild":
+														break;
+													case "addSiblingBefore":
+														break;
+													case "addSiblingAfter":
 														break;
 												}
 											}

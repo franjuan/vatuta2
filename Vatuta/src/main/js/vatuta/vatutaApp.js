@@ -1,4 +1,4 @@
-define([ "vatuta/services/vatuta",
+define([ "vatuta/services",
          "lib/css!css/pikaday/pikaday.css",
          "lib/css!https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.0.7/ui-grid.min.css",
          "lib/css!https://fonts.googleapis.com/icon?family=Material+Icons",

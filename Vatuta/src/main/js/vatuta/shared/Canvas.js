@@ -301,7 +301,7 @@ define(
 							"top");
 					
 					this.drawTaskOperation(
-							"moveUpTask",
+							"moveDownTask",
 							"/icons/ic_keyboard_arrow_down_black_48px.svg",
 							this._rulerColor,
 							scale - 0.10,

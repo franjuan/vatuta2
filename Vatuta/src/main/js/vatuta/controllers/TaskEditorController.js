@@ -1,5 +1,5 @@
 define([ "vatuta/shared/Tactics", "vatuta/shared/Duration", "vatuta/shared/SummaryTask", "vatuta/vatutaApp"], function(Tactics, DurationUtils, SummaryTask) {	
-	angular.module('vatutaApp').controller('TaskEditorController', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav','Restrictions', 'Engine', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions, Engine) {
+	angular.module('vatutaApp').controller('TaskEditorController', ['$scope', '$mdDialog', '$mdToast', '$mdSidenav', 'Restrictions', 'Engine', 'ProjectHandler', 'VatutaHandler', function($scope,  $mdDialog, $mdToast, $mdSidenav, Restrictions, Engine, ProjectHandler, VatutaHandler, $q) {
 		//this.isNaN = isNaN; // To allow use isNaN in template expressions
 		
 		this.showDurationFields = function(task) {
@@ -92,29 +92,11 @@ define([ "vatuta/shared/Tactics", "vatuta/shared/Duration", "vatuta/shared/Summa
 		 };
 		 
 		 this.deleteTask  = function(task, event) {
-			 var name = task.name();
-			 var confirm = $mdDialog.confirm()
-	          .title('Would you like to delete task ' + name + '?')
-	          .content('Confirm you want to remove the task ' + task.index() + '.- ' + name)
-	          .ariaLabel('Remove ' + name)
-	          .targetEvent(event)
-	          .ok('Confirm removal')
-	          .cancel("Don't do it!");
-		    $mdDialog.show(confirm).then(function() {
-		    	$mdSidenav('left').toggle();
-		    	task.remove();
-		    	$scope.project.removeTask(task);
-		    	$scope.$root.$broadcast('deleteTask', task);
-		    	$mdToast.show(
-		                $mdToast.simple()
-		                  .content("Task " + name + " has been removed")
-		                  .position('top right')
-		                  .hideDelay(1500)
-		              );
-		    	ga('send', 'event', 'gantt', 'delete', 'task');
-		    }, function() {
-		        console.log('Removal of task ' + name + ' cancelled');
-		    });
+			 VatutaHandler.deleteTask(task)
+			 	.then (function(){
+			 				$mdSidenav('left').toggle();
+			 			},
+			 			function(){});
 		 }
 		 
 		 this.tactics = Tactics.getTactics();

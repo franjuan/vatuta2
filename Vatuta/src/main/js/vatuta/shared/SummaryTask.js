@@ -49,6 +49,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			task.parent(this);
 			return task;
 		},
+		removeTask: function(task) {
+			// Remove task from project
+			_.remove(this.children(), "_id", task.id());
+			return task;
+		},
 		replaceTask: function(task) {
 			 // Find element in project
 			 var index = _.findIndex(this.children(), "_id", task.id());
