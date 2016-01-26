@@ -138,6 +138,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		lateEnd: function(newLateEnd) {
 			return arguments.length ? this._lateEnd = newLateEnd : this._lateEnd;
 		},
+		manualStart: function(newManualStart) {
+			return arguments.length ? this._manualStart = newManualStart : this._manualStart;
+		},
+		manualEnd: function(newManualEnd) {
+			return arguments.length ? this._manualEnd = newLateEnd : this._manualEnd;
+		},
 		actualStart: function(newActualStart) {
 			return arguments.length ? this._actualStart = newActualStart : this._actualStart;
 		},

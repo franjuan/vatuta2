@@ -29,29 +29,40 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 	angular.module('vatuta').factory('ProjectHandler', ["$q", function($q) {
 		return {
 			addTask: function(project, task, parent) {
-				var newTask;
-				if (task) {
-					if (task.isInstanceOf(BaseTask)) {
-						newTask = task;
+				var deferred = $q.defer();
+				
+			    deferred.notify('About to create new task.');
+			    
+			    try {
+					var newTask;
+					if (task) {
+						if (task.isInstanceOf(BaseTask)) {
+							newTask = task;
+						} else {
+							newTask = new Task(task);
+						}
 					} else {
-						newTask = new Task(task);
+						newTask = new Task({_name: "New", _duration: new Duration({days: 1})});
 					}
-				} else {
-					newTask = new Task({_name: "New", _duration: new Duration({days: 1})});
-				}
-				if (!parent) {
-					project.addTask(newTask);
-				} else {
-					if (parent.isInstanceOf(SummaryTask)) {
-						project.addTask(newTask, parent);
+					if (!parent) {
+						project.addTask(newTask);
 					} else {
-						var newParent = this.convertTaskToSummary(project, parent);
-						
-						project.addTask(newTask, newParent);
+						if (parent.isInstanceOf(SummaryTask)) {
+							project.addTask(newTask, parent);
+						} else {
+							var newParent = this.convertTaskToSummary(project, parent);
+							project.replaceTask(newParent);
+							project.addTask(newTask, newParent);
+						}
 					}
-				}
-				Engine.calculateEarlyStartLateEnding();
-				return newTask;
+					Engine.calculateEarlyStartLateEnding();
+					
+					deferred.resolve(newTask);
+			    } catch (err) {
+			    	deferred.reject(err);
+			    }
+
+			    return deferred.promise;
 			},
 			convertTaskToSummary: function(project, task) {
 				var keys = _.filter(_.keysIn(task), function(key){return key.startsWith("_") && !key.endsWith("inherited")});
@@ -175,8 +186,8 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				days : 4
 			}),
 			_tactic: Tactics.MANUAL.name(),
-			_actualStart: moment().add(2, 'days'),
-			_actualEnd: moment().add(6, 'days')
+			_manualStart: moment().add(2, 'days'),
+			_manualEnd: moment().add(6, 'days')
 		});
 		project.addTask(base);
 
@@ -199,8 +210,8 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 				days : 4
 			}),
 			_tactic: Tactics.MANUAL.name(),
-			_actualStart: moment().add(8, 'days'),
-			_actualEnd: moment().add(12, 'days')
+			_manualStart: moment().add(8, 'days'),
+			_manualEnd: moment().add(12, 'days')
 		});
 		project.addTask(taskB, summary);
 

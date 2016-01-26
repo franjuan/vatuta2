@@ -44,8 +44,8 @@ require(["vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 					days : 4
 				}),
 				_tactic: Tactics.MANUAL.name(),
-				_actualStart: Moment().add(10, 'days'),
-				_actualEnd: Moment().add(14, 'days')
+				_manualStart: Moment().add(10, 'days'),
+				_manualEnd: Moment().add(14, 'days')
 			});
 			project.addTask(taskB, summary);
 

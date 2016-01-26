@@ -46,8 +46,39 @@ define([ "vatuta/vatutaApp"  ], function() {
 			    });
 			    
 			    return deferred.promise;
+			},
+			addChildTask: function(parent) {
+				var deferred = $q.defer();
+				
+				ProjectHandler.addTask($project, null, parent)
+				.then (
+						function(newTask){
+							$mdToast.show(
+					                $mdToast.simple()
+					                  .content("New task added as " + parent.name() + "'s child")
+					                  .position('top right')
+					                  .hideDelay(1500)
+					              );
+							$rootScope.$broadcast('addTask', newTask);
+							ga('send', 'event', 'gantt', 'create', 'task');
+							
+							deferred.resolve(newTask);
+						},
+						function(err){
+							$mdToast.show(
+					                $mdToast.simple()
+					                  .content("Error creating new task.")
+					                  .position('top right')
+					                  .hideDelay(5000)
+					              );
+				    		console.log("Error creating new task: " + err.message);
+				    		deferred.reject(err);
+						});
+				
+				return deferred.promise;
 			}
 		}
+		
 	} ]);
 	
 });

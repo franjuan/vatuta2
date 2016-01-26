@@ -13,6 +13,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultEarlyStart: function() {
 			if (this.earlyStart()) {
 				return this.earlyStart();
+			} else if (this.manualStart()) {
+				return this.manualStart();
 			} else if (this.earlyEnd()) {
 				return this.duration().subtractFrom(this.earlyEnd());
 			}  else {
@@ -23,6 +25,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultEarlyEnd: function() {
 			if (this.earlyEnd()) {
 				return this.earlyEnd();
+			} else if (this.manualEnd()){
+				return this.manualEnd();
 			} else if (this.earlyStart()) {
 				return this.duration().addTo(this.earlyStart());
 //			} else if (this.parent().earlyEnd()) {
@@ -34,6 +38,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultLateStart: function() {
 			if (this.lateStart()) {
 				return this.lateStart();
+			} else if (this.manualStart()) {
+				return this.manualStart();
 			} else if (this.lateEnd()) {
 				return this.duration().subtractFrom(this.lateEnd());
 //			} else if (this.parent().earlyEnd()) {
@@ -45,6 +51,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultLateEnd: function() {
 			if (this.lateEnd()) {
 				return this.lateEnd();
+			} else if (this.manualEnd()) {
+				return this.manualEnd();
 			} else if (this.lateStart()) {
 				return this.duration().addTo(this.lateStart());
 			} else {

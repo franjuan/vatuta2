@@ -48,11 +48,8 @@ define(
 						delete task._earlyEnd;
 						delete task._lateStart;
 						delete task._lateEnd;
-						// TODO Hay que hacer esto un poco más elegante
-						if (!task.tactic().equals(Tactics.MANUAL)) {
-							delete task._actualStart;
-							delete task._actualEnd;
-						}
+						delete task._actualStart;
+						delete task._actualEnd;
 						delete task._$actualStartCalculated;
 						delete task._$actualEndCalculated;
 						delete task._$actualCalculated;
@@ -76,7 +73,7 @@ define(
 								earlyStart = task.earlyStart();
 							} else {
 								if (task.tactic().equals(Tactics.MANUAL)) {
-									earlyStart = task.actualStart();
+									earlyStart = task.manualStart();
 								} else {
 									earlyStart = task.getDefaultEarlyStart();
 									if (!isNaN(earlyStart)) {
@@ -110,7 +107,7 @@ define(
 								earlyEnd = task.earlyEnd()
 							} else {
 								if (task.tactic().equals(Tactics.MANUAL)) {
-									earlyEnd = task.actualEnd();
+									earlyEnd = task.manualEnd();
 								} else {
 									earlyEnd = task.getDefaultEarlyEnd();
 									if (!isNaN(earlyEnd)){
@@ -169,7 +166,7 @@ define(
 								lateEnd = task.lateEnd()
 							} else {
 								if (task.tactic().equals(Tactics.MANUAL)) {
-									lateEnd = task.actualEnd();
+									lateEnd = task.manualEnd();
 								} else {
 									lateEnd = task.getDefaultLateEnd();
 									if (!isNaN(lateEnd)) {
@@ -202,7 +199,7 @@ define(
 								lateStart = task.lateStart()
 							} else {
 								if (task.tactic().equals(Tactics.MANUAL)) {
-									lateStart = task.actualStart();
+									lateStart = task.manualStart();
 								} else {
 									lateStart = task.getDefaultLateStart();
 									if (!isNaN(lateStart)){
@@ -322,6 +319,9 @@ define(
 								}
 								alreadyCalculatedIndex++;
 							}
+							
+							console.log ("Task: " + task.name() + " on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for planned stage");
+							this.showState(this.currentProject(), tasks);
 						}
 						if (!unknownResolvedInIteration) {
 							this.showState(this.currentProject(), tasks);
@@ -344,7 +344,7 @@ define(
 					});
 				},
 				showState: function(project, tasks) {
-					console.log('                      EarlyStart EarlyEnd   LateStart  LateEnd');
+					console.log('                      EarlyStart EarlyEnd   LateStart  LateEnd    ActualStartActualEnd  ');
 					console.log(('Project             : ' + (project.earlyStart()?project.earlyStart().format('DD/MM/YYYY'):'          ') + ' '
 														 + (project.earlyEnd()?project.earlyEnd().format('DD/MM/YYYY'):'          ') + ' '
 														 + (project.lateStart()?project.lateStart().format('DD/MM/YYYY'):'          ') + ' '

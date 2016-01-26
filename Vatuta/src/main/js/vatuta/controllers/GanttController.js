@@ -124,10 +124,17 @@ define(
 														break;
 													case "deleteTask":
 														VatutaHandler.deleteTask(task)
-													 	.then (function(){},
-													 			function(){});
+													 	.then (function(task){},
+													 			function(err){});
 														break;
 													case "addChild":
+														VatutaHandler.addChildTask(task)
+															.then(
+																function(newTask){
+																	$scope.selectedTask = newTask;
+																	$scope.toggleSidenav('left');
+																},
+																function(err){});
 														break;
 													case "addSiblingBefore":
 														break;

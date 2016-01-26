@@ -1,5 +1,5 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/shared/Duration", "vatuta/shared/BaseTask" ], function(declare,
-		lang, _, moment, DurationUtils, BaseTask) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/shared/Duration", "vatuta/shared/BaseTask",  "vatuta/shared/Tactics" ], function(declare,
+		lang, _, moment, DurationUtils, BaseTask, Tactics) {
 	return declare("SummaryTask", BaseTask, {
 		constructor : function (/* Object */kwArgs) {
 			this._children = [];
@@ -28,6 +28,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			return _.reduce(this.children(), function(estimated, child) {
 				return estimated || child.isEstimated();
 			}, false, this);
+		},
+		tactic: function(newTactic) {
+			return Tactics.getTacticInstanceByName("ASAP"); 
 		},
 		remove: function() {
 			this.inherited(arguments);
@@ -81,6 +84,30 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				} else {
 					var earlyEnd = this.calculatedEarlyEnd();
 					return isNaN(earlyEnd)?undefined:earlyEnd;
+				}
+			}
+		},
+		lateStart: function(newLateStart) {
+			if (arguments.length) {
+				this._lateStart = newLateStart;
+			} else {
+				if (this._lateStart) {
+					return this._lateStart;
+				} else {
+					var lateStart = this.calculatedLateStart();
+					return isNaN(lateStart)?undefined:lateStart;
+				}
+			}
+		},
+		lateEnd: function(newLateEnd) {
+			if (arguments.length) {
+				this._lateEnd = newLateEnd;
+			} else {
+				if (this._lateEnd) {
+					return this._lateEnd;
+				} else {
+					var lateEnd = this.calculatedLateEnd();
+					return isNaN(lateEnd)?undefined:lateEnd;
 				}
 			}
 		},

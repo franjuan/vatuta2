@@ -408,8 +408,6 @@ define(
 				},
 				drawOverTask: function(task, project){
 					this._overTaskContainer.removeAllChildren();
-
-					console.log("in");
 					
 					if (task) {
 						var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
@@ -423,8 +421,6 @@ define(
 				},
 				drawOutTask: function(task, project){
 					this._overTaskContainer.removeAllChildren();
-					
-					console.log("out");
 					
 					this._stage.update();
 					

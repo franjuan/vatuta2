@@ -86,10 +86,10 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash"], function(declare, l
 			return "Start and end are manually set for task";
 		},
 		getPlannedStartInRange4Task: function(task, startRange) {
-			return task.actualStart();
+			return task.manualStart();
 		},
 		getPlannedEndInRange4Task: function(task, endRange) {
-			return task.actualEnd();
+			return task.manualEnd();
 		},
 		equals: function(other) {
 			if (other.isInstanceOf && other.isInstanceOf(this.constructor)) {

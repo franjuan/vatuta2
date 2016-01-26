@@ -109,7 +109,7 @@ define([ "vatuta/shared/Tactics", "vatuta/shared/Duration", "vatuta/shared/Summa
 			 }
 		 };
 		 
-		 this.actualStartChanged = function (task, event)  {
+		 this.manualStartChanged = function (task, event)  {
 			 if (task.tactic().equals(Tactics.MANUAL)) {
 				 if (task.isEstimated()) {
 					 task.duration(task.actualDuration());
@@ -119,7 +119,7 @@ define([ "vatuta/shared/Tactics", "vatuta/shared/Duration", "vatuta/shared/Summa
 			 }
 		 };
 		 
-		 this.actualEndChanged = function (task, event)  {
+		 this.manualEndChanged = function (task, event)  {
 			 if (task.tactic().equals(Tactics.MANUAL)) {
 				 if (task.isEstimated()) {
 					 task.duration(task.actualDuration());
@@ -127,6 +127,10 @@ define([ "vatuta/shared/Tactics", "vatuta/shared/Duration", "vatuta/shared/Summa
 					 task.actualStart(task.duration().subtractFrom(task.actualEnd()));
 				 }
 			 }
+		 }
+		 
+		 this.isInstanceOfTask = function(task) {
+			 return task && task.isInstanceOf(Task);
 		 }
 		 
 //		 this.durationString= function(newDuration) {

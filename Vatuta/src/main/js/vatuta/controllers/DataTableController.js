@@ -80,13 +80,13 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "moment", "vatuta/v
 											    	enableSorting: true, sortingAlgorithm: this.momentSort,
 											    	cellEditableCondition: function ($scope) {
 											    		return $scope.row.entity.tactic().name()=="Manual";
-											    	}, enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/MomentEditCell.html', editModelField: 'actualStart',
+											    	}, enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/MomentEditCell.html', editModelField: 'manualStart',
 											    	width: '*' },
 										    	{ displayName: 'Actual End', field: 'actualEnd()', cellFilter: 'moment: "DD-MM-YYYY"', type: "date",
 											    	enableSorting: true, sortingAlgorithm: this.momentSort,
 											    	cellEditableCondition: function ($scope) {
 											    		return $scope.row.entity.tactic().name()=="Manual";
-											    	}, enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/MomentEditCell.html', editModelField: 'actualEnd',
+											    	}, enableCellEdit: true, editableCellTemplate: 'vatuta/templates/ui-grid/MomentEditCell.html', editModelField: 'manualEnd',
 											    	width: '*' },
 											    { displayName: 'Actual Duration', field: 'actualDuration()', cellFilter: 'duration: false: "-"', enableCellEdit: false,
 											    	sortingAlgorithm: this.durationSort, enableSorting: true, width: '*' }

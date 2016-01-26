@@ -29,7 +29,7 @@
               Estimated<md-tooltip md-direction="bottom">If estimated the duration will not be considered the main and first restriction, but an estimation that will change in accordance with other restrictions</md-tooltip>
             </md-checkbox>
             </div>
-            <md-input-container>
+            <md-input-container ng-hide="!ctrl.isInstanceOfTask(selectedTask)" >
 		        <label>Planning Tactic</label>
 		        <md-select ng-model="selectedTask.tactic" ng-model-options="{ getterSetter: true }" tactic>
 		          <md-option ng-repeat="tactic in ctrl.tactics" value="{{tactic.name}}">
@@ -37,9 +37,9 @@
 		          </md-option>
 		        </md-select>
 		    </md-input-container>
-	        <md-datepicker ng-model="selectedTask.actualStart" ng-model-options="{ getterSetter: true }" ng-change="ctrl.actualStartChanged(selectedTask, $event)"
+	        <md-datepicker ng-model="selectedTask.manualStart" ng-model-options="{ getterSetter: true }" ng-change="ctrl.manualStartChanged(selectedTask, $event)"
 	        				md-placeholder="Enter date" moment ng-hide="selectedTask.tactic().name() != 'Manual'" required moment-date></md-datepicker>
-			<md-datepicker ng-model="selectedTask.actualEnd" ng-model-options="{ getterSetter: true }" ng-change="ctrl.actualEndChanged(selectedTask, $event)"
+			<md-datepicker ng-model="selectedTask.manualEnd" ng-model-options="{ getterSetter: true }" ng-change="ctrl.manualEndChanged(selectedTask, $event)"
 							md-placeholder="Enter date" moment ng-hide="selectedTask.tactic().name() != 'Manual'" required moment-date></md-datepicker>
 		</form>
 	</section>
