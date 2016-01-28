@@ -22,6 +22,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Task", "lodash"
 				tasks : function() {
 					return this._tasks;
 				},
+				children : function() {
+					return this._tasks;
+				},
 				_tasksIndex: function() {
 					if (!this._$taskIndex) {
 						this._$taskIndex = {};
@@ -36,13 +39,16 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Task", "lodash"
 				 * @function
 				 * @memberof Project
 				 */
-				addTask : function(task, parent) {
+				addTask : function(task, parent, index) {
+					var i = 0;
 					if (!parent)	{
 						task.parent(this);
+						i = !isNaN(index) ? (index - 1) : (task.parent().tasks().length);
 					} else {
-						parent.addTask(task);
+						parent.addTask(task, index - parent.index() - 1);
+						i = !isNaN(index) ? (index - 1) : (task.parent().index() + task.parent().children().length - 1);
 					}
-					this.tasks().push(task);
+					this.tasks().splice(i, 0, task);
 					this._tasksIndex()[task.id()] = task;
 					this.setViewIndexes();
 					return task;

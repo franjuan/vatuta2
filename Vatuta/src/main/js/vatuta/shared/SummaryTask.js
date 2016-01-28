@@ -47,8 +47,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		 * @function
 		 * @memberof Project
 		 */
-		addTask : function(task) {
-			this.children().push(task);
+		addTask : function(task, index) {
+			var i = !isNaN(index) ? index : this.children().length;
+			this.children().splice(i, 0, task);
 			task.parent(this);
 			return task;
 		},

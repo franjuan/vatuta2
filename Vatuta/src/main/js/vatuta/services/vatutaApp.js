@@ -76,6 +76,48 @@ define([ "vatuta/vatutaApp"  ], function() {
 						});
 				
 				return deferred.promise;
+			},
+			addSiblingTaskAt: function(task, index) {
+				var deferred = $q.defer();
+				
+				ProjectHandler.addTask($project, null, task.parent(), index)
+				.then (
+						function(newTask){
+							$mdToast.show(
+					                $mdToast.simple()
+					                  .content("New task added as " + task.parent().name() + "'s child")
+					                  .position('top right')
+					                  .hideDelay(1500)
+					              );
+							$rootScope.$broadcast('addTask', newTask);
+							ga('send', 'event', 'gantt', 'create', 'task');
+							
+							deferred.resolve(newTask);
+						},
+						function(err){
+							$mdToast.show(
+					                $mdToast.simple()
+					                  .content("Error creating new task.")
+					                  .position('top right')
+					                  .hideDelay(5000)
+					              );
+				    		console.log("Error creating new task: " + err.message);
+				    		deferred.reject(err);
+						});
+				
+				return deferred.promise;
+			},
+			addSiblingTaskBefore: function(task) {
+				return this.addSiblingTaskAt(task, task.index());
+			},
+			addSiblingTaskAfter: function(task) {
+				var index = 0;
+				if (task.isInstanceOf(SummaryTask)) {
+					index = task.maxIndex() + 1;
+				} else {
+					index = task.index() + 1;
+				}
+				return this.addSiblingTaskAt(task, index);
 			}
 		}
 		

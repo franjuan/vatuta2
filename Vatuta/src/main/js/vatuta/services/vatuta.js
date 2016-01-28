@@ -28,7 +28,7 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 	
 	angular.module('vatuta').factory('ProjectHandler', ["$q", function($q) {
 		return {
-			addTask: function(project, task, parent) {
+			addTask: function(project, task, parent, index) {
 				var deferred = $q.defer();
 				
 			    deferred.notify('About to create new task.');
@@ -44,15 +44,15 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 					} else {
 						newTask = new Task({_name: "New", _duration: new Duration({days: 1})});
 					}
-					if (!parent) {
-						project.addTask(newTask);
+					if (!parent || parent.isInstanceOf(Project)) {
+						project.addTask(newTask, null, !isNaN(index) ? index : project.tasks().length);
 					} else {
 						if (parent.isInstanceOf(SummaryTask)) {
-							project.addTask(newTask, parent);
+							project.addTask(newTask, parent, !isNaN(index) ? index : (parent.children().length + parent.index()));
 						} else {
 							var newParent = this.convertTaskToSummary(project, parent);
 							project.replaceTask(newParent);
-							project.addTask(newTask, newParent);
+							project.addTask(newTask, newParent, !isNaN(index) ? index : (newParent.children().length + newParent.index()));
 						}
 					}
 					Engine.calculateEarlyStartLateEnding();
