@@ -1,5 +1,5 @@
-define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/shared/Duration", "vatuta/shared/BaseTask" ], function(declare,
-		lang, _, moment, DurationUtils, BaseTask) {
+define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/shared/Duration", "vatuta/shared/BaseTask", "vatuta/shared/Tactics" ], function(declare,
+		lang, _, moment, DurationUtils, BaseTask, Tactics) {
 	return declare("Task", BaseTask, {
 		constructor : function (/* Object */kwArgs) {
 			this.inherited(arguments);
@@ -13,7 +13,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultEarlyStart: function() {
 			if (this.earlyStart()) {
 				return this.earlyStart();
-			} else if (this.manualStart() && task.tactic().equals(Tactics.MANUAL)) {
+			} else if (this.tactic().equals(Tactics.MANUAL)) {
 				return this.manualStart();
 			} else if (this.earlyEnd()) {
 				return this.duration().subtractFrom(this.earlyEnd());
@@ -24,12 +24,10 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultEarlyEnd: function() {
 			if (this.earlyEnd()) {
 				return this.earlyEnd();
-			} else if (this.manualEnd()){
+			} else if (this.tactic().equals(Tactics.MANUAL)){
 				return this.manualEnd();
 			} else if (this.earlyStart()) {
 				return this.duration().addTo(this.earlyStart());
-//			} else if (this.parent().earlyEnd()) {
-//				return this.parent().earlyEnd();
 			} else {
 				return Infinity;
 			}
@@ -59,26 +57,26 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				return parent?parent:Infinity;
 			}
 		},
-		getRestrictionsForScheduling: function() {
-			return this.getRestrictionsFor([this.restrictions(), this.restrictionsFromDependants()]);
+		getRestrictionsForScheduling: function(constraints) {
+			return this.getRestrictionsFor([this.restrictions(), this.restrictionsFromDependants()], constraints);
 		},
-		getRestrictionsFor: function(restrictions, constraints) {
+		getRestrictionsFor: function(types, constraints) {
 			if (!constraints) {
 				var constraints = [];
 			}
-			_.forEach(restrictions, function(restrictions) {
+			_.forEach(types, function(restrictions) {
 				_.forEach(restrictions, function(restriction) {
 					constraints.push(restriction);
-				}, task);
-			}, task);
+				}, this);
+			}, this);
 			if (this.parent().getRestrictionsFor) {
-				task.parent().getRestrictionsFor(restrictions, constraints);
+				this.parent().getRestrictionsForScheduling(constraints);
 			}
 			return constraints;
 		},
 		applyRestrictionForEarlyStart: function(restriction, earlyStart) {
 			var restrictionValue = restriction.getMinEarlyStart4Task.call(restriction, this);
-			if (!restrictionValue) {
+			if (!moment.isMoment(restrictionValue) && restrictionValue!=0 && restrictionValue!=Infinity) {
 				return false
 			} else if (restrictionValue != 0) {
 				// TODO Si incoherencia avisar
@@ -91,8 +89,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				return earlyStart;
 			}
 		},
+		applyRestrictionForEarlyEnd: function(restriction, earlyEnd) {
+			var restrictionValue = restriction.getMinEarlyEnd4Task.call(restriction, this);
+			if (!moment.isMoment(restrictionValue) && restrictionValue!=0 && restrictionValue!=Infinity) {
+				return false
+			} else if (isFinite(restrictionValue)) {
+				// TODO Si incoherencia avisar
+				if (!isFinite(earlyEnd)) {
+					return restrictionValue;
+				} else {
+					return moment.max(earlyEnd, restrictionValue);
+				}
+			} else {
+				return earlyEnd;
+			}
+		},
 		applyEarlyStart: function(earlyStart) {
-			if (earlyStart && earlyStart != 0) {
+			if (moment.isMoment(earlyStart)) {
 				if (this.earlyEnd() && earlyStart.isAfter(this.earlyEnd()) ){
 					throw {
 						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is before than early start " + earlyStart.ToString(),
@@ -108,12 +121,28 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 						}
 				}
 				this.earlyStart(earlyStart);
-				this.earlyEnd(this.duration().addTo(earlyStart));
 				return true;
 			} else return false;
 		},
-		hasFixedDuration: function() {
-			return !this.isEstimated();
+		applyEarlyEnd: function(earlyEnd) {
+			if (moment.isMoment(earlyEnd)) {
+				if (this.earlyStart() && earlyEnd.isBefore(this.earlyStart()) ){
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is before than early start " + earlyEnd.ToString(),
+						task: this,
+						error: "StartEndConstraint"
+						}
+				}
+				if (this.earlyStart() && !this.isEstimated() && this.duration().addTo(this.earlyStart()).isAfter(earlyEnd) ){
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is smaller than early start " + earlyEnd.ToString() + " with duration added",
+						task: this,
+						error: "DurationConstraint"
+						}
+				}
+				this.earlyEnd(earlyEnd);
+				return true;
+			} else return false;
 		},
 		applyPlannedStartRange2Task: function(plannedStartRange) {
 			if (plannedStartRange[0]!=0 && this.earlyStart().isBefore(plannedStartRange[0])) {

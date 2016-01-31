@@ -53,6 +53,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		id: function(newId) {
 		     return arguments.length ? (this._id = newId) : this._id;
 		},
+		equals: function(other) {
+			 if (!other.isInstanceOf(BaseTask)) {
+				 return false;
+			 } else {
+				 return other.id() == this.id();
+			 }
+		},
+		isDescendantOf: function(ascendant) {
+			 if (!ascendant.isInstanceOf(BaseTask)) {
+				 return false;
+			 } else {
+				 if (ascendant.equals(this.parent())) {
+					 return true;
+				 } else {
+					 return this.parent().isInstanceOf(BaseTask)?this.parent().isDescendantOf(ascendant):false;
+				 }
+			 }
+		},
 		parent: function(newParent) {
 		     return arguments.length ? (this._parent = newParent) : this._parent;
 		},

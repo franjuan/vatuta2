@@ -71,65 +71,52 @@ define(
 							
 							// Calculate EarlyStart
 							var earlyStart;
-							if (task._$engine.earlyStart) {
+							if (task._$engine.earlyStart) { // If already calculated
 								earlyStart = task.earlyStart();
 							} else {
-								earlyStart = task.getDefaultEarlyStart();
-								if (earlyStart) {
+								earlyStart = task.getDefaultEarlyStart(); // Gets default value depending on task typr
+								if (earlyStart || earlyStart == 0) { // If valid value
 									_.forEach(task.getRestrictionsForScheduling(), function(restriction) {
-										task.applyRestrictionForEarlyStart(restriction, earlyStart);
+										earlyStart = task.applyRestrictionForEarlyStart(restriction, earlyStart); // Apply restriction
+										return (lyStart==0 || earlyStart==Infinity); // If false it finishes loop
 									}, task);
-									if(task.applyEarlyStart(earlyStart)) {
-										task._$engine.earlyStart = true;
-										unknownResolvedInIteration = true;
+									if(task.applyEarlyStart(earlyStart)) { // If value can be applied to task
+										task._$engine.earlyStart = true; // Mark task as calculted for the value
+										unknownResolvedInIteration = true; // Notify engine than improvements has been performed in this iteration
+										// TODO: Quitar esto de aquí y delegar en el proyecto
 										startOfProject = startOfProject==0?task.earlyStart():moment.min(startOfProject, task.earlyStart());	
 									}
 								}
 							}
 							
-							
-							
 							// Calculate EarlyEnd
 							var earlyEnd;
-							if (task.earlyEnd()) {
-								earlyEnd = task.earlyEnd()
+							if (task._$engine.earlyEnd) { // If already calculated
+								earlyEnd = task.earlyEnd();
 							} else {
-								if (task.tactic().equals(Tactics.MANUAL)) {
-									earlyEnd = task.manualEnd();
-								} else {
-									earlyEnd = task.getDefaultEarlyEnd();
-									if (!isNaN(earlyEnd)){
-										_.forEach(this.getMinEarlyEndConstraints(task), function(constraint) {
-											var restrictionValue = constraint();
-											if (isNaN(restrictionValue)) {
-												earlyEnd = NaN
-												return false;
-											} else if (isFinite(restrictionValue)) {
-												if (!isFinite(earlyEnd)) {
-													earlyEnd = restrictionValue;
-												} else {
-													earlyEnd = moment.max(earlyEnd, restrictionValue);
-												}
-											}
-										}, task);
+								earlyEnd = task.getDefaultEarlyEnd(); // Gets default value depending on task typr
+								if (earlyEnd || earlyEnd == 0) { // If valid value
+									_.forEach(task.getRestrictionsForScheduling(), function(restriction) {
+										earlyEnd = task.applyRestrictionForEarlyEnd(restriction, earlyEnd); // Apply restriction
+										return (lyEnd==0 || earlyEnd==Infinity); // If false it finishes loop
+									}, task);
+									if(task.applyEarlyEnd(earlyEnd)) { // If value can be applied to task
+										task._$engine.earlyEnd = true; // Mark task as calculted for the value
+										unknownResolvedInIteration = true; // Notify engine than improvements has been performed in this iteration
+										// TODO: Quitar esto de aquí y delegar en el proyecto
+										endOfProject = moment.max(endOfProject, task.earlyEnd());	
 									}
 								}
-								if (!isNaN(earlyEnd) && isFinite(earlyEnd)) {
-									unknownResolvedInIteration = true;
-									task.earlyEnd(earlyEnd);
-									endOfProject = moment.max(endOfProject, task.earlyEnd());
-								} else {
-									earlyEnd = NaN;
-								}
 							}
-							if (!isNaN(earlyStart) && !isNaN(earlyEnd)) {
+							
+							if (earlyStart && earlyEnd) { // If both has been calculated move up in list and avoid recalculating
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
 									tasks[i] = tasks[alreadyCalculatedIndex + 1];
 									tasks[alreadyCalculatedIndex + 1] = aux;
 								}
-								unknownResolvedInIteration = true;
-								alreadyCalculatedIndex++;
+								unknownResolvedInIteration = true; // Notify engine than improvements has been performed in this iteration
+								alreadyCalculatedIndex++; // Consider last item for calculation in list
 							}
 							console.log ("Task: " + task.name() + " on iteration " + (alreadyCalculatedIndex + 2) + " (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for early stage");
 							this.showState(this.currentProject(), tasks);

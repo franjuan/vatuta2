@@ -98,7 +98,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			this.inherited(arguments);
 		},
 		getMinEarlyStart4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().earlyEnd()) {
 					return this.delay().addTo(this.dependency().earlyEnd());
 				} else {
@@ -109,7 +109,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().earlyEnd() && this.dependant().duration()) {
 					return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyEnd()));
 				} else {
@@ -295,7 +295,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			this.inherited(arguments);
 		},
 		getMinEarlyStart4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().earlyStart()) {
 					return this.delay().addTo(this.dependency().earlyStart());
 				} else {
@@ -306,7 +306,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().earlyStart() && this.dependant().duration()) {
 					return this.dependant().duration().addTo(this.delay().addTo(this.dependency().earlyStart()));
 				} else {

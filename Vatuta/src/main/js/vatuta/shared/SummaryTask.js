@@ -22,7 +22,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			}, this.index(), this);
 		},
 		duration: function(newDuration) {
-		    return NaN;
+		    return false;
 		},
 		isEstimated: function(estimated) {
 			return _.reduce(this.children(), function(estimated, child) {
@@ -117,7 +117,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				if (!isNaN(min) && child.earlyStart()) {
 					return min==0?child.earlyStart():moment.min(min, child.earlyStart());
 				} else {
-					return false;
+					return NaN;
 				}
 			}, 0, this);
 		},
@@ -149,14 +149,27 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			}, 0, this);
 		},
 		getDefaultEarlyStart: function() {
-			return this.calculatedEarlyStart();
+			if (this.earlyStart()) {
+				return this.earlyStart();
+			} else {
+				var earlyStart = this.calculatedEarlyStart();
+				if (!isNaN(earlyStart)) {
+					return earlyStart;
+				} else {
+					return 0;
+				}
+			}
 		},
 		getDefaultEarlyEnd: function() {
-			var earlyEnd = this.calculatedEarlyEnd();
-			if (!isNaN(earlyEnd)) {
-				return earlyEnd;
+			if (this.earlyEnd()) {
+				return this.earlyEnd();
 			} else {
-				return Infinity;
+				var earlyEnd = this.calculatedEarlyEnd();
+				if (!isNaN(earlyEnd)) {
+					return earlyEnd;
+				} else {
+					return Infinity;
+				}
 			}
 		},
 		getDefaultLateStart: function() {
@@ -176,32 +189,47 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				return parent?parent:Infinity;
 			}
 		},
-		getRestrictionsForScheduling: function() {
-			return this.getRestrictionsFor([this.restrictions(), this.restrictionsFromDependants()]);
+		getRestrictionsForScheduling: function(constraints) {
+			return this.getRestrictionsFor([this.restrictions(), this.restrictionsFromDependants()], constraints);
 		},
-		getRestrictionsFor: function(restrictions, constraints) {
+		getRestrictionsFor: function(types, constraints) {
 			if (!constraints) {
 				var constraints = [];
 			}
-			_.forEach(restrictions, function(restrictions) {
+			_.forEach(types, function(restrictions) {
 				_.forEach(restrictions, function(restriction) {
 					constraints.push(restriction);
-				}, task);
-			}, task);
+				}, this);
+			}, this);
 			return constraints;
 		},
-		applyRestrictionForEarlyStart: function(constraint, earlyStart) {
+		applyRestrictionForEarlyStart: function(restriction, earlyStart) {
 			var restrictionValue = restriction.getMinEarlyStart4Task.call(restriction, this);
-			if (!restrictionValue) {
+			if (!moment.isMoment(restrictionValue) && restrictionValue!=0 && restrictionValue!=Infinity) {
 				return false
 			} else {
 				// TODO Si incoherencia avisar
 				return earlyStart;
 			}
 		},
+		applyRestrictionForEarlyEnd: function(restriction, earlyEnd) {
+			var restrictionValue = restriction.getMinEarlyEnd4Task.call(restriction, this);
+			if (!moment.isMoment(restrictionValue) && restrictionValue!=0 && restrictionValue!=Infinity) {
+				return false
+			} else {
+				// TODO Si incoherencia avisar
+				return earlyEnd;
+			}
+		},
 		applyEarlyStart: function(earlyStart) {
-			if (earlyStart && earlyStart != 0 && calculatedEarlyStart().isSame(earlyStart)) {
+			if (moment.isMoment(earlyStart) && earlyStart.isSame(this.calculatedEarlyStart())) {
 				this.earlyStart(earlyStart);
+				return true;
+			} else return false;
+		},
+		applyEarlyEnd: function(earlyEnd) {
+			if (moment.isMoment(earlyEnd) && earlyEnd.isSame(this.calculatedEarlyEnd())) {
+				this.earlyEnd(earlyEnd);
 				return true;
 			} else return false;
 		},
