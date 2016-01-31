@@ -53,6 +53,8 @@ define(
 						delete task._$actualStartCalculated;
 						delete task._$actualEndCalculated;
 						delete task._$actualCalculated;
+						
+						task._$engine = {};
 					});
 					
 					// We clone the tasks array
@@ -69,37 +71,23 @@ define(
 							
 							// Calculate EarlyStart
 							var earlyStart;
-							if (task.earlyStart()) {
+							if (task._$engine.earlyStart) {
 								earlyStart = task.earlyStart();
 							} else {
-								if (task.tactic().equals(Tactics.MANUAL)) {
-									earlyStart = task.manualStart();
-								} else {
-									earlyStart = task.getDefaultEarlyStart();
-									if (!isNaN(earlyStart)) {
-										_.forEach(this.getMinEarlyStartConstraints(task), function(constraint) {
-											var restrictionValue = constraint();
-											if (isNaN(restrictionValue)) {
-												earlyStart = NaN
-												return false;
-											} else if (restrictionValue != 0) {
-												if (earlyStart == 0) {
-													earlyStart = restrictionValue;
-												} else {
-													earlyStart = moment.max(earlyStart, restrictionValue);
-												}
-											}
-										}, task);
+								earlyStart = task.getDefaultEarlyStart();
+								if (earlyStart) {
+									_.forEach(task.getRestrictionsForScheduling(), function(restriction) {
+										task.applyRestrictionForEarlyStart(restriction, earlyStart);
+									}, task);
+									if(task.applyEarlyStart(earlyStart)) {
+										task._$engine.earlyStart = true;
+										unknownResolvedInIteration = true;
+										startOfProject = startOfProject==0?task.earlyStart():moment.min(startOfProject, task.earlyStart());	
 									}
 								}
-								if (!isNaN(earlyStart) && earlyStart != 0) {
-									unknownResolvedInIteration = true;
-									task.earlyStart(earlyStart);
-									startOfProject = startOfProject==0?task.earlyStart():moment.min(startOfProject, task.earlyStart());
-								} else {
-									earlyStart = NaN;
-								}
 							}
+							
+							
 							
 							// Calculate EarlyEnd
 							var earlyEnd;

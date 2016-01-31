@@ -65,7 +65,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			return 0;
 		},
 		getMinEarlyEnd4Task: function(task) {
-			return 0;
+			return Infinity;
 		},
 		getMaxLateStart4Task: function(task) {
 			return Infinity;

@@ -117,7 +117,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				if (!isNaN(min) && child.earlyStart()) {
 					return min==0?child.earlyStart():moment.min(min, child.earlyStart());
 				} else {
-					return NaN;
+					return false;
 				}
 			}, 0, this);
 		},
@@ -149,13 +149,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			}, 0, this);
 		},
 		getDefaultEarlyStart: function() {
-			var earlyStart = this.calculatedEarlyStart();
-			if (!isNaN(earlyStart)) {
-				return earlyStart;
-			} else {
-				var parent = this.iterateDepthForProperty("earlyStart");
-				return parent?parent:0;
-			}
+			return this.calculatedEarlyStart();
 		},
 		getDefaultEarlyEnd: function() {
 			var earlyEnd = this.calculatedEarlyEnd();
@@ -181,6 +175,35 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				var parent = this.iterateDepthForProperty("lateEnd");
 				return parent?parent:Infinity;
 			}
+		},
+		getRestrictionsForScheduling: function() {
+			return this.getRestrictionsFor([this.restrictions(), this.restrictionsFromDependants()]);
+		},
+		getRestrictionsFor: function(restrictions, constraints) {
+			if (!constraints) {
+				var constraints = [];
+			}
+			_.forEach(restrictions, function(restrictions) {
+				_.forEach(restrictions, function(restriction) {
+					constraints.push(restriction);
+				}, task);
+			}, task);
+			return constraints;
+		},
+		applyRestrictionForEarlyStart: function(constraint, earlyStart) {
+			var restrictionValue = restriction.getMinEarlyStart4Task.call(restriction, this);
+			if (!restrictionValue) {
+				return false
+			} else {
+				// TODO Si incoherencia avisar
+				return earlyStart;
+			}
+		},
+		applyEarlyStart: function(earlyStart) {
+			if (earlyStart && earlyStart != 0 && calculatedEarlyStart().isSame(earlyStart)) {
+				this.earlyStart(earlyStart);
+				return true;
+			} else return false;
 		},
 		actualStart: function(newActualStart) {
 			return _.reduce(this.children(), function(min, child) {

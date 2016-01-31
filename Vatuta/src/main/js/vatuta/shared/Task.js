@@ -13,13 +13,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultEarlyStart: function() {
 			if (this.earlyStart()) {
 				return this.earlyStart();
-			} else if (this.manualStart()) {
+			} else if (this.manualStart() && task.tactic().equals(Tactics.MANUAL)) {
 				return this.manualStart();
 			} else if (this.earlyEnd()) {
 				return this.duration().subtractFrom(this.earlyEnd());
 			}  else {
-				var parent = this.iterateDepthForProperty("earlyStart");
-				return parent?parent:0;
+				return 0;
 			}
 		},
 		getDefaultEarlyEnd: function() {
@@ -59,6 +58,59 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				var parent = this.iterateDepthForProperty("lateEnd");
 				return parent?parent:Infinity;
 			}
+		},
+		getRestrictionsForScheduling: function() {
+			return this.getRestrictionsFor([this.restrictions(), this.restrictionsFromDependants()]);
+		},
+		getRestrictionsFor: function(restrictions, constraints) {
+			if (!constraints) {
+				var constraints = [];
+			}
+			_.forEach(restrictions, function(restrictions) {
+				_.forEach(restrictions, function(restriction) {
+					constraints.push(restriction);
+				}, task);
+			}, task);
+			if (this.parent().getRestrictionsFor) {
+				task.parent().getRestrictionsFor(restrictions, constraints);
+			}
+			return constraints;
+		},
+		applyRestrictionForEarlyStart: function(restriction, earlyStart) {
+			var restrictionValue = restriction.getMinEarlyStart4Task.call(restriction, this);
+			if (!restrictionValue) {
+				return false
+			} else if (restrictionValue != 0) {
+				// TODO Si incoherencia avisar
+				if (earlyStart == 0) {
+					return restrictionValue;
+				} else {
+					return moment.max(earlyStart, restrictionValue);
+				}
+			} else {
+				return earlyStart;
+			}
+		},
+		applyEarlyStart: function(earlyStart) {
+			if (earlyStart && earlyStart != 0) {
+				if (this.earlyEnd() && earlyStart.isAfter(this.earlyEnd()) ){
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is before than early start " + earlyStart.ToString(),
+						task: this,
+						error: "StartEndConstraint"
+						}
+				}
+				if (this.earlyEnd() && !this.isEstimated() && this.duration().addTo(earlyStart).isAfter(this.earlyEnd()) ){
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is smaller than early start " + earlyStart.ToString() + " with duration added",
+						task: this,
+						error: "DurationConstraint"
+						}
+				}
+				this.earlyStart(earlyStart);
+				this.earlyEnd(this.duration().addTo(earlyStart));
+				return true;
+			} else return false;
 		},
 		hasFixedDuration: function() {
 			return !this.isEstimated();
