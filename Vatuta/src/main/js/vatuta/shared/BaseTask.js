@@ -8,18 +8,6 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			constructor: "manual"
 		},
 		constructor : function (/* Object */kwArgs) {
-//			if (this._earlyStart && !moment.isMoment(this._earlyStart)) {
-//				this._earlyStart = moment(this._earlyStart);
-//			}
-//			if (this._earlyEnd && !moment.isMoment(this._earlyEnd)) {
-//				this._earlyEnd = moment(this._earlyEnd);
-//			}
-//			if (this._lateStart && !moment.isMoment(this._lateStart)) {
-//				this._lateStart = moment(this._lateStart);
-//			}
-//			if (this._lateEnd && !moment.isMoment(this._lateEnd)) {
-//				this._lateEnd = moment(this._lateEnd);
-//			}
 			declare.safeMixin(this, kwArgs);
 			if (!this._id) {
 				this._id='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {

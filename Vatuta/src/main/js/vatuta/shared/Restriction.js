@@ -105,7 +105,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 					return NaN;
 				}
 			} else {
-				return 0;
+				return -Infinity;
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {
@@ -203,7 +203,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 					return NaN;
 				}
 			} else {
-				return 0;
+				return -Infinity;
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {
@@ -302,7 +302,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 					return NaN;
 				}
 			} else {
-				return 0;
+				return -Infinity;
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {
@@ -392,7 +392,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 					return NaN;
 				}
 			} else {
-				return 0;
+				return -Infinity;
 			}
 		},
 		getMinEarlyEnd4Task: function(task) {

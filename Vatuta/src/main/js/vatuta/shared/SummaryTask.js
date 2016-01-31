@@ -156,7 +156,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				if (!isNaN(earlyStart)) {
 					return earlyStart;
 				} else {
-					return 0;
+					return -Infinity;
 				}
 			}
 		},
@@ -177,7 +177,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			if (!isNaN(lateStart)) {
 				return lateStart;
 			} else {
-				return 0;
+				return -Infinity;
 			}
 		},
 		getDefaultLateEnd: function() {
@@ -205,7 +205,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		},
 		applyRestrictionForEarlyStart: function(restriction, earlyStart) {
 			var restrictionValue = restriction.getMinEarlyStart4Task.call(restriction, this);
-			if (!moment.isMoment(restrictionValue) && restrictionValue!=0 && restrictionValue!=Infinity) {
+			if (!moment.isMoment(restrictionValue) && isFinite(restrictionValue)) {
 				return false
 			} else {
 				// TODO Si incoherencia avisar
@@ -214,7 +214,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		},
 		applyRestrictionForEarlyEnd: function(restriction, earlyEnd) {
 			var restrictionValue = restriction.getMinEarlyEnd4Task.call(restriction, this);
-			if (!moment.isMoment(restrictionValue) && restrictionValue!=0 && restrictionValue!=Infinity) {
+			if (!moment.isMoment(restrictionValue) && isFinite(restrictionValue)) {
 				return false
 			} else {
 				// TODO Si incoherencia avisar

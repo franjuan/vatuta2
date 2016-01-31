@@ -75,10 +75,10 @@ define(
 								earlyStart = task.earlyStart();
 							} else {
 								earlyStart = task.getDefaultEarlyStart(); // Gets default value depending on task typr
-								if (earlyStart || earlyStart == 0) { // If valid value
+								if (!!earlyStart) { // If valid value
 									_.forEach(task.getRestrictionsForScheduling(), function(restriction) {
 										earlyStart = task.applyRestrictionForEarlyStart(restriction, earlyStart); // Apply restriction
-										return (lyStart==0 || earlyStart==Infinity); // If false it finishes loop
+										return !!earlyStart; // If false it finishes loop
 									}, task);
 									if(task.applyEarlyStart(earlyStart)) { // If value can be applied to task
 										task._$engine.earlyStart = true; // Mark task as calculted for the value
@@ -95,10 +95,10 @@ define(
 								earlyEnd = task.earlyEnd();
 							} else {
 								earlyEnd = task.getDefaultEarlyEnd(); // Gets default value depending on task typr
-								if (earlyEnd || earlyEnd == 0) { // If valid value
+								if (!!earlyEnd) { // If valid value
 									_.forEach(task.getRestrictionsForScheduling(), function(restriction) {
 										earlyEnd = task.applyRestrictionForEarlyEnd(restriction, earlyEnd); // Apply restriction
-										return (lyEnd==0 || earlyEnd==Infinity); // If false it finishes loop
+										return !!earlyEnd; // If false it finishes loop
 									}, task);
 									if(task.applyEarlyEnd(earlyEnd)) { // If value can be applied to task
 										task._$engine.earlyEnd = true; // Mark task as calculted for the value

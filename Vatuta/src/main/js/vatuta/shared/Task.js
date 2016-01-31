@@ -18,7 +18,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			} else if (this.earlyEnd()) {
 				return this.duration().subtractFrom(this.earlyEnd());
 			}  else {
-				return 0;
+				return -Infinity;
 			}
 		},
 		getDefaultEarlyEnd: function() {
@@ -39,10 +39,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				return this.manualStart();
 			} else if (this.lateEnd()) {
 				return this.duration().subtractFrom(this.lateEnd());
-//			} else if (this.parent().earlyEnd()) {
-//				return this.parent().earlyEnd();
 			} else {
-				return 0;
+				return -Infinity;
 			}
 		},
 		getDefaultLateEnd: function() {
@@ -76,11 +74,11 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		},
 		applyRestrictionForEarlyStart: function(restriction, earlyStart) {
 			var restrictionValue = restriction.getMinEarlyStart4Task.call(restriction, this);
-			if (!moment.isMoment(restrictionValue) && restrictionValue!=0 && restrictionValue!=Infinity) {
+			if (!moment.isMoment(restrictionValue) && isFinite(restrictionValue)) {
 				return false
-			} else if (restrictionValue != 0) {
+			} else if (isFinite(restrictionValue)) {
 				// TODO Si incoherencia avisar
-				if (earlyStart == 0) {
+				if (!isFinite(earlyStart)) {
 					return restrictionValue;
 				} else {
 					return moment.max(earlyStart, restrictionValue);
@@ -91,7 +89,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		},
 		applyRestrictionForEarlyEnd: function(restriction, earlyEnd) {
 			var restrictionValue = restriction.getMinEarlyEnd4Task.call(restriction, this);
-			if (!moment.isMoment(restrictionValue) && restrictionValue!=0 && restrictionValue!=Infinity) {
+			if (!moment.isMoment(restrictionValue) && isFinite(restrictionValue)) {
 				return false
 			} else if (isFinite(restrictionValue)) {
 				// TODO Si incoherencia avisar
