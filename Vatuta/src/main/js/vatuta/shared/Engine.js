@@ -316,6 +316,7 @@ define(
 						delete task._$actualStartCalculated;
 						delete task._$actualEndCalculated;
 						delete task._$actualCalculated;
+						delete task._$engine;
 					});
 				},
 				showState: function(project, tasks) {
