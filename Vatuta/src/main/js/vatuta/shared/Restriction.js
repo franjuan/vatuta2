@@ -120,7 +120,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMaxLateStart4Task: function(task) {
-			if (task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency()) || task.isDescendantOf(this.dependency())) {
 				if (this.dependant().lateStart() && this.dependency().duration()) {
 					return this.dependency().duration().subtractFrom(this.delay().subtractFrom(this.dependant().lateStart()));
 				} else {
@@ -131,7 +131,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMaxLateEnd4Task: function(task) {
-			if (task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency()) || task.isDescendantOf(this.dependency())) {
 				if (this.dependant().lateStart()) {
 					return this.delay().subtractFrom(this.dependant().lateStart());
 				} else {
@@ -218,7 +218,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMaxLateStart4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency())) {
 				if (this.dependant().lateEnd()) {
 					return this.delay().subtractFrom(this.dependant().lateEnd());
 				} else {
@@ -229,7 +229,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMaxLateEnd4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency())) {
 				if (this.dependant().lateEnd() && this.dependency().duration()) {
 					return this.dependency().duration().addTo(this.delay().subtractFrom(this.dependant().lateEnd()));
 				} else {
@@ -317,7 +317,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMaxLateStart4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency()) || task.isDescendantOf(this.dependency())) {
 				if (this.dependant().lateStart()) {
 					return this.delay().subtractFrom(this.dependant().lateStart());
 				} else {
@@ -328,7 +328,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMaxLateEnd4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency()) || task.isDescendantOf(this.dependency())) {
 				if (this.dependant().lateStart() && this.dependency().duration()) {
 					return this.dependency().duration().addTo(this.delay().subtractFrom(this.dependant().lateStart()));
 				} else {
@@ -407,7 +407,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMaxLateStart4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency())) {
 				if (this.dependant().lateEnd() && this.dependency().duration()) {
 					return this.dependency().duration().subtractFrom(this.delay().subtractFrom(this.dependant().lateEnd()));
 				} else {
@@ -418,7 +418,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			}
 		},
 		getMaxLateEnd4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency())) {
 				if (this.dependant().lateEnd()) {
 					return this.delay().subtractFrom(this.dependant().lateEnd());
 				} else {

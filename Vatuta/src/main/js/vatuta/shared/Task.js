@@ -35,7 +35,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultLateStart: function() {
 			if (this.lateStart()) {
 				return this.lateStart();
-			} else if (this.manualStart()) {
+			} else if (this.tactic().equals(Tactics.MANUAL)) {
 				return this.manualStart();
 			} else if (this.lateEnd()) {
 				return this.duration().subtractFrom(this.lateEnd());
@@ -46,13 +46,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getDefaultLateEnd: function() {
 			if (this.lateEnd()) {
 				return this.lateEnd();
-			} else if (this.manualEnd()) {
+			} else if (this.tactic().equals(Tactics.MANUAL)) {
 				return this.manualEnd();
 			} else if (this.lateStart()) {
 				return this.duration().addTo(this.lateStart());
 			} else {
-				var parent = this.iterateDepthForProperty("lateEnd");
-				return parent?parent:Infinity;
+				return Infinity;
 			}
 		},
 		getRestrictionsForScheduling: function(constraints) {
@@ -102,6 +101,36 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				return earlyEnd;
 			}
 		},
+		applyRestrictionForLateStart: function(restriction, lateStart) {
+			var restrictionValue = restriction.getMaxLateStart4Task.call(restriction, this);
+			if (!moment.isMoment(restrictionValue) && isFinite(restrictionValue)) {
+				return false
+			} else if (isFinite(restrictionValue)) {
+				// TODO Si incoherencia avisar
+				if (!isFinite(lateStart)) {
+					return restrictionValue;
+				} else {
+					return moment.min(lateStart, restrictionValue);
+				}
+			} else {
+				return lateStart;
+			}
+		},
+		applyRestrictionForLateEnd: function(restriction, lateEnd) {
+			var restrictionValue = restriction.getMaxLateEnd4Task.call(restriction, this);
+			if (!moment.isMoment(restrictionValue) && isFinite(restrictionValue)) {
+				return false
+			} else if (isFinite(restrictionValue)) {
+				// TODO Si incoherencia avisar
+				if (!isFinite(lateEnd)) {
+					return restrictionValue;
+				} else {
+					return moment.min(lateEnd, restrictionValue);
+				}
+			} else {
+				return lateEnd;
+			}
+		},
 		applyEarlyStart: function(earlyStart) {
 			if (moment.isMoment(earlyStart)) {
 				if (this.earlyEnd() && earlyStart.isAfter(this.earlyEnd()) ){
@@ -139,6 +168,46 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 						}
 				}
 				this.earlyEnd(earlyEnd);
+				return true;
+			} else return false;
+		},
+		applyLateStart: function(lateStart) {
+			if (moment.isMoment(lateStart)) {
+				if (this.lateEnd() && lateStart.isAfter(this.lateEnd()) ){
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.lateEnd().toString() + " is before than late start " + lateStart.ToString(),
+						task: this,
+						error: "StartEndConstraint"
+						}
+				}
+				if (this.lateEnd() && !this.isEstimated() && this.duration().addTo(lateStart).isAfter(this.lateEnd()) ){
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.lateEnd().toString() + " is smaller than late start " + lateStart.ToString() + " with duration added",
+						task: this,
+						error: "DurationConstraint"
+						}
+				}
+				this.lateStart(lateStart);
+				return true;
+			} else return false;
+		},
+		applyLateEnd: function(lateEnd) {
+			if (moment.isMoment(lateEnd)) {
+				if (this.lateStart() && lateEnd.isBefore(this.lateStart()) ){
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.LateEnd().toString() + " is before than late start " + lateEnd.ToString(),
+						task: this,
+						error: "StartEndConstraint"
+						}
+				}
+				if (this.lateStart() && !this.isEstimated() && this.duration().addTo(this.lateStart()).isAfter(lateEnd) ){
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.LateEnd().toString() + " is smaller than late start " + lateEnd.ToString() + " with duration added",
+						task: this,
+						error: "DurationConstraint"
+						}
+				}
+				this.lateEnd(lateEnd);
 				return true;
 			} else return false;
 		},
