@@ -57,6 +57,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getRestrictionsForScheduling: function(constraints) {
 			return this.getRestrictionsFor([this.restrictions(), this.restrictionsFromDependants()], constraints);
 		},
+		getRestrictionsForPlanning: function(constraints) {
+			return this.getRestrictionsFor([this.restrictions()], constraints);
+		},
 		getRestrictionsFor: function(types, constraints) {
 			if (!constraints) {
 				var constraints = [];
@@ -129,6 +132,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				}
 			} else {
 				return lateEnd;
+			}
+		},
+		applyRestrictionForPlannedStart: function(restriction, plannedStartRange) {
+			var restrictionRange = restriction.getPlannedStartRange4Task.call(restriction, this);
+			if (!restrictionRange || (!restrictionRange[0] && !restrictionRange[1])) {
+				return false
+			} else {
+				// TODO Si incoherencia avisar
+				return this.rangeUnion(plannedStartRange, restrictionRange);
+			}
+		},
+		applyRestrictionForPlannedEnd: function(restriction, plannedEndRange) {
+			var restrictionRange = restriction.getPlannedEndRange4Task.call(restriction, this);
+			if (!restrictionRange || (!restrictionRange[0] && !restrictionRange[1])) {
+				return false
+			} else {
+				// TODO Si incoherencia avisar
+				return this.rangeUnion(plannedEndRange, restrictionRange);
 			}
 		},
 		applyEarlyStart: function(earlyStart) {
@@ -211,8 +232,8 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				return true;
 			} else return false;
 		},
-		applyPlannedStartRange2Task: function(plannedStartRange) {
-			if (plannedStartRange[0]!=0 && this.earlyStart().isBefore(plannedStartRange[0])) {
+		applyPlannedStart: function(plannedStartRange) {
+			if (isFinite(plannedStartRange[0]) && this.earlyStart().isBefore(plannedStartRange[0])) {
 				this.earlyStart(plannedStartRange[0]);
 				this.earlyEnd(this.duration().addTo(plannedStartRange[0]))
 			}
@@ -220,9 +241,10 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				this.lateStart(plannedStartRange[1]);
 				this.lateEnd(this.duration().addTo(plannedStartRange[1]))
 			}
+			return [this.earlyStart(),this.lateStart()];
 		},
-		applyPlannedEndRange2Task: function(plannedEndRange) {
-			if (plannedEndRange[0]!=0 && this.earlyEnd().isBefore(plannedEndRange[0])) {
+		applyPlannedEnd: function(plannedEndRange) {
+			if (isFinite(plannedEndRange[0]) && this.earlyEnd().isBefore(plannedEndRange[0])) {
 				this.earlyEnd(plannedEndRange[0]);
 				this.earlyStart(this.duration().subtractFrom(plannedEndRange[0]))
 			}
@@ -230,11 +252,12 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 				this.lateEnd(plannedEndRange[1]);
 				this.lateStart(this.duration().subtractFrom(plannedEndRange[1]))
 			}
+			return [this.earlyEnd(),this.lateEnd()];
 		},
-		applyTactic2PlannedStartRange4PlannedStart: function(plannedStartRange) {
+		applyTactic4PlannedStart: function(plannedStartRange) {
 			return this.actualStart(this.tactic().getPlannedStartInRange4Task(this, plannedStartRange));
 		},
-		applyTactic2PlannedEndRange4PlannedEnd: function(plannedEndRange) {
+		applyTactic4PlannedEnd: function(plannedEndRange) {
 			return this.actualEnd(this.tactic().getPlannedEndInRange4Task(this, plannedEndRange));
 		},
 		watchHash: function() {

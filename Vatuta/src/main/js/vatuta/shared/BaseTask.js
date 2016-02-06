@@ -166,6 +166,36 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			duration[unit] = value;
 			return duration
 		},
+		// TODO Sacar esta función de aquí y llevarla a una clase Range
+		rangeUnion: function(range, other) {
+			var returnRange = [];
+			
+			if (!isFinite(range[0]) && !isFinite(other[0])) {
+				returnRange[0] = -Infinity;
+			} else if (!isFinite(range[0])) {
+				returnRange[0] = other[0];
+			} else if (!isFinite(other[0])) {
+				returnRange[0] = range[0];
+			} else if (range[0].isAfter(other[1]) || range[1].isBefore(other[0])) {
+				return null;
+			} else {
+				returnRange[0] = moment.max(range[0], other[0]);
+			}
+			
+			if (!isFinite(range[1]) && !isFinite(other[1])) {
+				returnRange[1] = Infinity;
+			} else if (!isFinite(range[1])) {
+				returnRange[1] = other[1];
+			} else if (!isFinite(other[1])) {
+				returnRange[1] = range[1];
+			} else if (range[0].isAfter(other[1]) || range[1].isBefore(other[0])) {
+				return null;
+			} else {
+				returnRange[1] = moment.min(range[1], other[1]);
+			}
+			
+			return returnRange;
+		},
 		iterateDepthForProperty: function(property) {
 			var value = this[property]();
 			if (value) {

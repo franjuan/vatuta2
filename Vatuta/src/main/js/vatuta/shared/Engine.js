@@ -199,7 +199,7 @@ define(
 					
 					
 					// Calculate planned start and ending
-					this.currentProject()._$actualCalculated = true; // For root task to be considered
+					//this.currentProject()._$actualCalculated = true; // For root task to be considered
 					var plannedProjectStart = 0;
 					var plannedProjectEnd = 0;
 					var alreadyCalculatedIndex = -1;
@@ -210,58 +210,41 @@ define(
 							
 							// Calculate PlannedStart
 							var plannedStartRange;
-							if (!task._$actualStartCalculated && task.parent()._$actualCalculated) {
-								plannedStartRange = [task.earlyStart(), task.lateStart()];
-								_.forEach(this.getConstraints4PlannedStart(task), function(restrictPlannedStartRange) {
-									plannedStartRange = restrictPlannedStartRange(plannedStartRange);
-									if (!plannedStartRange) {
-										return false;
-									} else {
-										// Chequear si el rango es válido
-										if (plannedStartRange[1].isBefore(plannedStartRange[0])) {
-											throw "Task " + task.name() + " wrong planned range [" + + ', ' +  +"] (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for actual stage";
-										}
+							if (!task._$engine.plannedStart) { // If already calculated
+								plannedStartRange = [task.earlyStart(), task.lateStart()]; // Gets current start range
+								if (!!plannedStartRange[0] && !!plannedStartRange[1]) { // If valid value
+									_.forEach(task.getRestrictionsForPlanning(), function(restriction) {
+										plannedStartRange = task.applyRestrictionForPlannedStart(restriction, plannedStartRange); // Apply restriction
+										return !!plannedStartRange[0] && !!plannedStartRange[1]; // If false it finishes loop
+									}, task);
+									if(task.applyPlannedStart(plannedStartRange)) { // If value can be applied to task
+										task._$engine.plannedStart = true; // Mark task as calculted for the value
+										unknownResolvedInIteration = true; // Notify engine than improvements has been performed in this iteration
+										var plannedStart = task.applyTactic4PlannedStart(plannedStartRange);
+										plannedProjectStart = plannedProjectStart == 0 ? plannedStart : moment.min(plannedProjectStart, plannedStart);
 									}
-								}, task);
-
-							
-								if (plannedStartRange) {
-									task._$actualStartCalculated = true;
-									unknownResolvedInIteration = true;
-									task.applyPlannedStartRange2Task(plannedStartRange);
-									var plannedStart = task.applyTactic2PlannedStartRange4PlannedStart(plannedStartRange);
-									plannedProjectStart = plannedProjectStart == 0 ? plannedStart : moment.min(plannedProjectStart, plannedStart);
 								}
 							}
 							
 							// Calculate PlannedEnd
 							var plannedEndRange;
-							if (!task._$actualEndCalculated && task.parent()._$actualCalculated) {
-								plannedEndRange = [task.earlyEnd(), task.lateEnd()];
-								_.forEach(this.getConstraints4PlannedEnd(task), function(restrictPlannedEndRange) {
-									plannedEndRange = restrictPlannedEndRange(plannedEndRange);
-									if (!plannedEndRange) {
-										return false;
-									} else {
-										// Chequear si el rango es válido
-										if (plannedEndRange[1].isBefore(plannedEndRange[0])) {
-											throw "Task " + task.name() + " wrong planned range [" + + ', ' +  +"] (alreadyCalculatedIndex= " + alreadyCalculatedIndex + ") for actual stage";
-										}
+							if (!task._$engine.plannedEnd) { // If already calculated
+								plannedEndRange = [task.earlyEnd(), task.lateEnd()]; // Gets current End range
+								if (!!plannedEndRange[0] && !!plannedEndRange[1]) { // If valid value
+									_.forEach(task.getRestrictionsForPlanning(), function(restriction) {
+										plannedEndRange = task.applyRestrictionForPlannedEnd(restriction, plannedEndRange); // Apply restriction
+										return !!plannedEndRange[0] && !!plannedEndRange[1]; // If false it finishes loop
+									}, task);
+									if(task.applyPlannedEnd(plannedEndRange)) { // If value can be applied to task
+										task._$engine.plannedEnd = true; // Mark task as calculted for the value
+										unknownResolvedInIteration = true; // Notify engine than improvements has been performed in this iteration
+										var plannedEnd = task.applyTactic4PlannedEnd(plannedEndRange);
+										plannedProjectEnd = plannedProjectEnd == 0 ? plannedEnd : moment.max(plannedProjectEnd, plannedEnd);
 									}
-								}, task);
-
-							
-								if (plannedEndRange) {
-									task._$actualEndCalculated = true;
-									unknownResolvedInIteration = true;
-									task.applyPlannedEndRange2Task(plannedEndRange);
-									var plannedEnd = task.applyTactic2PlannedEndRange4PlannedEnd(plannedEndRange);
-									plannedProjectEnd = plannedProjectEnd == 0 ? plannedEnd : moment.max(plannedProjectEnd, plannedEnd);
 								}
 							}
 							
-							if (task._$actualStartCalculated && task._$actualEndCalculated) {
-								task._$actualCalculated = true;
+							if (task._$engine.plannedStart && task._$engine.plannedEnd) {
 								if (i != alreadyCalculatedIndex + 1) {
 									var aux = tasks[i];
 									tasks[i] = tasks[alreadyCalculatedIndex + 1];

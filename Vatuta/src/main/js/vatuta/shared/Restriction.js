@@ -48,14 +48,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			return arguments.length ? (this._delay = newDuration) : this._delay;
 		},
 		getDependants4Task: function(task) {
-			if (!task || task.id()===this.dependency().id()) {
+			if (task.equals(this.dependency())) {
 				return [this.dependant()];
 			} else {
 				return [];
 			}
 		},
 		getDependencies4Task: function(task) {
-			if (!task || task.id()===this.dependant().id()) {
+			if (task.equals(this.dependant())) {
 				return [this.dependency()];
 			} else {
 				return [];
@@ -155,24 +155,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //				return false;
 //			}
 //		},
-		restrictPlannedStartRange: function(task, plannedStartRange) {
-			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency()._$actualEndCalculated) {
-					return [moment.max(plannedStartRange[0], this.delay().addTo(this.dependency().actualEnd())),
-					        plannedStartRange[1]];
+		getPlannedStartRange4Task: function(task) {
+			if (task.equals(this.dependant())) {
+				if (this.dependency().actualEnd()) {
+					return [this.delay().addTo(this.dependency().actualEnd()), Infinity];
 				} else {
 					return false;
 				}
-			} else return plannedStartRange;
+			} else return [-Infinity,Infinity];
 		},
-		restrictPlannedEndRange: function(task, plannedEndRange) {
-			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency()._$actualEndCalculated) {
-					return plannedEndRange;
+		getPlannedEndRange4Task: function(task) {
+			if (task.equals(this.dependant())) {
+				if (this.dependency().actualEnd()) {
+					return [-Infinity,Infinity];
 				} else {
 					return false;
 				}
-			} else return plannedEndRange;
+			} else return [-Infinity,Infinity];
 		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().humanize(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " finishes.";
@@ -253,24 +252,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //				return true;
 //			}
 //		},
-		restrictPlannedStartRange: function(task, plannedStartRange) {
-			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency()._$actualStartCalculated) {
-					return plannedStartRange;
+		getPlannedStartRange4Task: function(task) {
+			if (task.equals(this.dependant())) {
+				if (this.dependency().actualStart()) {
+					return [-Infinity,Infinity];
 				} else {
 					return false;
 				}
-			} else return plannedStartRange;
+			} else return [-Infinity,Infinity];
 		},
-		restrictPlannedEndRange: function(task, plannedEndRange) {
-			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency()._$actualStartCalculated) {
-					return [moment.max(plannedEndRange[0], this.delay().addTo(this.dependency().actualStart())),
-					        plannedEndRange[1]];
+		getPlannedEndRange4Task: function(task) {
+			if (task.equals(this.dependant())) {
+				if (this.dependency().actualStart()) {
+					return [this.delay().addTo(this.dependency().actualStart()), Infinity];
 				} else {
 					return false;
 				}
-			} else return plannedEndRange;
+			} else return [-Infinity,Infinity];
 			
 		},
 		dependantDescription: function() {
@@ -344,24 +342,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //		onFinish: function(task) {
 //			return false;
 //		},
-		restrictPlannedStartRange: function(task, plannedStartRange) {
-			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency()._$actualStartCalculated) {
-					return [moment.max(plannedStartRange[0], this.delay().addTo(this.dependency().actualStart())),
-					        plannedStartRange[1]];
+		getPlannedStartRange4Task: function(task) {
+			if (task.equals(this.dependant())) {
+				if (this.dependency().actualStart()) {
+					return [this.delay().addTo(this.dependency().actualStart()), Infinity];
 				} else {
 					return false;
 				}
-			} else return plannedStartRange;
+			} else return [-Infinity,Infinity];
 		},
-		restrictPlannedEndRange: function(task, plannedEndRange) {
-			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency()._$actualStartCalculated) {
-					return plannedEndRange;
+		getPlannedEndRange4Task: function(task) {
+			if (task.equals(this.dependant())) {
+				if (this.dependency().actualStart()) {
+					return [-Infinity,Infinity];
 				} else {
 					return false;
 				}
-			} else return plannedEndRange;
+			} else return [-Infinity,Infinity];
 		},
 		dependantDescription: function() {
 			return "This task starts " + this.delay().toString(true) + " " + this.dependency().index() + ".- " + this.dependency().name()+ " starts.";
@@ -434,24 +431,23 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //		onFinish: function(task) {
 //			return true;
 //		},
-		restrictPlannedStartRange: function(task, plannedStartRange) {
-			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency()._$actualEndCalculated) {
-					return plannedStartRange;
+		getPlannedStartRange4Task: function(task) {
+			if (task.equals(this.dependant())) {
+				if (this.dependency().actualEnd()) {
+					return [-Infinity,Infinity];
 				} else {
 					return false;
 				}
-			} else return plannedStartRange;
+			} else return [-Infinity,Infinity];
 		},
-		restrictPlannedEndRange: function(task, plannedEndRange) {
-			if (!task || task.id()===this.dependant().id()) {
-				if (this.dependency()._$actualEndCalculated) {
-					return [moment.max(plannedEndRange[0], this.delay().addTo(this.dependency().actualEnd())),
-					        plannedEndRange[1]];
+		getPlannedEndRange4Task: function(task) {
+			if (task.equals(this.dependant())) {
+				if (this.dependency().actualEnd()) {
+					return [this.delay().addTo(this.dependency().actualEnd()), Infinity];
 				} else {
 					return false;
 				}
-			} else return plannedEndRange;
+			} else return [-Infinity,Infinity];
 			
 		},
 		dependantDescription: function() {

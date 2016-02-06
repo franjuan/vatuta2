@@ -199,6 +199,9 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		getRestrictionsForScheduling: function(constraints) {
 			return this.getRestrictionsFor([this.restrictions(), this.restrictionsFromDependants()], constraints);
 		},
+		getRestrictionsForPlanning: function(constraints) {
+			return this.getRestrictionsFor([this.restrictions()], constraints);
+		},
 		getRestrictionsFor: function(types, constraints) {
 			if (!constraints) {
 				var constraints = [];
@@ -230,6 +233,24 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 		},
 		applyRestrictionForLateEnd: function(restriction, lateEnd) {
 			return this.applyRestrictionFor(restriction.getMaxLateEnd4Task, restriction, lateEnd);
+		},
+		applyRestrictionForPlannedStart: function(restriction, plannedStartRange) {
+			var restrictionRange = restriction.getPlannedStartRange4Task.call(restriction, this);
+			if (!restrictionRange || (!restrictionRange[0] && !restrictionRange[1])) {
+				return false
+			} else {
+				// TODO Si incoherencia avisar
+				return this.rangeUnion(plannedStartRange, restrictionRange);
+			}
+		},
+		applyRestrictionForPlannedEnd: function(restriction, plannedEndRange) {
+			var restrictionRange = restriction.getPlannedEndRange4Task.call(restriction, this);
+			if (!restrictionRange || (!restrictionRange[0] && !restrictionRange[1])) {
+				return false
+			} else {
+				// TODO Si incoherencia avisar
+				return this.rangeUnion(plannedEndRange, restrictionRange);
+			}
 		},
 		applyEarlyStart: function(earlyStart) {
 			if (moment.isMoment(earlyStart) && earlyStart.isSame(this.calculatedEarlyStart())) {
@@ -286,28 +307,27 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			duration[unit] = value;
 			return duration
 		},
-		applyPlannedStartRange2Task: function(plannedStartRange) {
-			var plannedStart = this.tactic().getPlannedStartInRange4Task(this, plannedStartRange);
+		applyPlannedStart: function(plannedStartRange) {
+			var isActualStart = true;
 			_.forEach(this.children(), function(task) {
-				task.applyPlannedStartRange2Task([plannedStart, Infinity])
+				isActualStart = isActualStart && !!task.actualStart();
 	    		 // TODO Revisar que early no sea posterior a late
 			}, this);
-			return plannedStart;
+			return isActualStart?[this.earlyStart(),this.lateStart()]:false;
 		},
-		applyPlannedEndRange2Task: function(plannedEndRange) {
-			// TODO las restricciones de finalizar después de no pueden aplicar a hijas una Summary (ojo, las de finalizar antes de sí)
-			var plannedEnd = this.tactic().getPlannedEndInRange4Task(this, plannedEndRange);
+		applyPlannedEnd: function(plannedEndRange) {
+			var isActualEnd = true;
 			_.forEach(this.children(), function(task) {
-				task.applyPlannedEndRange2Task([0, plannedEnd])
+				isActualEnd = isActualEnd && !!task.actualEnd();
 	    		 // TODO Revisar que early no sea posterior a late
 			}, this);
-			return plannedEnd;
+			return isActualEnd?[this.earlyEnd(),this.lateEnd()]:false;
 		},
-		applyTactic2PlannedStartRange4PlannedStart: function(plannedStartRange) {
-			return this.tactic().getPlannedStartInRange4Task(this, plannedStartRange);
+		applyTactic4PlannedStart: function(plannedStartRange) {
+			return this.actualStart()
 		},
-		applyTactic2PlannedEndRange4PlannedEnd: function(plannedEndRange) {
-			return this.tactic().getPlannedEndInRange4Task(this, plannedEndRange);
+		applyTactic4PlannedEnd: function(plannedEndRange) {
+			return this.actualEnd();
 		},
 		watchHash: function() {
 			// TODO Include duration in watch function
