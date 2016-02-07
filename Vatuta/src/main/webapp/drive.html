@@ -1,0 +1,207 @@
+<html>
+  <head>
+    <script type="text/javascript">
+      // Your Client ID can be retrieved from your project in the Google
+      // Developer Console, https://console.developers.google.com
+      var CLIENT_ID = '604717306980-1a7b9ick4c0o32n40pe4kft7n79f8tjq.apps.googleusercontent.com';
+
+      var SCOPES = ['https://www.googleapis.com/auth/drive',
+                    'https://www.googleapis.com/auth/drive.appfolder'];
+
+      /**
+       * Check if current user has authorized this application.
+       */
+      function checkAuth() {
+        gapi.auth.authorize(
+          {
+            'client_id': CLIENT_ID,
+            'scope': SCOPES.join(' '),
+            'immediate': true
+          }, handleAuthResult);
+      }
+
+      /**
+       * Handle response from authorization server.
+       *
+       * @param {Object} authResult Authorization result.
+       */
+      function handleAuthResult(authResult) {
+        var authorizeDiv = document.getElementById('authorize-div');
+        if (authResult && !authResult.error) {
+          // Hide auth UI, then load client library.
+          authorizeDiv.style.display = 'none';
+          loadDriveApi();
+        } else {
+          // Show auth UI, allowing the user to initiate authorization by
+          // clicking authorize button.
+          authorizeDiv.style.display = 'inline';
+        }
+      }
+
+      /**
+       * Initiate auth flow in response to user clicking authorize button.
+       *
+       * @param {Event} event Button click event.
+       */
+      function handleAuthClick(event) {
+        gapi.auth.authorize(
+          {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+          handleAuthResult);
+        return false;
+      }
+
+      /**
+       * Load Drive API client library.
+       */
+      function loadDriveApi() {
+        gapi.client.load('drive', 'v2', listFiles);
+      }
+
+      /**
+       * Print files.
+       */
+      function listFiles() {
+        var request = gapi.client.drive.files.list({
+        	'q': '\'appfolder\' in parents',
+            'maxResults': 10
+          });
+
+          request.execute(function(resp) {
+            appendPre('Files:');
+            var files = resp.items;
+            if (files && files.length > 0) {
+              for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                appendPre(file.title + ' (' + file.id + ')');
+              }
+            } else {
+              appendPre('No files found.');
+            }
+          });
+      }
+
+      /**
+       * Append a pre element to the body containing the given message
+       * as its text node.
+       *
+       * @param {string} message Text to be placed in pre element.
+       */
+      function appendPre(message) {
+        var pre = document.getElementById('output');
+        var textContent = document.createTextNode(message + '\n');
+        pre.appendChild(textContent);
+      }
+       
+       /**
+        * Print metadata for the Application Data folder.
+        */
+       function printApplicationDataFolderMetadata() {
+         var request = gapi.client.drive.files.get({
+           'fileId': 'appfolder'
+         });
+         request.execute(function(resp) {
+           console.log('Id: ' + resp.id);
+           console.log('Title: ' + resp.title);
+         });
+       }
+       
+       /**
+        * Write a file
+        */
+       function writeFile() {
+    	   var value = document.getElementById('text').value;
+    	   
+    	   const boundary = '-------314159265358979323846';
+    	   const delimiter = "\r\n--" + boundary + "\r\n";
+    	   const close_delim = "\r\n--" + boundary + "--";
+    	   
+    	   var contentType = 'text/plain';
+    	   var metadata = {
+    	      'title': value + '.vatuta',
+    	      'mimeType': contentType,
+    	      'parents': [{'id': 'appfolder'}]
+    	   };
+    	   
+    	   var multipartRequestBody =
+    	        delimiter +
+    	        'Content-Type: application/json\r\n\r\n' +
+    	        JSON.stringify(metadata) +
+    	        delimiter +
+    	        'Content-Type: ' + contentType + '\r\n' +
+    	        'Content-Transfer-Encoding: 8bit\r\n' +
+    	        '\r\n' +
+    	        value +
+    	        close_delim;
+    	   
+    	   var request = gapi.client.request({
+    	        'path': '/upload/drive/v2/files',
+    	        'method': 'POST',
+    	        'params': {'uploadType': 'multipart'},
+    	        'headers': {
+    	          'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+    	        },
+    	        'body': multipartRequestBody});
+
+    	   var callback = function(file) {
+    	        console.log(file)
+    	      };
+    	      
+    	    request.execute(callback);
+       }
+       /**
+        * Write a file
+        */
+       function loadFile() {
+    	   var value = document.getElementById('text').value;
+    	   
+    	   var request = gapi.client.drive.files.get({
+    		    'fileId': value
+    		});
+    	   
+    	   var callback = function(file) {
+    		var downloadUrl = file.downloadUrl;
+    		
+    		 var myToken = gapi.auth.getToken();
+    	        var myXHR   = new XMLHttpRequest();
+    	        myXHR.open('GET', downloadUrl, true );
+    	        myXHR.setRequestHeader('Authorization', 'Bearer ' + myToken.access_token );
+    	        myXHR.onreadystatechange = function( theProgressEvent ) {
+    	            if (myXHR.readyState == 4) {
+//    	          1=connection ok, 2=Request received, 3=running, 4=terminated
+    	                if ( myXHR.status == 200 ) {
+//    	              200=OK
+    	                    console.log( myXHR.response );
+    	                }
+    	            }
+    	        }
+    	        myXHR.send();
+    		
+  	      };
+    	   
+    	   request.execute(callback);
+       }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth">
+    </script>
+  </head>
+  <body>
+    <div id="authorize-div" style="display: none">
+      <span>Authorize access to Drive API</span>
+      <!--Button for the user to click to initiate auth sequence -->
+      <button id="authorize-button" onclick="handleAuthClick(event)">
+        Authorize
+      </button>
+    </div>
+    <button onclick="printApplicationDataFolderMetadata()">
+        Application Folder Meta Data
+    </button>
+    <input id="text" type="text"/>
+    <button onclick="writeFile()">
+        Write data
+    </button>
+    <button onclick="loadFile()">
+        Load data
+    </button>
+    <pre id="output"></pre>
+  </body>
+</html>
