@@ -57,6 +57,8 @@ define(
 					this._rulerColor = "#C5CAE9";
 					/* @member {Number} */
 					this._rulerHeightOffset = 0; //Height offset if ruler is drawn in the same canvas than gantt
+					/* @member {Number} */
+					this._toolBarHeight = 64; // Height of toolbarmenu
 					
 					lang.mixin(this, kwArgs);
 					
@@ -155,7 +157,7 @@ define(
 				},
 				drawProject: function(project, selectedTask, $window) {
 					this._width = Math.max(project.actualDuration().asDays() * this._dayWidth + 2*this._sideMargins, $window.innerWidth - this._dayWidth);
-					this._height = Math.max(this._rulerHeightOffset + this._taskRowHeight * project.tasks().length, $window.innerHeight - this._rulerHeightOffset - 2*this._dayWidth);
+					this._height = Math.max(this._rulerHeightOffset + this._taskRowHeight * project.tasks().length, $window.innerHeight - this._rulerHeightOffset -this._toolBarHeight - 2*this._dayWidth);
 
 					this._canvas.width = this._width;
 					this._canvas.height = this._height;

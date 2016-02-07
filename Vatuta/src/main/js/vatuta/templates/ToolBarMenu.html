@@ -1,0 +1,78 @@
+<md-toolbar>
+     <div class="md-toolbar-tools" >
+     	<md-menu>
+	       <md-button class="md-icon-button" aria-label="File" ng-click="$mdOpenMenu($event)">
+	         <md-icon md-svg-icon="icons/ic_folder_open_white_48px.svg"></md-icon>
+	       </md-button>
+	       <md-menu-content width="2">
+	       		<md-menu-item>
+	          			<md-button ng-click="fileOpen($event)">
+	          				<span md-menu-align-target>Open...</span>
+	          			</md-button>
+	        		</md-menu-item>
+	        		<md-menu-item>
+	          			<md-button ng-click="fileSave($event)">
+	          				<span md-menu-align-target>Save...</span>
+	          			</md-button>
+	        		</md-menu-item>
+	        		<md-menu-item>
+	        			<md-button ng-click="asImage($event)">
+	          				<span md-menu-align-target>As image...</span>
+	          			</md-button>
+	        		</md-menu-item>
+	       	</md-menu-content> 
+        </md-menu>
+        <md-menu>
+	       <md-button class="md-icon-button" aria-label="Add task" ng-click="$mdOpenMenu($event)">
+	         <md-icon md-svg-icon="icons/ic_add_circle_outline_white_48px.svg"></md-icon>
+	       </md-button>
+	       <md-menu-content width="2">
+	       		<md-menu-item>
+	          			<md-button ng-click="fileOpen($event)">
+	          				<span md-menu-align-target>Before this task</span>
+	          			</md-button>
+	        		</md-menu-item>
+	        		<md-menu-item>
+	          			<md-button ng-click="fileSave($event)">
+	          				<span md-menu-align-target>After this task</span>
+	          			</md-button>
+	        		</md-menu-item>
+	        		<md-menu-item>
+	        			<md-button ng-click="asImage($event)">
+	          				<span md-menu-align-target>As a child</span>
+	          			</md-button>
+	        		</md-menu-item>
+	       	</md-menu-content> 
+        </md-menu>
+       <md-button class="md-icon-button" aria-label="Move up task" ng-disabled="true">
+         <md-icon md-svg-icon="icons/ic_arrow_drop_up_white_48px.svg"></md-icon>
+       </md-button>
+       <md-button class="md-icon-button" aria-label="Move down task" ng-disabled="true">
+         <md-icon md-svg-icon="icons/ic_arrow_drop_down_white_48px.svg"></md-icon>
+       </md-button>
+       <span flex></span>
+       <md-menu md-position-mode="target-right target">
+	       <md-button class="md-icon-button" aria-label="Views" ng-click="$mdOpenMenu($event)">
+	         <md-icon md-svg-icon="icons/ic_visibility_white_48px.svg"></md-icon>
+	       </md-button>
+	       <md-menu-content width="2">
+	       		<md-menu-item>
+	              <md-button ng-click="changeView('/gantt');" aria-label="Gantt View">
+	                  <div layout="row">
+	                  	<md-icon md-menu-align-target md-svg-src="icons/ic_clear_all_black_48px.svg" aria-label="Gantt view"></md-icon>
+	                    <p flex>Gantt view</p>
+	                  </div>
+	              </md-button>
+	            </md-menu-item>
+	            <md-menu-item>
+	              <md-button ng-click="changeView('/dataTable');" aria-label="Table View">
+	                  <div layout="row">
+	                  	<md-icon md-menu-align-target md-svg-src="icons/ic_view_list_black_48px.svg" aria-label="Table view"></md-icon>
+	                    <p flex>Datatable view</p>
+	                  </div>
+	              </md-button>
+	            </md-menu-item>
+	       </md-menu-content>
+       </md-menu>
+     </div>
+</md-toolbar>

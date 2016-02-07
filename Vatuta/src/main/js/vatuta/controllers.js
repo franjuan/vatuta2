@@ -1,6 +1,6 @@
 define([ "vatuta/controllers/TaskDependencyDialogController",
          "vatuta/controllers/TaskEditorController",
-         "vatuta/controllers/SpeedDialMenuController",
+         "vatuta/controllers/ToolBarMenuController",
          "vatuta/controllers/DataTableController",
          "vatuta/controllers/GanttController",
          "vatuta/controllers/BottomSheetMenuController",
