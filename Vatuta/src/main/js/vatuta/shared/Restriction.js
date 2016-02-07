@@ -156,7 +156,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //			}
 //		},
 		getPlannedStartRange4Task: function(task) {
-			if (task.equals(this.dependant())) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().actualEnd()) {
 					return [this.delay().addTo(this.dependency().actualEnd()), Infinity];
 				} else {
@@ -165,7 +165,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			} else return [-Infinity,Infinity];
 		},
 		getPlannedEndRange4Task: function(task) {
-			if (task.equals(this.dependant())) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().actualEnd()) {
 					return [-Infinity,Infinity];
 				} else {
@@ -253,7 +253,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //			}
 //		},
 		getPlannedStartRange4Task: function(task) {
-			if (task.equals(this.dependant())) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().actualStart()) {
 					return [-Infinity,Infinity];
 				} else {
@@ -262,7 +262,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			} else return [-Infinity,Infinity];
 		},
 		getPlannedEndRange4Task: function(task) {
-			if (task.equals(this.dependant())) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().actualStart()) {
 					return [this.delay().addTo(this.dependency().actualStart()), Infinity];
 				} else {
@@ -343,7 +343,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //			return false;
 //		},
 		getPlannedStartRange4Task: function(task) {
-			if (task.equals(this.dependant())) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().actualStart()) {
 					return [this.delay().addTo(this.dependency().actualStart()), Infinity];
 				} else {
@@ -352,7 +352,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			} else return [-Infinity,Infinity];
 		},
 		getPlannedEndRange4Task: function(task) {
-			if (task.equals(this.dependant())) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().actualStart()) {
 					return [-Infinity,Infinity];
 				} else {
@@ -432,7 +432,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 //			return true;
 //		},
 		getPlannedStartRange4Task: function(task) {
-			if (task.equals(this.dependant())) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().actualEnd()) {
 					return [-Infinity,Infinity];
 				} else {
@@ -441,7 +441,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "vatuta/shared/Engine", "vatut
 			} else return [-Infinity,Infinity];
 		},
 		getPlannedEndRange4Task: function(task) {
-			if (task.equals(this.dependant())) {
+			if (task.equals(this.dependant()) || task.isDescendantOf(this.dependant())) {
 				if (this.dependency().actualEnd()) {
 					return [this.delay().addTo(this.dependency().actualEnd()), Infinity];
 				} else {
