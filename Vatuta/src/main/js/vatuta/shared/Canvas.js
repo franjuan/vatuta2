@@ -291,70 +291,78 @@ define(
 				drawClickedTask: function(task, project){
 					this._selectedTaskContainer.removeAllChildren();
 					
-					var scale = 0.40;
+					if (!!task) {
+						var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
+						
+						this._selectedTaskContainer.addChild(earlyLateLimitsContainer);
+					}
 					
-					this.drawTaskOperation(
-							"moveUpTask",
-							"/icons/ic_keyboard_arrow_up_black_48px.svg",
-							this._rulerColor,
-							scale - 0.10,
-							task,
-							"center",
-							"top");
+//					var scale = 0.40;
+//					
+//					this.drawTaskOperation(
+//							"moveUpTask",
+//							"/icons/ic_keyboard_arrow_up_black_48px.svg",
+//							this._rulerColor,
+//							scale - 0.10,
+//							task,
+//							"center",
+//							"top");
+//					
+//					this.drawTaskOperation(
+//							"moveDownTask",
+//							"/icons/ic_keyboard_arrow_down_black_48px.svg",
+//							this._rulerColor,
+//							scale - 0.10,
+//							task,
+//							"center",
+//							"bottom");
+//					
+//					this.drawTaskOperation(
+//							"showTaskInfo",
+//							"/icons/ic_info_outline_black_48px.svg",
+//							this._rulerColor,
+//							scale + 0.10,
+//							task,
+//							"center",
+//							"center");
+//					
+//					this.drawTaskOperation(
+//							"deleteTask",
+//							"icons/ic_delete_black_48px.svg",
+//							"#FF5252",
+//							scale,
+//							task,
+//							"right",
+//							"top");
+//					
+//					this.drawTaskOperation(
+//							"addChild",
+//							"/icons/ic_control_point_duplicate_black_48px.svg",
+//							this._rulerColor,
+//							scale,
+//							task,
+//							"right",
+//							"bottom");
+//					
+//					this.drawTaskOperation(
+//							"addSiblingBefore",
+//							"/icons/ic_add_circle_outline_black_48px.svg",
+//							this._rulerColor,
+//							scale,
+//							task,
+//							"left",
+//							"top");
+//					
+//					this.drawTaskOperation(
+//							"addSiblingAfter",
+//							"/icons/ic_add_circle_outline_black_48px.svg",
+//							this._rulerColor,
+//							scale,
+//							task,
+//							"left",
+//							"bottom");
 					
-					this.drawTaskOperation(
-							"moveDownTask",
-							"/icons/ic_keyboard_arrow_down_black_48px.svg",
-							this._rulerColor,
-							scale - 0.10,
-							task,
-							"center",
-							"bottom");
-					
-					this.drawTaskOperation(
-							"showTaskInfo",
-							"/icons/ic_info_outline_black_48px.svg",
-							this._rulerColor,
-							scale + 0.10,
-							task,
-							"center",
-							"center");
-					
-					this.drawTaskOperation(
-							"deleteTask",
-							"icons/ic_delete_black_48px.svg",
-							"#FF5252",
-							scale,
-							task,
-							"right",
-							"top");
-					
-					this.drawTaskOperation(
-							"addChild",
-							"/icons/ic_control_point_duplicate_black_48px.svg",
-							this._rulerColor,
-							scale,
-							task,
-							"right",
-							"bottom");
-					
-					this.drawTaskOperation(
-							"addSiblingBefore",
-							"/icons/ic_add_circle_outline_black_48px.svg",
-							this._rulerColor,
-							scale,
-							task,
-							"left",
-							"top");
-					
-					this.drawTaskOperation(
-							"addSiblingAfter",
-							"/icons/ic_add_circle_outline_black_48px.svg",
-							this._rulerColor,
-							scale,
-							task,
-							"left",
-							"bottom");
+					this._stage.update();
 					
 					return this._selectedTaskContainer;
 				},
@@ -411,11 +419,11 @@ define(
 				drawOverTask: function(task, project){
 					this._overTaskContainer.removeAllChildren();
 					
-					if (task) {
-						var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
-						
-						this._overTaskContainer.addChild(earlyLateLimitsContainer);
-					}
+//					if (!!task) {
+//						var earlyLateLimitsContainer = this.drawEarlyLateLimits(task, project);
+//						
+//						this._overTaskContainer.addChild(earlyLateLimitsContainer);
+//					}
 					
 					this._stage.update();
 					

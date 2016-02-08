@@ -118,6 +118,12 @@ define([ "vatuta/vatutaApp"  ], function() {
 					index = task.index() + 1;
 				}
 				return this.addSiblingTaskAt(task, index);
+			},
+			loadProject: function() {
+				
+			},
+			saveProject: function() {
+				
 			}
 		}
 		

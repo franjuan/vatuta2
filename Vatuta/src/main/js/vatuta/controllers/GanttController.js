@@ -82,6 +82,9 @@ define(
 											},
 											onClickOnTaskContainer : function(
 													event, task) {
+												$scope.$apply(function() {
+													$scope.selectedTask = null;
+												});
 //												$scope
 //														.$apply(function() {
 //															$scope.selectedTask = task;
@@ -112,50 +115,50 @@ define(
 //																											1500));
 //																			});
 //														});
-											},
-											onClickTaskOperation: function (event, task, operation) {
-												switch (operation) {
-													case "showTaskInfo":
-														$scope.toggleSidenav('left');
-														break;
-													case "moveUpTask":
-														break;
-													case "moveDownTask":
-														break;
-													case "deleteTask":
-														VatutaHandler.deleteTask(task)
-													 	.then (function(task){},
-													 			function(err){});
-														break;
-													case "addChild":
-														VatutaHandler.addChildTask(task)
-															.then(
-																function(newTask){
-																	$scope.selectedTask = newTask;
-																	$scope.toggleSidenav('left');
-																},
-																function(err){});
-														break;
-													case "addSiblingBefore":
-														VatutaHandler.addSiblingTaskBefore(task)
-														.then(
-															function(newTask){
-																$scope.selectedTask = newTask;
-																$scope.toggleSidenav('left');
-															},
-															function(err){});
-														break;
-													case "addSiblingAfter":
-														VatutaHandler.addSiblingTaskAfter(task)
-														.then(
-															function(newTask){
-																$scope.selectedTask = newTask;
-																$scope.toggleSidenav('left');
-															},
-															function(err){});
-														break;
-												}
-											}
+											}//,
+//											onClickTaskOperation: function (event, task, operation) {
+//												switch (operation) {
+//													case "showTaskInfo":
+//														$scope.toggleSidenav('left');
+//														break;
+//													case "moveUpTask":
+//														break;
+//													case "moveDownTask":
+//														break;
+//													case "deleteTask":
+//														VatutaHandler.deleteTask(task)
+//													 	.then (function(task){},
+//													 			function(err){});
+//														break;
+//													case "addChild":
+//														VatutaHandler.addChildTask(task)
+//															.then(
+//																function(newTask){
+//																	$scope.selectedTask = newTask;
+//																	$scope.toggleSidenav('left');
+//																},
+//																function(err){});
+//														break;
+//													case "addSiblingBefore":
+//														VatutaHandler.addSiblingTaskBefore(task)
+//														.then(
+//															function(newTask){
+//																$scope.selectedTask = newTask;
+//																$scope.toggleSidenav('left');
+//															},
+//															function(err){});
+//														break;
+//													case "addSiblingAfter":
+//														VatutaHandler.addSiblingTaskAfter(task)
+//														.then(
+//															function(newTask){
+//																$scope.selectedTask = newTask;
+//																$scope.toggleSidenav('left');
+//															},
+//															function(err){});
+//														break;
+//												}
+//											}
 										};
 
 										function taskChanged(newP, oldP, $scope) {

@@ -10,9 +10,8 @@ define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "moment", "vatuta/v
 									'$mdToast',
 									'$project',
 									function($scope, $mdDialog, $mdToast, $project) {
-										$scope.message =  "This is a test message in DataTable view";$scope
+
 										$scope.project = $project;
-										$project.name("Other name");
 										
 										this.durationSort = function(a, b, rowA, rowB, direction) {
 								    		var nulls = $scope.dataTableGridApi.core.sortHandleNulls(a, b);

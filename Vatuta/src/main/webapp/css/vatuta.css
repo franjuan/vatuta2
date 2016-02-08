@@ -125,3 +125,9 @@ vatuta-menu md-menu button md-icon {
 .cell-error-icons {
 	font-size: 20px;
 }
+
+/* Padding for Project name in toolbarmanue*/
+vatuta-toolbarmenu h2 {
+    padding-left: 30px;
+    padding-right: 30px;
+}

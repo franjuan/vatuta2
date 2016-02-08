@@ -25,7 +25,7 @@ define([ "vatuta/services",
 
 	vatutaApp.constant('config', {
 		policyVersion : 0.1,
-		version : 0.24
+		version : 0.25
 	}).run(function($rootScope, config) {
 		$rootScope.$config = config;
 	});
