@@ -239,8 +239,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			if (!restrictionRange || (!restrictionRange[0] && !restrictionRange[1])) {
 				return false
 			} else {
-				// TODO Si incoherencia avisar
-				return this.rangeUnion(plannedStartRange, restrictionRange);
+				var union = this.rangeUnion(plannedStartRange, restrictionRange);
+				if (!union) {
+					// TODO Incluir el error en la restricción para mostrarlo
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", restriction " + restriction.shortDescription() + " is not achievable.",
+						task: this,
+						error: "UnachievableConstraint"
+						}
+					return plannedStartRange;
+				}
+				return union;
 			}
 		},
 		applyRestrictionForPlannedEnd: function(restriction, plannedEndRange) {
@@ -248,8 +257,17 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			if (!restrictionRange || (!restrictionRange[0] && !restrictionRange[1])) {
 				return false
 			} else {
-				// TODO Si incoherencia avisar
-				return this.rangeUnion(plannedEndRange, restrictionRange);
+				var union = this.rangeUnion(plannedEndRange, restrictionRange);
+				if (!union) {
+					// TODO Incluir el error en la restricción para mostrarlo
+					throw {
+						message: "Error at task " + this.index() + ".- " + this.name() + ", restriction " + restriction.shortDescription() + " is not achievable.",
+						task: this,
+						error: "UnachievableConstraint"
+						}
+					return plannedEndRange;
+				}
+				return union;
 			}
 		},
 		applyEarlyStart: function(earlyStart) {

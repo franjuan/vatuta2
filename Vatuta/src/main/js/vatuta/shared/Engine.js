@@ -42,7 +42,6 @@ define(
 					// Remove old values
 					delete this.currentProject()._actualStart;
 					delete this.currentProject()._actualEnd;
-					delete this.currentProject()._$actualCalculated;
 					_.forEach(this.currentProject().tasks(), function(task) {
 						delete task._earlyStart;
 						delete task._earlyEnd;
@@ -50,9 +49,6 @@ define(
 						delete task._lateEnd;
 						delete task._actualStart;
 						delete task._actualEnd;
-						delete task._$actualStartCalculated;
-						delete task._$actualEndCalculated;
-						delete task._$actualCalculated;
 						
 						task._$engine = {};
 					});
@@ -269,11 +265,7 @@ define(
 					this.showState(this.currentProject(), tasks);
 					
 					// Remove temp vars
-					delete this.currentProject()._$actualCalculated;
 					_.forEach(this.currentProject().tasks(), function(task) {
-						delete task._$actualStartCalculated;
-						delete task._$actualEndCalculated;
-						delete task._$actualCalculated;
 						delete task._$engine;
 					});
 				},

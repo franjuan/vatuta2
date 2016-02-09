@@ -9,50 +9,18 @@
       </md-button>
     </div>
   </md-toolbar>
-  <md-dialog-content style="max-width:800px;max-height:810px; ">
-    <div class="md-dialog-content">
+  <md-dialog-content>
+    <div class="md-dialog-content" layout="column" layout-align="center start">
      <md-input-container>
         <label>Dependency type</label>
         <md-select ng-model="ctrl.type" >
-          <md-option value="FS" selected class="dependencyTypeOption">
-          	<div layout="row" class="leftSide">
-	          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Finish-Start"></md-icon>
-	          	<div layout = "column" class="rightSide">
-		            <span class="topPart firstLine">Finish-Start. </span>
-		            <span class="bottomPart secondLine">This task should start after referred one is finished.</span>
-	            </div>
-            </div>
-          </md-option>
-          <md-option value="FF" class="dependencyTypeOption">
-          	<div layout="row" class="leftSide">
-	          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
-	          	<div layout = "column" class="rightSide">
-		            <span class="topPart firstLine">Finish-Finish. </span>
-		            <span class="bottomPart secondLine">This task should end after referred one is finished.</span>
-	            </div>
-            </div>
-          </md-option>
-          <md-option value="SS" class="dependencyTypeOption">
-          	<div layout="row" class="leftSide">
-	          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
-	          	<div layout = "column" class="rightSide">
-		            <span class="topPart firstLine">Start-Start. </span>
-		            <span class="bottomPart secondLine">This task should start after referred one has started.</span>
-	            </div>
-            </div>
-          </md-option>
-          <md-option value="SF" class="dependencyTypeOption">
-          	<div layout="row" class="leftSide" >
-	          	<md-icon md-svg-src="icons/ic_keyboard_tab_black_48px.svg" aria-label="Task dependencies"></md-icon>
-	          	<div layout = "column" class="rightSide">
-		            <span class="topPart firstLine">Start-Finish. </span>
-		            <span class="bottomPart secondLine">This task should finish after referred one has started.</span>
-	            </div>
-            </div>
-          </md-option>
+          <md-option value="FS" selected><span>Finish-Start.- This task should start after referred one is finished.</md-option>
+          <md-option value="FF">Finish-Finish.- This task should end after referred one is finished.</md-option>
+          <md-option value="SS">Start-Start.- This task should start after referred one has started.</md-option>
+          <md-option value="SF">Start-Finish.- This task should finish after referred one has started.</md-option>
         </md-select>
       </md-input-container>
-      <md-input-container>
+      <md-input-container style="width:100%">
         <label>Task</label>
        	<md-autocomplete
        	  md-input-name="taskSelector"
@@ -79,12 +47,13 @@
 			<div ng-message="duration">Delay does not have a valid value, please check time units and values</div>
 		</div>
 		</md-input-container>
+	</div>
   </md-dialog-content>
-  <div class="md-actions" layout="row" layout-align="space-between center">
+  <md-dialog-actions layout="row" layout-align="space-between center">
     <md-button ng-click="cancel()" class="md-raised md-primary">Cancel</md-button>
     <span flex></span>
     <md-button ng-click="answer(ctrl.type, ctrl.task)" class="md-raised md-primary" style="margin-right:20px;" ng-disabled="taskDependencyForm.$invalid || ctrl.invalidTask">Create</md-button>
-  </div>
+  </md-dialog-actions>
   </form>
 </md-dialog>
 
