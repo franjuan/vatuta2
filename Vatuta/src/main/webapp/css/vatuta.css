@@ -131,3 +131,19 @@ vatuta-toolbarmenu h2 {
     padding-left: 30px;
     padding-right: 30px;
 }
+
+/* To avoid project name take all toolbar */ 
+vatuta-toolbarmenu .projectName {
+	text-overflow: ellipsis;
+	width: 30%;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ProjectPropertiesDialog {
+	min-width:400px; width:70%;
+}
+
+md-input-container.fullWidth {
+    width: 100%;
+}

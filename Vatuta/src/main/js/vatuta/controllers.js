@@ -4,5 +4,6 @@ define([ "vatuta/controllers/TaskDependencyDialogController",
          "vatuta/controllers/DataTableController",
          "vatuta/controllers/GanttController",
          "vatuta/controllers/BottomSheetMenuController",
-         "vatuta/controllers/ViewSelectorController"], function() {
+         "vatuta/controllers/ViewSelectorController",
+         "vatuta/controllers/ProjectPropertiesDialogController"], function() {
 });

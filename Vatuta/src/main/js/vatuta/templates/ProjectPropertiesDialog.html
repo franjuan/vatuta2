@@ -1,0 +1,47 @@
+<md-dialog aria-label="Project properties" ng-cloak ng-controller="ProjectPropertiesDialogController as ctrl" class="ProjectPropertiesDialog">
+  <form name="projectPropertiesForm" novalidate>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Project {{project.name()}}'s properties</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <md-icon md-svg-src="icons/ic_close_white_48px.svg" aria-label="Close dialog"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content" layout="column" layout-align="start start">
+     <md-input-container class="fullWidth">
+     	<label>Name</label>
+		<input name="name" ng-model="project.name" ng-model-options="{ getterSetter: true }" required></input>
+		<div ng-messages="projectPropertiesForm.name.$error" role="alert">
+			<div ng-message="required">Project must have a name</div>
+		</div>
+	 </md-input-container>
+	 <md-input-container flex class="fullWidth">
+	 	<label>Description</label>
+	 	<textarea name="project" column="1" ng-model="project.description"
+				ng-model-options="{ getterSetter: true }" flex></textarea>
+	 </md-input-container>
+	 <div layout="row" style="width: 100%;">
+	 	<div flex="50">
+		 	<h5>Start of project</h5>
+	 		<md-datepicker ng-model="project.earlyStart" ng-model-options="{ getterSetter: true }" 
+	        				md-placeholder="Enter date" moment-date required></md-datepicker>
+	    </div>
+        <div flex="50">
+	        <h5>End of project</h5>
+			<md-datepicker ng-model="project.earlyEnd" ng-model-options="{ getterSetter: true }" 
+							md-placeholder="Enter date" moment-date required></md-datepicker>
+		</div>
+	 </div>
+	</div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row" layout-align="space-between center">
+    <md-button ng-click="cancel()" class="md-raised md-primary">Cancel</md-button>
+    <span flex></span>
+    <md-button ng-click="answer(true)" class="md-raised md-primary" style="margin-right:20px;" ng-disabled="projectPropertiesForm.$invalid">Accept changes</md-button>
+  </md-dialog-actions>
+  </form>
+</md-dialog>
+

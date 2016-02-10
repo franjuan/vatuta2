@@ -37,7 +37,7 @@
 	       </md-button>
 	       <md-menu-content width="2">
 	       			<md-menu-item>
-		              <md-button ng-click="projectProperties($event)" aria-label="Project properties">
+		              <md-button ng-click="showProjectProperties($event)" aria-label="Project properties">
 		                  <div layout="row">
 		                  	<md-icon md-menu-align-target md-svg-src="icons/ic_business_center_black_48px.svg"></md-icon>
 		                    <p flex>Project properties</p>
@@ -46,7 +46,7 @@
 	            	</md-menu-item>
 	       	</md-menu-content> 
         </md-menu>
-        <h2>
+        <h2  class="projectName">
           <span>{{project.name()}}</span>
         </h2>
        <md-button class="md-icon-button" aria-label="Insert task after this" ng-hide="!selectedTask" ng-click="addSiblingAfter(selectedTask)">

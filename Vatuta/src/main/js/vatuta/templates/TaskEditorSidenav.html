@@ -38,9 +38,9 @@
 		        </md-select>
 		    </md-input-container>
 	        <md-datepicker ng-model="selectedTask.manualStart" ng-model-options="{ getterSetter: true }" ng-change="ctrl.manualStartChanged(selectedTask, $event)"
-	        				md-placeholder="Enter date" moment ng-hide="selectedTask.tactic().name() != 'Manual'" required moment-date></md-datepicker>
+	        				md-placeholder="Enter date" ng-hide="selectedTask.tactic().name() != 'Manual'" required moment-date></md-datepicker>
 			<md-datepicker ng-model="selectedTask.manualEnd" ng-model-options="{ getterSetter: true }" ng-change="ctrl.manualEndChanged(selectedTask, $event)"
-							md-placeholder="Enter date" moment ng-hide="selectedTask.tactic().name() != 'Manual'" required moment-date></md-datepicker>
+							md-placeholder="Enter date" ng-hide="selectedTask.tactic().name() != 'Manual'" required moment-date></md-datepicker>
 		</form>
 	</section>
 	<section layout="column">

@@ -70,6 +70,30 @@ define([ "vatuta/vatutaApp"], function() {
 		       ga('send', 'event', 'project', 'asImage');
 		};
 		
+		$scope.showProjectProperties = function(ev) {
+			var newDialogScope = $scope.$new(false, $scope);
+			newDialogScope.project = $scope.project;
+			
+		    $mdDialog.show({
+		      controller: 'ProjectPropertiesDialogController',
+		      templateUrl: 'vatuta/templates/ProjectPropertiesDialog.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:false,
+		      scope: newDialogScope
+		    })
+		    .then(function(changed) {
+		    	if (changed) {
+		    		$mdToast.show(
+		                $mdToast.simple()
+		                  .content("Project "+ $scope.project.name() + "'s properties have been changed")
+		                  .position('top right')
+		                  .hideDelay(1500)
+		              );
+		    	};
+		    }, function() {});
+		};
+		
 		$scope.showTaskInfo = function() {
 			$mdSidenav('left').toggle();
 		};
