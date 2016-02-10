@@ -18,8 +18,12 @@ define([ "vatuta/services",
 			templateUrl : 'vatuta/partials/DataTableView.html',
 			controller : 'DataTableController',
 			controllerAs : 'ctrl'
+		}).when('/calendar', {
+			templateUrl : 'vatuta/partials/CalendarView.html',
+			controller : 'CalendarController',
+			controllerAs : 'ctrl'
 		}).otherwise({
-			redirectTo : '/gantt'
+			redirectTo : '/calendar'
 		});
 	} ]);
 
