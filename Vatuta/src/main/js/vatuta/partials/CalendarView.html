@@ -13,10 +13,15 @@
      </div>
 </md-toolbar>
 <div>
-	<table>
-		<tr ng-repeat="$row in getSequence(rows)">
-			<td ng-repeat="$column in getSequence(columns)">
-				<span>{{$row}}:{{$column}}={{columns*$row+$column+1}}</span>
+	<table class="calendarTable">
+		<tr ng-repeat="$row in getSequence(rows)" class="calendarRow">
+			<td ng-repeat="$column in getSequence(columns)" class="calendarCell">
+				<span class="monthName">{{moment.months(columns*$row+$column)}}</span>
+				<table class="calendarMonth">
+					<tr>
+					<th ng-repeat="$weekDay in getWeekDays()" class="weekDays">{{$weekDay}}</th>
+					</tr>
+				</table>
 			</td>
 		</tr>
 	</table>

@@ -17,6 +17,11 @@ function(Duration, Tactics, moment) {
 					    }
 					    return result;   
 					}
+					
+					$scope.moment = moment;
+					$scope.getWeekDays = function() {
+						return moment.weekdaysMin();
+					}
 				
 					
 				} ]);
