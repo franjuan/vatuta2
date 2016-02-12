@@ -22,7 +22,18 @@ function(Duration, Tactics, moment) {
 					$scope.getWeekDays = function() {
 						return moment.weekdaysMin();
 					}
-				
 					
+					$scope.weeks = function(year, month) {
+						var init = moment({ years:year, months:month-1, date:1}).startOf("week");
+						var end = moment({ years:year, months:month-1, date:1}).endOf("month");
+						return Math.ceil(end.diff(init,"weeks",true));
+					}
+					
+					$scope.day = function(year, month, week, weekDay) {
+						var day = moment({ years:year, months:month-1, date:1}).startOf("week");
+						day.add(week, "weeks");
+						day.add(weekDay - 1, "days");
+						return day;
+					}
 				} ]);
 });

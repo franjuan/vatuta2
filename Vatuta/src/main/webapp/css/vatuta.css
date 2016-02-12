@@ -147,3 +147,45 @@ vatuta-toolbarmenu .projectName {
 md-input-container.fullWidth {
     width: 100%;
 }
+
+/* Calendar */
+.dayCell {
+    width: 30px;
+    height: 30px;
+    text-align: right;
+    vertical-align: bottom;
+    font-family: Roboto;
+    font-size: medium;
+    border-radius: 5px;
+    background: #C5CAE9;
+    color: white;
+    padding: 2px;
+    margin: 10px;
+}
+
+.weekDays {
+    text-align: right;
+    vertical-align: bottom;
+    font-family: Roboto;
+    font-size: smaller;
+}
+
+.calendarCell {
+    text-align: center;
+    vertical-align: top;
+    margin: auto;
+}
+
+.monthName {
+    font-family: Roboto, SANS-SERIF;
+    font-size: large;
+}
+
+.calendarTable {
+    width: 100%;
+    margin: 20px;
+}
+
+.calendarMonth {
+    margin: auto;
+}

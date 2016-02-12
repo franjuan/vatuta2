@@ -16,10 +16,15 @@
 	<table class="calendarTable">
 		<tr ng-repeat="$row in getSequence(rows)" class="calendarRow">
 			<td ng-repeat="$column in getSequence(columns)" class="calendarCell">
-				<span class="monthName">{{moment.months(columns*$row+$column)}}</span>
+				<span class="monthName">{{$month=columns*$row+$column+1;moment.months($month-1)}}</span>
 				<table class="calendarMonth">
-					<tr>
+					<tr class="weekDaysRow">
 					<th ng-repeat="$weekDay in getWeekDays()" class="weekDays">{{$weekDay}}</th>
+					</tr>
+					<tr ng-repeat="$week in getSequence(weeks(2016, $month))" class="weekRow">
+						<td ng-repeat="$day in [1,2,3,4,5,6,7]" ng-class="$date=day(2016, $month,$week,$day);$date.month()==$month-1?'dayCell':'otherMonthDayCell'">
+							{{$date.month()==$month-1?$date.date():''}}
+						</td>
 					</tr>
 				</table>
 			</td>
