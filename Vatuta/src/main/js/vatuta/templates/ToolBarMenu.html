@@ -49,34 +49,7 @@
         <h2  class="projectName">
           <span>{{project.name()}}</span>
         </h2>
-       <md-button class="md-icon-button" aria-label="Insert task after this" ng-hide="!selectedTask" ng-click="addSiblingAfter(selectedTask)">
-         <md-tooltip md-direction="bottom">Insert task after this</md-tooltip>
-         <md-icon md-svg-icon="icons/ic_vertical_align_bottom_white_48px.svg"></md-icon>
-       </md-button>
-       <md-button class="md-icon-button" aria-label="Insert task before this" ng-hide="!selectedTask" ng-click="addSiblingBefore(selectedTask)">
-         <md-tooltip md-direction="bottom">Insert task before this</md-tooltip>
-         <md-icon md-svg-icon="icons/ic_vertical_align_top_white_48px.svg"></md-icon>
-       </md-button>
-       <md-button class="md-icon-button" aria-label="Insert task as a child of this" ng-hide="!selectedTask" ng-click="addChild(selectedTask)">
-       	 <md-tooltip md-direction="bottom">Insert task as a child of this</md-tooltip>
-         <md-icon md-svg-icon="icons/ic_control_point_duplicate_white_48px.svg"></md-icon>
-       </md-button>
-       <md-button class="md-icon-button" aria-label="Move up task" ng-hide="true">
-       	 <md-tooltip md-direction="bottom">Move up task</md-tooltip>
-         <md-icon md-svg-icon="icons/ic_arrow_drop_up_white_48px.svg"></md-icon>
-       </md-button>
-       <md-button class="md-icon-button" aria-label="Move down task" ng-hide="true">
-       	 <md-tooltip md-direction="bottom">Move down task</md-tooltip>
-         <md-icon md-svg-icon="icons/ic_arrow_drop_down_white_48px.svg"></md-icon>
-       </md-button>
-       <md-button class="md-icon-button" aria-label="Task info and properties" ng-hide="!selectedTask" ng-click="showTaskInfo()">
-         <md-tooltip md-direction="bottom">Task info and properties</md-tooltip>
-         <md-icon md-svg-icon="icons/ic_info_outline_white_48px.svg"></md-icon>
-       </md-button>
-       <md-button class="md-icon-button" aria-label="Delete task" ng-hide="!selectedTask" ng-click="deleteTask(selectedTask)">
-         <md-tooltip md-direction="bottom">Delete task</md-tooltip>
-         <md-icon md-svg-icon="icons/ic_delete_white_48px.svg"></md-icon>
-       </md-button>
+        <ng-transclude></ng-transclude>
        <span flex></span>
        <md-menu md-position-mode="target-right target">
 	       <md-button class="md-icon-button" aria-label="Views" ng-click="$mdOpenMenu($event)">
@@ -96,6 +69,14 @@
 	                  <div layout="row">
 	                  	<md-icon md-menu-align-target md-svg-src="icons/ic_view_list_black_48px.svg" aria-label="Table view"></md-icon>
 	                    <p flex>Datatable view</p>
+	                  </div>
+	              </md-button>
+	            </md-menu-item>
+	            <md-menu-item>
+	              <md-button ng-click="changeView('/calendar');" aria-label="Calendar View">
+	                  <div layout="row">
+	                  	<md-icon md-menu-align-target md-svg-src="icons/ic_today_black_48px.svg" aria-label="Calendar view"></md-icon>
+	                    <p flex>Calendar view</p>
 	                  </div>
 	              </md-button>
 	            </md-menu-item>

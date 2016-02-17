@@ -1,4 +1,7 @@
-<md-toolbar>
+<vatuta-toolbarmenu project="project" selected-task="selectedTask">
+	<vatuta-datatable-toolbarmenu project="project"></vatuta-datatable-toolbarmenu>
+</vatuta-toolbarmenu>
+<!-- <md-toolbar>
      <div class="md-toolbar-tools" >
        <md-button class="md-icon-button" aria-label="Decrease indent" ng-disabled="true">
          <md-icon md-svg-icon="icons/ic_format_indent_decrease_white_48px.svg"></md-icon>
@@ -11,7 +14,6 @@
          <md-icon md-svg-icon="icons/ic_menu_white_48px.svg"></md-icon>
        </md-button>
      </div>
-</md-toolbar>
+</md-toolbar> -->
 <div id="dataTable" ui-grid="dataTableOptions" class="dataTable"
 	ui-grid-move-columns ui-grid-auto-resize ui-grid-resize-columns ui-grid-pinning ui-grid-cellNav ui-grid-edit ui-grid-selection ui-grid-tree-view flex></div>
-<View-Selector></View-Selector>

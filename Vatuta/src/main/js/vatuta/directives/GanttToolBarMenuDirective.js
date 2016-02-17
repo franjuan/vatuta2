@@ -1,15 +1,14 @@
 define(["vatuta/vatutaApp"], function() {
 	
-	angular.module('vatutaApp').directive('vatutaToolbarmenu', function() {
+	angular.module('vatutaApp').directive('vatutaGanttToolbarmenu', function() {
 		  return {
 			    restrict: 'EAC',
 			    scope: {
 			    	project: '=',
 			    	selectedTask: '='
 			    },
-			    transclude:true,
-			    templateUrl: 'vatuta/templates/ToolBarMenu.html',
-			    controller: 'ToolBarMenuController',
+			    templateUrl: 'vatuta/templates/GanttToolBarMenu.html',
+			    controller: 'GanttToolBarMenuController',
 			    controllerAs: 'ctrl'
 			  };
 			});

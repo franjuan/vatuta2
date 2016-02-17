@@ -7,9 +7,19 @@ function(Duration, Tactics, moment) {
 				'$mdDialog',
 				'$mdToast',
 				'$project',
-				function($scope, $mdDialog, $mdToast, $project) {
-					$scope.columns = 4;
-					$scope.rows = 3;
+				'$window',
+				function($scope, $mdDialog, $mdToast, $project, $window) {
+					$scope.project = $project;
+					
+					$scope.timetables = [{id:1, name:'Base'},{id:2, name:'Convenio'},{id:3,name:'Special'}];
+					$scope.timetable = $scope.timetables[0];
+					
+					$scope.year = moment().year();
+				
+					$scope.columns = Math.floor($window.innerWidth/300);
+					$scope.columns = $scope.columns > 4?4:$scope.columns;
+					$scope.rows = 12/$scope.columns;
+					
 					$scope.getSequence = function(num) {
 						var result = [];
 						for(var i=0; i<num; i++) {
@@ -35,5 +45,10 @@ function(Duration, Tactics, moment) {
 						day.add(weekDay - 1, "days");
 						return day;
 					}
+					
+					this.onChangeYear = function(event,year) {
+						$scope.year = year;
+					}
+					$scope.$on('changeYear', this.onChangeYear);
 				} ]);
 });

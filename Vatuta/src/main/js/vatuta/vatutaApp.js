@@ -23,13 +23,13 @@ define([ "vatuta/services",
 			controller : 'CalendarController',
 			controllerAs : 'ctrl'
 		}).otherwise({
-			redirectTo : '/calendar'
+			redirectTo : '/gantt'
 		});
 	} ]);
 
 	vatutaApp.constant('config', {
 		policyVersion : 0.1,
-		version : 0.25
+		version : 0.26
 	}).run(function($rootScope, config) {
 		$rootScope.$config = config;
 	});

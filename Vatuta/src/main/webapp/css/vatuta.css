@@ -183,9 +183,17 @@ md-input-container.fullWidth {
 
 .calendarTable {
     width: 100%;
-    margin: 20px;
+    margin: auto;
 }
 
 .calendarMonth {
     margin: auto;
+}
+
+.calendarYear {
+	display: inline;
+}
+
+.calendar {
+	overflow-y: auto;
 }

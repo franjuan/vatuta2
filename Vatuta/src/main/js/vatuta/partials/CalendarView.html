@@ -1,34 +1,48 @@
-<md-toolbar>
-     <div class="md-toolbar-tools" >
-       <md-button class="md-icon-button" aria-label="Decrease indent" ng-disabled="true">
-         <md-icon md-svg-icon="icons/ic_format_indent_decrease_white_48px.svg"></md-icon>
-       </md-button>
-       <md-button class="md-icon-button" aria-label="Increase indent" ng-disabled="true">
-         <md-icon md-svg-icon="icons/ic_format_indent_increase_white_48px.svg"></md-icon>
-       </md-button>
-       <span flex></span>
-       <md-button class="md-icon-button" aria-label="Menu" ng-disabled="true">
-         <md-icon md-svg-icon="icons/ic_menu_white_48px.svg"></md-icon>
-       </md-button>
-     </div>
-</md-toolbar>
-<div>
-	<table class="calendarTable">
-		<tr ng-repeat="$row in getSequence(rows)" class="calendarRow">
-			<td ng-repeat="$column in getSequence(columns)" class="calendarCell">
-				<span class="monthName">{{$month=columns*$row+$column+1;moment.months($month-1)}}</span>
-				<table class="calendarMonth">
-					<tr class="weekDaysRow">
-					<th ng-repeat="$weekDay in getWeekDays()" class="weekDays">{{$weekDay}}</th>
-					</tr>
-					<tr ng-repeat="$week in getSequence(weeks(2016, $month))" class="weekRow">
-						<td ng-repeat="$day in [1,2,3,4,5,6,7]" ng-class="$date=day(2016, $month,$week,$day);$date.month()==$month-1?'dayCell':'otherMonthDayCell'">
-							{{$date.month()==$month-1?$date.date():''}}
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
-</div>
-<View-Selector></View-Selector>
+<vatuta-toolbarmenu project="project" selected-task="selectedTask">
+	<vatuta-calendar-toolbarmenu project="project" selected-task="selectedTask"></vatuta-calendar-toolbarmenu>
+</vatuta-toolbarmenu>
+
+<!-- <div layout="column" layout-align="start start" class="timetable">
+	<md-input-container class="timetableSelect">
+        <label>Timetable</label>
+        <md-select ng-model="timetable" >
+          <md-option ng-repeat="$timetable in timetables" value="{{$timetable.id}}">{{$timetable.name}}</md-option>
+        </md-select>
+    </md-input-container>
+    <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Card with image</span>
+            <span class="md-subhead">Large</span>
+          </md-card-title-text>
+          <md-card-title-media>
+            <div class="md-media-lg card-media"></div>
+          </md-card-title-media>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="end center">
+          <md-button>Action 1</md-button>
+          <md-button>Action 2</md-button>
+        </md-card-actions>
+      </md-card>
+</div> -->
+<md-content>	
+	<section class="calendar">
+		<table class="calendarTable">
+			<tr ng-repeat="$row in getSequence(rows)" class="calendarRow">
+				<td ng-repeat="$column in getSequence(columns)" class="calendarCell">
+					<span class="monthName">{{$month=columns*$row+$column+1;moment.months($month-1)}}</span>
+					<table class="calendarMonth">
+						<tr class="weekDaysRow">
+						<th ng-repeat="$weekDay in getWeekDays()" class="weekDays">{{$weekDay}}</th>
+						</tr>
+						<tr ng-repeat="$week in getSequence(weeks(year, $month))" class="weekRow">
+							<td ng-repeat="$day in [1,2,3,4,5,6,7]" ng-class="$date=day(year, $month,$week,$day);$date.month()==$month-1?'dayCell':'otherMonthDayCell'">
+								{{$date.month()==$month-1?$date.date():''}}
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</section>
+</md-content>

@@ -1,9 +1,5 @@
 define([ "vatuta/vatutaApp"], function() {
 	angular.module('vatutaApp').controller('ToolBarMenuController', ['$scope', '$location', '$mdDialog', '$mdToast', '$mdSidenav', 'Task', 'Project', 'ProjectSerializer', 'Engine', 'VatutaHandler', function($scope, $location, $mdDialog, $mdToast, $mdSidenav, Task, Project, ProjectSerializer, Engine, VatutaHandler) {
-		this.isOpen = false;
-		$scope.projectProperties = function(event) {
-			
-		};
 		$scope.fileOpen = function(event) {
 			if(typeof(Storage) !== "undefined") {
 				$scope.project = ProjectSerializer.deserializeProject(localStorage.getItem("project"));
@@ -94,49 +90,8 @@ define([ "vatuta/vatutaApp"], function() {
 		    }, function() {});
 		};
 		
-		$scope.showTaskInfo = function() {
-			$mdSidenav('left').toggle();
-		};
-		
-		$scope.deleteTask = function(task) {
-			VatutaHandler.deleteTask(task)
-		 	.then (function(task){},
-		 			function(err){});
-		};
-		
-		$scope.addChild = function(parentTask) {
-			VatutaHandler.addChildTask(parentTask)
-			.then(
-				function(newTask){
-					$scope.selectedTask = newTask;
-					$mdSidenav('left').toggle();
-				},
-				function(err){});
-		};
-		
-		$scope.addSiblingBefore = function(parentTask) {
-			VatutaHandler.addSiblingTaskBefore(parentTask)
-			.then(
-				function(newTask){
-					$scope.selectedTask = newTask;
-					$mdSidenav('left').toggle();
-				},
-				function(err){});
-		};
-		
-		$scope.addSiblingAfter = function(parentTask) {
-			VatutaHandler.addSiblingTaskAfter(parentTask)
-			.then(
-				function(newTask){
-					$scope.selectedTask = newTask;
-					$mdSidenav('left').toggle();
-				},
-				function(err){});
-		}
-		
 		$scope.changeView = function ( path ) {
 			  $location.path( path );
 			};
-		
 		}]);
 });
