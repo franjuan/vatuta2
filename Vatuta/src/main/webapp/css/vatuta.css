@@ -157,7 +157,6 @@ md-input-container.fullWidth {
     font-family: Roboto;
     font-size: medium;
     border-radius: 5px;
-    background: #C5CAE9;
     color: white;
     padding: 2px;
     margin: 10px;
@@ -196,4 +195,46 @@ md-input-container.fullWidth {
 
 .calendar {
 	overflow-y: auto;
+}
+
+.timetableSelector {
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.weekDayIcon {
+    display: inline-block;
+    width: 30px;
+    border-style: solid;
+    border-radius: 30px;
+    text-align: center;
+    background: #C2185B;
+    border-color: #C2185B;
+    color: white;
+    font-size: small;
+    font-weight: bold;
+    font-family: Roboto;
+}
+
+.timeHours {
+    font-family: Roboto;
+    font-size: medium;
+    padding-left: 30px;
+    vertical-align: top;
+}
+
+.timeTable {
+    padding-left: 30px;
+    padding-right: 30px;
+    border: 20px;
+}
+
+.weekDaysRow td {
+    padding-left: 20px;
+}
+
+.timetableDescriptor {
+    padding-top: 30px;
+    padding-bottom: 20px;
 }

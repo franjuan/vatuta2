@@ -11,13 +11,40 @@ function(Duration, Tactics, moment) {
 				function($scope, $mdDialog, $mdToast, $project, $window) {
 					$scope.project = $project;
 					
-					$scope.timetables = [{id:1, name:'Base'},{id:2, name:'Convenio'},{id:3,name:'Special'}];
-					$scope.timetable = $scope.timetables[0];
+					$scope.timetables = [{name:'Base',
+										  color: '#C5CAE9',
+										  intervals:[
+										             {weekday:[false,true,true,true,true,false,false],
+										             ranges:[{from:'8:00',to:'13:00'},
+										                     {from:'14:00',to:'17:00'}
+										                     ]},
+								                     {weekday:[false,false,false,false,false,true,false],
+										             ranges:[{from:'8:00',to:'15:00'}
+										                     ]},
+								                     {weekday:[true,false,false,false,false,false,true],
+											             ranges:[]}
+										             ]},
+					                     {name:'Summer',
+										  color: '#FFA000',
+										  intervals:[
+										             {weekday:[false,true,true,true,true,true,false],
+										             ranges:[{from:'8:00',to:'15:00'}
+										                     ]},
+								                     {weekday:[true,false,false,false,false,false,true],
+											             ranges:[]}
+										             ]},
+					                     {name:'Vacation',
+										  color: '#FF5252',
+										  intervals:[
+								                     {weekday:[true,true,true,true,true,true,true],
+											             ranges:[]}
+										             ]}];
+					$scope.indexTimetables = 0;
 					
 					$scope.year = moment().year();
 				
 					$scope.columns = Math.floor($window.innerWidth/300);
-					$scope.columns = $scope.columns > 4?4:$scope.columns;
+					$scope.columns = Math.min(4,$scope.columns);
 					$scope.rows = 12/$scope.columns;
 					
 					$scope.getSequence = function(num) {
@@ -50,5 +77,13 @@ function(Duration, Tactics, moment) {
 						$scope.year = year;
 					}
 					$scope.$on('changeYear', this.onChangeYear);
+					
+					$scope.editTimeTable = function(timetable, $event) {
+						
+					}
+					
+					$scope.addTimeTable = function($event) {
+						
+					}
 				} ]);
 });
