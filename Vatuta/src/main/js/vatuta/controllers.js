@@ -9,5 +9,6 @@ define([ "vatuta/controllers/TaskDependencyDialogController",
          "vatuta/controllers/BottomSheetMenuController",
          "vatuta/controllers/ViewSelectorController",
          "vatuta/controllers/CalendarController",
+         "vatuta/controllers/TimeTableEditorController",
          "vatuta/controllers/ProjectPropertiesDialogController"], function() {
 });

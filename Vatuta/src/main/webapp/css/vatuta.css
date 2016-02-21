@@ -217,6 +217,20 @@ md-input-container.fullWidth {
     font-family: Roboto;
 }
 
+.disabledWeekDayIcon {
+	display: inline-block;
+    width: 30px;
+    border-style: solid;
+    border-radius: 30px;
+    text-align: center;
+    background: #F8BBD0;
+    border-color: #F8BBD0;
+    color: white;
+    font-size: small;
+    font-weight: bold;
+    font-family: Roboto;
+}
+
 .timeHours {
     font-family: Roboto;
     font-size: medium;
@@ -237,4 +251,29 @@ md-input-container.fullWidth {
 .timetableDescriptor {
     padding-top: 30px;
     padding-bottom: 20px;
+}
+
+.sideNavForm {
+	width: 100%;
+	padding-right: 26px;
+	padding-left: 26px;
+}
+
+vatuta-timetable-editor md-content {
+    overflow-x: hidden;
+}
+
+.colorPicker button {
+	overflow: visible;
+}
+
+.timeInput {
+	width: 3em;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+/* To remove bottom padding */
+.timeInput .md-errors-spacer {
+    display: none;
 }

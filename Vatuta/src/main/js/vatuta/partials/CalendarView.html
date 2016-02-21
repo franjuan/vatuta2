@@ -1,6 +1,11 @@
 <vatuta-toolbarmenu project="project" selected-task="selectedTask">
 	<vatuta-calendar-toolbarmenu project="project" selected-task="selectedTask"></vatuta-calendar-toolbarmenu>
 </vatuta-toolbarmenu>
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+	<div layout="column">
+		<vatuta-timetable-editor timetables="timetables" selected-index="indexTimetables"></vatuta-timetable-ditor>
+	</div>
+</md-sidenav>
 <div layout="column">
 	<div class="timetableSelector" layout="column">
 		<div layout="row" class="timetableSelectRow">
@@ -10,6 +15,10 @@
 		          <md-option ng-repeat="$timetable in timetables track by $index" value="{{$index}}">{{$timetable.name}}</md-option>
 		        </md-select>
 		    </md-input-container>
+		    <md-button aria-label="Add timetable" class="md-fab md-mini md-raised md-primary" ng-click="addTimeTable($event)">
+		 		<md-tooltip md-direction="top">Add timetable</md-tooltip>
+		     	<md-icon md-svg-src="icons/ic_add_white_48px.svg"></md-icon>
+		  	</md-button>
 	    </div>
 	    <div layout="row" class="timetableDescriptor">
 	    	<table>
@@ -30,15 +39,15 @@
 	    			</tr>
 	    		</table>
 	    	</div>
+	    	<div flex></div>
 	    	<md-button aria-label="Edit timetable" class="md-fab md-mini md-raised md-primary" ng-click="editTimeTable(timetable, $event)">
 		 		<md-tooltip md-direction="top">Edit timetable</md-tooltip>
 		     	<md-icon md-svg-src="icons/ic_mode_edit_white_48px.svg"></md-icon>
 			</md-button>
-	    	<div flex></div>
-	    	<md-button aria-label="Add timetable" class="md-fab md-mini md-raised md-warn" ng-click="addTimeTable($event)">
-		 		<md-tooltip md-direction="top">Add timetable</md-tooltip>
-		     	<md-icon md-svg-src="icons/ic_add_white_48px.svg"></md-icon>
-		  	</md-button>
+	    	<md-button aria-label="Remove timetable" class="md-fab md-mini md-raised md-warn" ng-click="removeTimeTable(timetable, $event)">
+		 		<md-tooltip md-direction="top">Remove timetable</md-tooltip>
+		     	<md-icon md-svg-src="icons/ic_delete_white_48px.svg"></md-icon>
+			</md-button>
 	    </div>
 	</div>
 	<md-content flex>	

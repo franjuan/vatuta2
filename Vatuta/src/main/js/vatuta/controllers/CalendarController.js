@@ -1,5 +1,5 @@
-define([  "vatuta/shared/Duration", "vatuta/shared/Tactics", "moment", "vatuta/vatutaApp"  ],
-function(Duration, Tactics, moment) {
+define(["moment", "vatuta/vatutaApp"  ],
+function(moment) {
 	angular
 		.module('vatutaApp')
 		.controller('CalendarController',
@@ -8,7 +8,8 @@ function(Duration, Tactics, moment) {
 				'$mdToast',
 				'$project',
 				'$window',
-				function($scope, $mdDialog, $mdToast, $project, $window) {
+				'$mdSidenav',
+				function($scope, $mdDialog, $mdToast, $project, $window, $mdSidenav) {
 					$scope.project = $project;
 					
 					$scope.timetables = [{name:'Base',
@@ -79,10 +80,14 @@ function(Duration, Tactics, moment) {
 					$scope.$on('changeYear', this.onChangeYear);
 					
 					$scope.editTimeTable = function(timetable, $event) {
-						
+						$mdSidenav('left').toggle();
 					}
 					
 					$scope.addTimeTable = function($event) {
+						
+					}
+					
+					$scope.removeTimeTable = function(timetable, $event) {
 						
 					}
 				} ]);

@@ -1,12 +1,14 @@
 define([ "vatuta/services",
          "lib/css!css/pikaday/pikaday.css",
+         "lib/css!css/colorPicker/mdColorPicker.css",
          "lib/css!https://cdnjs.cloudflare.com/ajax/libs/angular-ui-grid/3.0.7/ui-grid.min.css",
          "lib/css!https://fonts.googleapis.com/icon?family=Material+Icons",
-		 "ui-grid"], function(vatuta) {
+		 "ui-grid","colorPicker"], function(vatuta) {
 	var vatutaApp = angular.module('vatutaApp', [ 'ngMaterial', 'ngMessages',
 			'ngSanitize', 'ngCookies', 'ngAnimate', 'ngRoute',
 			'ui.grid', 'ui.grid.moveColumns', 'ui.grid.autoResize', 'ui.grid.resizeColumns',
 			'ui.grid.pinning', 'ui.grid.cellNav', 'ui.grid.edit', 'ui.grid.selection', 'ui.grid.treeView', 'ui.grid.treeBase',
+			'mdColorPicker',
 			'vatuta' ]);
 
 	vatutaApp.config([ '$routeProvider', function($routeProvider) {
