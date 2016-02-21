@@ -18,7 +18,7 @@
 		<form name="timeRangeForm" novalidate layout="column" layout-align="start start" class="sideNavForm">
 			<div ng-repeat="$interval in timetables[selectedIndex].intervals">
 				<div>
-	    			<span ng-class="$interval.weekday[$weekday]?'weekDayIcon':'disabledWeekDayIcon'" ng-repeat="$weekday in [0,1,2,3,4,5,6]" >{{getWeekDays()[$weekday]}}</span>
+	    			<span ng-class="$interval.weekday[$weekday]?'weekDayIcon':'disabledWeekDayIcon'" ng-repeat="$weekday in [0,1,2,3,4,5,6]" ng-click="clickWeekDay(timetables[selectedIndex], $interval, $weekday, $event)">{{getWeekDays()[$weekday]}}</span>
 	    		</div>
 	    		<div ng-repeat="$range in $interval.ranges">
 	    			<md-input-container  class="timeInput">
