@@ -1,40 +1,44 @@
-<md-toolbar>
-    <div class="md-toolbar-tools">TimeTable</div>
-</md-toolbar>
-<md-content>
-	<section layout="column" layout-align="start start">
-		<md-subheader class="md-primary">Properties</md-subheader>
-		<form name="timeTableForm" novalidate layout="column" layout-align="start start" class="sideNavForm">
-			<md-input-container class="fullWidth"> <label>Name</label> <input
-				name="name" ng-model="timetables[selectedIndex].name"
-				required aria-label="Name"></input>
-			<div ng-messages="timeTableForm.name.$error" role="alert">
-				<div ng-message="required">TimeTable must have a name</div>
-			</div>
-			</md-input-container>
-			<div class="colorPicker" label="Color" md-color-picker value="timetables[selectedIndex].color" open-on-input="true"></div>
-		</form>
-		<md-subheader class="md-primary">Time ranges by weekday</md-subheader>
-		<form name="timeRangeForm" novalidate layout="column" layout-align="start start" class="sideNavForm">
-			<div ng-repeat="$interval in timetables[selectedIndex].intervals">
-				<div>
-	    			<span ng-class="$interval.weekday[$weekday]?'weekDayIcon':'disabledWeekDayIcon'" ng-repeat="$weekday in [0,1,2,3,4,5,6]" ng-click="clickWeekDay(timetables[selectedIndex], $interval, $weekday, $event)">{{getWeekDays()[$weekday]}}</span>
-	    		</div>
-	    		<div ng-repeat="$range in $interval.ranges">
-	    			<md-input-container  class="timeInput">
-	    				<input name="from" ng-model="$range.from" required aria-label="from"></input>
-	    			</md-input-container>
-	    			<span> - </span>
-	    			<md-input-container class="timeInput">
-	    				<input name="to" ng-model="$range.to" required aria-label="to"></input>
-	    			</md-input-container>
-	    			<md-button><md-icon class="material-icons">clear</md-icon><span>Remove</span></md-button>
-	    		</div>
-	    		<div>
-	    			<md-button><md-icon class="material-icons">add</md-icon>
-	    			<span>Add</span></md-button>
-	    		</div>
-	    	</div>
-		</form>
-	</section>
-</md-content>
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+	<div layout="column">		
+		<md-toolbar>
+		    <div class="md-toolbar-tools">TimeTable</div>
+		</md-toolbar>
+		<md-content>
+			<section layout="column" layout-align="start start">
+				<md-subheader class="md-primary">Properties</md-subheader>
+				<form name="timeTableForm" novalidate layout="column" layout-align="start start" class="sideNavForm">
+					<md-input-container class="fullWidth"> <label>Name</label> <input
+						name="name" ng-model="timetables[selectedIndex].name"
+						required aria-label="Name" md-sidenav-focus></input>
+					<div ng-messages="timeTableForm.name.$error" role="alert">
+						<div ng-message="required">TimeTable must have a name</div>
+					</div>
+					</md-input-container>
+					<div class="colorPicker" label="Color" md-color-picker value="timetables[selectedIndex].color" open-on-input="true"></div>
+				</form>
+				<md-subheader class="md-primary">Time ranges by weekday</md-subheader>
+				<form name="timeRangeForm" novalidate layout="column" layout-align="start start" class="sideNavForm">
+					<div ng-repeat="$interval in timetables[selectedIndex].intervals">
+						<div>
+			    			<span ng-class="$interval.weekday[$weekday]?'weekDayIcon':'disabledWeekDayIcon'" ng-repeat="$weekday in [0,1,2,3,4,5,6]" ng-click="clickWeekDay(timetables[selectedIndex], $interval, $weekday, $event)">{{getWeekDays()[$weekday]}}</span>
+			    		</div>
+			    		<div ng-repeat="$range in $interval.ranges">
+			    			<md-input-container  class="timeInput">
+			    				<input name="from" ng-model="$range.from" time-string required aria-label="from"></input>
+			    			</md-input-container>
+			    			<span> - </span>
+			    			<md-input-container class="timeInput">
+			    				<input name="to" ng-model="$range.to" time-string required aria-label="to"></input>
+			    			</md-input-container>
+			    			<md-button><md-icon class="material-icons">clear</md-icon><span>Remove</span></md-button>
+			    		</div>
+			    		<div>
+			    			<md-button><md-icon class="material-icons">add</md-icon>
+			    			<span>Add</span></md-button>
+			    		</div>
+			    	</div>
+				</form>
+			</section>
+		</md-content>
+	</div>
+</md-sidenav>

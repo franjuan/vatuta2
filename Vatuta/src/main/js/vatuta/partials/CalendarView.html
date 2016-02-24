@@ -1,11 +1,7 @@
 <vatuta-toolbarmenu project="project" selected-task="selectedTask">
 	<vatuta-calendar-toolbarmenu project="project" selected-task="selectedTask"></vatuta-calendar-toolbarmenu>
 </vatuta-toolbarmenu>
-<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
-	<div layout="column">
-		<vatuta-timetable-editor timetables="timetables" selected-index="indexTimetables"></vatuta-timetable-ditor>
-	</div>
-</md-sidenav>
+<vatuta-timetable-editor timetables="timetables" selected-index="indexTimetables"></vatuta-timetable-editor>
 <div layout="column">
 	<div class="timetableSelector" layout="column">
 		<div layout="row" class="timetableSelectRow">
@@ -33,7 +29,7 @@
 	    			</tr>
 	    			<tr class="timeHoursRow">
 	    				<td class="timeHours" ng-repeat="$interval in timetables[indexTimetables].intervals">
-	    					<div ng-repeat="$range in $interval.ranges">{{$range.from + ' - ' + $range.to}}</div>
+	    					<div ng-repeat="$range in $interval.ranges">{{$range.from| time:false:'--'}} - {{$range.to| time:false:'--'}}</div>
 	    					<div ng-if="$interval.ranges.length==0">No work</div>
 	    				</td>
 	    			</tr>

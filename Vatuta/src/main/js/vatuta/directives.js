@@ -11,8 +11,10 @@ define(["vatuta/directives/VatutaGanttDirective",
         "vatuta/validators/CellValidator",
         "vatuta/validators/TacticValidator",
         "vatuta/validators/MomentValidator",
+        "vatuta/validators/TimeValidator",
         "vatuta/filters/DurationFilter",
-        "vatuta/filters/MomentFilter"
+        "vatuta/filters/MomentFilter",
+        "vatuta/filters/TimeFilter"
         ], function() {
 
 });

@@ -16,11 +16,11 @@ function(moment) {
 										  color: '#C5CAE9',
 										  intervals:[
 										             {weekday:[false,true,true,true,true,false,false],
-										             ranges:[{from:'8:00',to:'13:00'},
-										                     {from:'14:00',to:'17:00'}
+										             ranges:[{from:{hours:8, minutes:0}, to:{hours:13,minutes:0}},
+										                     {from:{hours:14, minutes:0}, to:{hours:17,minutes:0}}
 										                     ]},
 								                     {weekday:[false,false,false,false,false,true,false],
-										             ranges:[{from:'8:00',to:'15:00'}
+										             ranges:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
 										                     ]},
 								                     {weekday:[true,false,false,false,false,false,true],
 											             ranges:[]}
@@ -29,7 +29,7 @@ function(moment) {
 										  color: '#FFA000',
 										  intervals:[
 										             {weekday:[false,true,true,true,true,true,false],
-										             ranges:[{from:'8:00',to:'15:00'}
+										             ranges:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
 										                     ]},
 								                     {weekday:[true,false,false,false,false,false,true],
 											             ranges:[]}
