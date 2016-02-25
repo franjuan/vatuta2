@@ -9,7 +9,8 @@ function(moment) {
 				'$project',
 				'$window',
 				'$mdSidenav',
-				function($scope, $mdDialog, $mdToast, $project, $window, $mdSidenav) {
+				'CalendarHandler',
+				function($scope, $mdDialog, $mdToast, $project, $window, $mdSidenav, CalendarHandler) {
 					$scope.project = $project;
 					
 					$scope.timetables = [{name:'Base',
@@ -40,6 +41,17 @@ function(moment) {
 								                     {weekday:[true,true,true,true,true,true,true],
 											             ranges:[]}
 										             ]}];
+					$scope.calendar = {
+							tree: 	{	isBranch:true,
+										lowDate: moment([2016,6,1]),
+										highDate: moment([2016,8,1]),
+										lowChild: {isLeaf:true, timetable:$scope.timetables[0]},
+										middleChild: {isLeaf:true, timetable:$scope.timetables[1]},
+										highChild: {isLeaf:true, timetable:$scope.timetables[0]}
+										
+									}
+					};
+					
 					$scope.indexTimetables = 0;
 					
 					$scope.year = moment().year();
@@ -72,6 +84,14 @@ function(moment) {
 						day.add(week, "weeks");
 						day.add(weekDay - 1, "days");
 						return day;
+					}
+					
+					$scope.getBackGroundColor = function(date) {
+						return CalendarHandler.searchTimeTable(date, $scope.calendar).color;
+					}
+					
+					$scope.clickOnDay = function(date) {
+						CalendarHandler.changeDay(date.year(), date.month()+1, date.date(), $scope.calendar, $scope.timetables[$scope.indexTimetables]);
 					}
 					
 					this.onChangeYear = function(event,year) {

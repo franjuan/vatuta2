@@ -57,8 +57,11 @@
 							<th ng-repeat="$weekDay in getWeekDays()" class="weekDays">{{$weekDay}}</th>
 							</tr>
 							<tr ng-repeat="$week in getSequence(weeks(year, $month))" class="weekRow">
-								<td ng-repeat="$day in [1,2,3,4,5,6,7]" ng-class="$date=day(year, $month,$week,$day);$date.month()==$month-1?'dayCell':'otherMonthDayCell'" ng-style="$date.month()==$month-1?{'background': '#C5CAE9'}:{}">
-									{{$date.month()==$month-1?$date.date():''}}
+								<td ng-repeat="$day in [1,2,3,4,5,6,7]"
+									ng-class="$date=day(year, $month,$week,$day);$date.month()==$month-1?'dayCell':'otherMonthDayCell'"
+									ng-style="$date.month()==$month-1?{'background': getBackGroundColor($date)}:{}"
+									ng-click="clickOnDay($date)">
+										{{$date.month()==$month-1?$date.date():''}}
 								</td>
 							</tr>
 						</table>
