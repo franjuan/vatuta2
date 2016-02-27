@@ -13,7 +13,8 @@ function(moment) {
 				function($scope, $mdDialog, $mdToast, $project, $window, $mdSidenav, CalendarHandler) {
 					$scope.project = $project;
 					
-					$scope.timetables = [{name:'Base',
+					$scope.timetables = [{id: 1,
+										  name:'Base',
 										  color: '#C5CAE9',
 										  intervals:[
 										             {weekday:[false,true,true,true,true,false,false],
@@ -26,7 +27,8 @@ function(moment) {
 								                     {weekday:[true,false,false,false,false,false,true],
 											             ranges:[]}
 										             ]},
-					                     {name:'Summer',
+					                     {id:2,
+										  name:'Summer',
 										  color: '#FFA000',
 										  intervals:[
 										             {weekday:[false,true,true,true,true,true,false],
@@ -35,7 +37,8 @@ function(moment) {
 								                     {weekday:[true,false,false,false,false,false,true],
 											             ranges:[]}
 										             ]},
-					                     {name:'Vacation',
+					                     {id:3,
+										  name:'Vacation',
 										  color: '#FF5252',
 										  intervals:[
 								                     {weekday:[true,true,true,true,true,true,true],
@@ -91,7 +94,7 @@ function(moment) {
 					}
 					
 					$scope.clickOnDay = function(date) {
-						CalendarHandler.changeDay(date.year(), date.month()+1, date.date(), $scope.calendar, $scope.timetables[$scope.indexTimetables]);
+						CalendarHandler.changeDay(date, $scope.calendar, $scope.timetables[$scope.indexTimetables]);
 					}
 					
 					this.onChangeYear = function(event,year) {

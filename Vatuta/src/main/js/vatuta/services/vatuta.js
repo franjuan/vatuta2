@@ -134,7 +134,9 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 					return moment(value);
 				}
 		};
+		// TODO: Analyse why is changing name of constructor
 		serializers["Moment"] = serializers["n"];
+		serializers["o"] = serializers["n"];
 		var necromancer = new Resurrect(
 				{
 					resolver: new Resurrect.NamespaceResolver(
