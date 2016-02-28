@@ -18,9 +18,9 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 				if (parent.lowDate.isSame(day) && parent.highDate.isSame(nextDay)) {
 					leaf.timetable=timetable;
 				}
-				// if parent has two leaves
+				// if parent has two leaves (of three available per node)
 				else if (parent.lowDate.isSame(parent.highDate)) {
-					// if new date matches separation date add second separation
+					// if new date matches separation date, add second separation and insert new leaf in the middle 
 					if (parent.lowDate.isSame(day)) {
 						parent.highDate = nextDay;
 						parent.middleChild = {isLeaf:true, timetable:timetable};
@@ -28,7 +28,7 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 						parent.lowDate = day;
 						parent.middleChild = {isLeaf:true, timetable:timetable};
 					}
-					// otherwise create a new one separation leaf
+					// otherwise if it does not match the current separation, add a separation and insert a new node before or...
 					else if (parent.lowDate.isAfter(nextDay)) {
 						parent.lowDate = nextDay;
 						parent.middleChild = parent.lowChild;
@@ -39,6 +39,7 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 												highChild: {isLeaf:true, timetable:timetable}
 											};
 					} else {
+					// ... behind
 						parent.highDate = day;
 						parent.middleChild = parent.highChild;
 						parent.highChild = {isBranch:true,
@@ -50,17 +51,30 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 
 					}
 				}
-				// Otherwise add node
+				// Otherwise parent has three leaves (node is full)
 				else {
-					this.addNode2Branch(
-						parent,
-						{isBranch:true,
-							lowDate: day,
-							highDate: nextDay,
-							lowChild: {isLeaf:true, timetable:leaf.timetable},
-							middleChild: {isLeaf:true, timetable:timetable},
-							highChild: {isLeaf:true, timetable:leaf.timetable}
-						});
+					var done = false;
+					//if new day is beside one of the separation, extend the separation
+					if (parent.middleChild.isLeaf && this.timetableEquals(parent.middleChild.timetable, timetable)) {
+						if (parent.highDate.isSame(day) )  {
+							parent.highDate = nextDay;
+							done = true;
+						} else if (parent.lowDate.isSame(nextDay)) {
+							parent.lowDate = day;
+							done = true;
+						}
+					}
+					if (!done) {
+						this.addNode2Branch(
+							parent,
+							{isBranch:true,
+								lowDate: day,
+								highDate: nextDay,
+								lowChild: {isLeaf:true, timetable:leaf.timetable},
+								middleChild: {isLeaf:true, timetable:timetable},
+								highChild: {isLeaf:true, timetable:leaf.timetable}
+							});
+					}
 				}
 				
 				this.pruneTree(calendar.tree);
