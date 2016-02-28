@@ -5,7 +5,8 @@ define(["vatuta/vatutaApp"], function() {
 			    restrict: 'EAC',
 			    scope: {
 			    	project: '=',
-			    	selectedTask: '='
+			    	selectedTask: '=',
+			    	calendar: '='
 			    },
 			    templateUrl: 'vatuta/templates/CalendarToolBarMenu.html',
 			    controller: 'CalendarToolBarMenuController',

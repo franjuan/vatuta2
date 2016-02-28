@@ -15,6 +15,7 @@ function(moment) {
 					
 					$scope.timetables = [{id: 1,
 										  name:'Base',
+										  description: '',
 										  color: '#C5CAE9',
 										  intervals:[
 										             {weekday:[false,true,true,true,true,false,false],
@@ -29,6 +30,7 @@ function(moment) {
 										             ]},
 					                     {id:2,
 										  name:'Summer',
+										  description: '',
 										  color: '#FFA000',
 										  intervals:[
 										             {weekday:[false,true,true,true,true,true,false],
@@ -39,6 +41,7 @@ function(moment) {
 										             ]},
 					                     {id:3,
 										  name:'Vacation',
+										  description: '',
 										  color: '#FF5252',
 										  intervals:[
 								                     {weekday:[true,true,true,true,true,true,true],

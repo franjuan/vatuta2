@@ -115,6 +115,7 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 			},
 			
 			pruneTree: function(node) {
+				// TODO Add prune cases where parent and child can be joined together in one node
 				if (node.isLeaf) {
 					return;
 				} else if (node.isBranch) {
@@ -145,8 +146,22 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 				}
 			},
 			
+			removeRangeFromInterval: function(calendar, timetable, interval, range2remove) {
+				_.remove(interval.ranges, function(range, index) {
+					return this.rangeEquals(range, range2remove);
+				}, this);
+			},
+			
+			addRangeToInterval: function(calendar, timetable, interval) {
+				interval.ranges.push({from:{hours:0, minutes:0}, to:{hours:0,minutes:0}});
+			},
+			
 			timetableEquals: function(one, two) {
 				return one.id == two.id;
+			},
+			
+			rangeEquals: function(one, two) {
+				return angular.equals(one, two);
 			}
 		}
 		

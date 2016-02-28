@@ -15,7 +15,6 @@
 			<md-input-container> <label>Description</label> <textarea
 				name="description" column="1" ng-model="selectedTask.description"
 				ng-model-options="{ getterSetter: true }"></textarea>
-			<div ng-messages="taskForm.name.$error" role="alert">
 			</div>
 			</md-input-container>
 			<div layout="row" layout-align="space-between center" ng-show="ctrl.showDurationFields(selectedTask)">

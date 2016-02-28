@@ -14,6 +14,9 @@
 						<div ng-message="required">TimeTable must have a name</div>
 					</div>
 					</md-input-container>
+					<md-input-container class="fullWidth"> <label>Description</label> <textarea
+						name="description" column="1" ng-model="timetables[selectedIndex].description" aria-label="Description" ></textarea>
+					</md-input-container>
 					<div class="colorPicker" label="Color" md-color-picker value="timetables[selectedIndex].color" open-on-input="true"></div>
 				</form>
 				<md-subheader class="md-primary">Time ranges by weekday</md-subheader>
@@ -30,10 +33,10 @@
 			    			<md-input-container class="timeInput">
 			    				<input name="to" ng-model="$range.to" time-string required aria-label="to"></input>
 			    			</md-input-container>
-			    			<md-button><md-icon class="material-icons">clear</md-icon><span>Remove</span></md-button>
+			    			<md-button ng-click="removeInterval(timetables[selectedIndex], $interval, $range)"><md-icon class="material-icons">clear</md-icon><span>Remove</span></md-button>
 			    		</div>
 			    		<div>
-			    			<md-button><md-icon class="material-icons">add</md-icon>
+			    			<md-button ng-click="addInterval(timetables[selectedIndex], $interval)"><md-icon class="material-icons">add</md-icon>
 			    			<span>Add</span></md-button>
 			    		</div>
 			    	</div>
