@@ -47,15 +47,19 @@ function(moment) {
 								                     {weekday:[true,true,true,true,true,true,true],
 											             ranges:[]}
 										             ]}];
+//					$scope.calendar = {
+//							tree: 	{	isBranch:true,
+//										lowDate: moment([2016,6,1]),
+//										highDate: moment([2016,8,1]),
+//										lowChild: {isLeaf:true, timetable:$scope.timetables[0]},
+//										middleChild: {isLeaf:true, timetable:$scope.timetables[1]},
+//										highChild: {isLeaf:true, timetable:$scope.timetables[0]}
+//										
+//									}
+//					};
+					
 					$scope.calendar = {
-							tree: 	{	isBranch:true,
-										lowDate: moment([2016,6,1]),
-										highDate: moment([2016,8,1]),
-										lowChild: {isLeaf:true, timetable:$scope.timetables[0]},
-										middleChild: {isLeaf:true, timetable:$scope.timetables[1]},
-										highChild: {isLeaf:true, timetable:$scope.timetables[0]}
-										
-									}
+							tree: {isLeaf: true, timetable:$scope.timetables[0]}
 					};
 					
 					$scope.indexTimetables = 0;
