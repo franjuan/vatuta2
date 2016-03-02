@@ -1,4 +1,4 @@
-define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
+define([ "moment", "lodash", "vatuta/vatutaApp" ], function(Moment, _) {
 
 	angular.module('vatutaApp').factory('CalendarHandler', ["$project", function($project) {
 		return {
@@ -29,7 +29,7 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 						parent.middleChild.timetable=timetable;
 					}
 					// if parent has two leaves (of three available per node)
-					else if (parent.lowDate.isSame(parent.highDate)) {
+					else if (this.leavesInNode(parent) == 2) {
 						// if new date matches separation date, add second separation and insert new leaf in the middle 
 						if (parent.lowDate.isSame(day)) {
 							parent.highDate = nextDay;
@@ -53,8 +53,8 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 							parent.highDate = day;
 							parent.middleChild = parent.highChild;
 							parent.highChild = {isBranch:true,
-									lowDate: day,
-									highDate: day,
+									lowDate: nextDay,
+									highDate: nextDay,
 									lowChild: {isLeaf:true, timetable:timetable},
 									highChild: {isLeaf:true, timetable:leaf.timetable}
 								};
@@ -89,43 +89,6 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 													timetable:(parent.lowDate.isSame(nextDay)|| parent.highDate.isSame(nextDay))?timetable:leaf.timetable}
 									});
 							}
-//							if (parent.lowDate.isSame(nextDay)) {
-//								this.addNode2Branch(
-//										parent,
-//										{isBranch:true,
-//											lowDate: day,
-//											highDate: day,
-//											lowChild: {isLeaf:true, timetable:leaf.timetable},
-//											highChild: {isLeaf:true, timetable:timetable}
-//										});
-//							} else if (parent.lowDate.isSame(day)) {
-//								this.addNode2Branch(
-//										parent,
-//										{isBranch:true,
-//											lowDate: nextDay,
-//											highDate: nextDay,
-//											lowChild: {isLeaf:true, timetable:timetable},
-//											highChild: {isLeaf:true, timetable:leaf.timetable}
-//										});
-//							} else if (parent.highDate.isSame(nextDay)) {
-//								this.addNode2Branch(
-//										parent,
-//										{isBranch:true,
-//											lowDate: day,
-//											highDate: day,
-//											lowChild: {isLeaf:true, timetable:leaf.timetable},
-//											highChild: {isLeaf:true, timetable:timetable}
-//										});
-//							} else if (parent.highDate.isSame(day)) {
-//								this.addNode2Branch(
-//										parent,
-//										{isBranch:true,
-//											lowDate: nextDay,
-//											highDate: nextDay,
-//											lowChild: {isLeaf:true, timetable:timetable},
-//											highChild: {isLeaf:true, timetable:leaf.timetable}
-//										});
-//							}
 							// If range does not match with separation date a 3leaves node is needed
 							else {
 								this.addNode2Branch(
@@ -151,8 +114,7 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 				if (node.isLeaf) {
 					return;
 				} else if (node.isBranch) {
-					// Join sibling nodes when overlapping
-					var conf = [{leftNode:node.lowChild, rightNode:node.middleChild},{leftNode:node.middleChild, rightNode:node.highChild}];
+					
 					// Remove overlapping children with parent, when one child branch is overlapping with some parent branch
 					if (lowLimit) {
 						// If lowLimit, the one set by parent, is bigger than lowDate prune lowChid
@@ -176,57 +138,22 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 					}
 					// If former operation converts node to leaf return
 					if (node.isLeaf) return;
-//					if (node.lowChild.isBranch && node.lowChild.highDate.isSame(node.lowDate)) {
-//						// Three leaves
-//						if (this.leavesInNode(node.lowChild) == 3) {
-//							node.lowChild.highDate = node.lowChild.lowDate;
-//							node.lowChild.highChild = node.lowChild.middleChild;
-//							delete node.lowChild.middleChild;
-//						}
-//						// Two leaves
-//						else {
-//							node.lowChild = node.lowChild.lowChild;
-//						}
-//					}
-//					if (!!node.middleChild && node.middleChild.isBranch) {
-//						if (node.middleChild.highDate.isSame(node.highDate)) {
-//							// Three leaves
-//							if (this.leavesInNode(node.middleChild) == 3) {
-//								node.middleChild.highDate = node.middleChild.lowDate;
-//								node.middleChild.highChild = node.middleChild.middleChild;
-//								delete node.middleChild.middleChild;
-//							}
-//							// Two leaves
-//							else {
-//								node.middleChild = node.middleChild.lowChild;
-//							}
-//						}
-//						
-//						if (node.middleChild.lowDate.isSame(node.lowDate)) {
-//							// Three leaves
-//							if (this.leavesInNode(node.middleChild) == 3) {
-//								node.middleChild.lowDate = node.middleChild.highDate;
-//								node.middleChild.lowChild = node.middleChild.middleChild;
-//								delete node.middleChild.middleChild;
-//							}
-//							// Two leaves
-//							else {
-//								node.middleChild = node.middleChild.highChild;
-//							}
-//						}
-//					}
-//					if (node.highChild.isBranch && node.highChild.lowDate.isSame(node.highDate)) {
-//						// Three leaves
-//						if (this.leavesInNode(node.highChild) == 3) {
-//							node.highChild.lowDate = node.highChild.highDate;
-//							node.highChild.lowChild = node.highChild.middleChild;
-//							delete node.highChild.middleChild;
-//						}
-//						// Two leaves
-//						else {
-//							node.highChild = node.highChild.highChild;
-//						}
-//					}
+
+					// Join sibling nodes when overlapping
+					var boundaries = [];
+					if (this.leavesInNode(node)==3) {
+						boundaries = [{leftNode:node.lowChild, rightNode:node.middleChild, border:node.lowDate},{leftNode:node.middleChild, rightNode:node.highChild, border:node.highDate}];
+					} else {
+						boundaries = [{leftNode:node.lowChild, rightNode:node.highChild, border:node.lowDate}];
+					}
+					
+					_.forEach(boundaries, function(boundary) {
+						var left = this.followBorderOnLeft(node, boundary.leftNode);
+						var right = this.followBorderOnRight(node, boundary.rightNode);
+						if (this.timetableEquals(left.leaf.timetable, right.leaf.timetable)) {
+							console.log('Iguales');
+						}
+					}, this);
 						
 					this.pruneTree(node.lowChild, lowLimit, node.lowDate);
 					this.pruneTree(node.highChild, node.highDate, highLimit);
@@ -342,6 +269,22 @@ define([ "moment", "vatuta/vatutaApp" ], function(Moment) {
 						return child;
 					}
 				} else throw "Calendar tree is not correct";
+			},
+			
+			followBorderOnLeft: function(parent, branch) {
+				if (branch.isLeaf) {
+					return {parent: parent, leaf:branch};
+				} else {
+					return this.followBorderOnLeft(branch, branch.highChild);
+				}
+			},
+			
+			followBorderOnRight: function(parent, branch) {
+				if (branch.isLeaf) {
+					return {parent: parent, leaf:branch};
+				} else {
+					return this.followBorderOnRight(branch, branch.lowChild);
+				}
 			},
 			
 			removeRangeFromInterval: function(calendar, timetable, interval, range2remove) {
