@@ -110,7 +110,10 @@ define(
 					text.x = (this.getXbyMoment(start) + this.getXbyMoment(end))/2;
 					text.y = (2*level+1)*this._rulerHeight/6;
 					
-					ruler.addChild(element, text);
+					ruler.addChild(element);
+					if (text.x>0) {
+						ruler.addChild(text);
+					}
 					
 					//this._rulerStage.update();
 				},

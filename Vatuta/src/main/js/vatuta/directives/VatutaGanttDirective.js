@@ -16,6 +16,9 @@ define(["vatuta/shared/Canvas", "vatuta/vatutaApp"], function(Canvas) {
 //				    	$scope.canvas.drawTimeRuler($scope.project);
 //				    	$scope.canvas.drawProject($scope.project);
 //			    	});
+			    	$scope.canvas.clear();
+	                $scope.canvas.drawProject($scope.project, null, $window);
+	                $scope.canvas.drawTimeRuler($scope.project, $window);
 			    },
 			    controller: function($scope, $attrs) {
 			    	var onTaskChange = function(event, task) {

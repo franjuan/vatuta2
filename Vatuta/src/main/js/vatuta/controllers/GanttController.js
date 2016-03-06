@@ -171,7 +171,7 @@ define(
 												$scope.$root.$broadcast(
 														'changeTask',
 														$scope.selectedTask);
-											} else {
+											} else if (!!$scope.selectedTask) {
 												$scope.$root.$broadcast(
 														'taskSelected',
 														$scope.selectedTask);
@@ -179,17 +179,15 @@ define(
 										}
 										
 										$(window).resize(function(){
-										    $scope.$apply(function(){
 										    	$scope.$root.$broadcast(
 														'windowResize',
 														$scope.selectedTask);
-										    });
 										});
 
 										function watchSelectedTask() {
-											return $scope.selectedTask ? $scope.selectedTask
+											return !!$scope.selectedTask ? $scope.selectedTask
 													.watchHash()
-													: "null";
+													: undefined;
 										}
 
 										$scope.$watch(watchSelectedTask,
@@ -281,5 +279,7 @@ define(
 																				});
 															});
 										}
+
 									} ]);
+
 		});
