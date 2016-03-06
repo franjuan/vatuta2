@@ -875,8 +875,8 @@ mdColorPickerDialogTemplate = '' +
 '				</md-tab-label>' +
 '				<md-tab-body>' +
 '					<div layout="column" layout-align="space-between start center" flex>' +
-'						<div ng-repeat="row in palette track by $index" flex="15"  layout-align="space-between" layout="row">' +
-'							<div ng-repeat="col in row track by $index" flex="10" style="height: 25.5px;width: 25.5px;" ng-style="{\'background\': col};" ng-click="setPaletteColor($event)"></div>' +
+'						<div ng-repeat="row in palette track by $index" flex="15" style="width:100%;" layout-align="space-between" layout="row">' +
+'							<div ng-repeat="col in row track by $index" flex="10" style="height: 25.5px;" ng-style="{\'background\': col};" ng-click="setPaletteColor($event)"></div>' +
 '						</div>' +
 '					</div>' +
 '				</md-tab-body>' +
