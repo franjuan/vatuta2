@@ -136,28 +136,39 @@ define([ "moment", "lodash", "vatuta/vatutaApp" ], function(Moment, _) {
 							this.removeNode2Branch(node, 'highChild');
 						}
 					}
-					// If former operation converts node to leaf return
+					// If former operation converted node to leaf return
 					if (node.isLeaf) return;
 
-					// Join sibling nodes when overlapping
-					var boundaries = [];
-					if (this.leavesInNode(node)==3) {
-						boundaries = [{leftNode:node.lowChild, rightNode:node.middleChild, border:node.lowDate},{leftNode:node.middleChild, rightNode:node.highChild, border:node.highDate}];
-					} else {
-						boundaries = [{leftNode:node.lowChild, rightNode:node.highChild, border:node.lowDate}];
-					}
-					
-					_.forEach(boundaries, function(boundary) {
-						var left = this.followBorderOnLeft(node, boundary.leftNode);
-						var right = this.followBorderOnRight(node, boundary.rightNode);
-						if (this.timetableEquals(left.leaf.timetable, right.leaf.timetable)) {
-							console.log('Iguales');
-						}
-					}, this);
-						
 					this.pruneTree(node.lowChild, lowLimit, node.lowDate);
 					this.pruneTree(node.highChild, node.highDate, highLimit);
 					if (!!node.middleChild) this.pruneTree(node.middleChild, node.lowDate, node.highDate);
+					
+					// Join sibling nodes when overlapping
+					var boundaries = [];
+					if (this.leavesInNode(node)==3) {
+						// If 3 leaves, check both borders
+						boundaries = [{border:'lowDate'},{border:'highDate'}];
+					} else {
+						// If 2 leaves, check the unique border
+						boundaries = [{border:'lowDate'}];
+					}
+					
+					_.forEach(boundaries, function(boundary) {
+						var left = this.followBorderOnLeft(node, this.leavesInNode(node) == 3 & boundary.border == 'highDate'?node.middleChild:node.lowChild);
+						var right = this.followBorderOnRight(node, this.leavesInNode(node) == 3 & boundary.border == 'lowDate'?node.middleChild:node.highChild);
+						// Prune when value in both sides of border is the same
+						if (this.timetableEquals(left.leaf.timetable, right.leaf.timetable)) {
+							// Make prune on deepest leaf
+							if (right.depth > left.depth) {
+								node[boundary.border] = right.parent['lowDate']
+								this.removeNode2Branch(right.parent, 'lowChild');
+							} else {
+								node[boundary.border] = left.parent['highDate'];
+								this.removeNode2Branch(left.parent, 'highChild');
+								
+							}
+						}
+					}, this);
 					
 					// If two leaves of three points to same timetable
 					if (!!node.middleChild && node.middleChild.isLeaf) {
@@ -201,22 +212,32 @@ define([ "moment", "lodash", "vatuta/vatutaApp" ], function(Moment, _) {
 						}
 						delete parent.middleChild;
 					} else {
-						parent.isLeaf = true;
+						var child = '';
 						if (nodePosition == 'lowChild') {
-							parent.timetable = parent['highChild'].timetable;
+							child = 'highChild';
 						} else if (nodePosition == 'highChild') {
-							parent.timetable = parent['lowChild'].timetable;
+							child = 'lowChild';
 						} else if (nodePosition == 'middleChild') {
 							throw "No se puede borrar node de en medio";
 						} else {
 							throw "No existe rama " + nodePosition;
 						}
-						delete parent.isBranch;
-						delete parent.lowDate;
-						delete parent.highDate;
-						delete parent.lowChild;
-						delete parent.middleChild;
-						delete parent.highChild;
+						if (parent[child].isLeaf) {
+							parent.isLeaf = true;
+							parent.timetable = parent[child].timetable;
+							delete parent.isBranch;
+							delete parent.lowDate;
+							delete parent.highDate;
+							delete parent.lowChild;
+							delete parent.middleChild;
+							delete parent.highChild;
+						} else {
+							parent.lowDate = parent[child].lowDate;
+							parent.highDate = parent[child].highDate;
+							parent.lowChild = parent[child].lowChild;
+							parent.middleChild = parent[child].middleChild;
+							parent.highChild = parent[child].highChild;
+						}
 					}
 				} else {
 					throw "No se puede borrar rama de una hoja";
@@ -271,19 +292,19 @@ define([ "moment", "lodash", "vatuta/vatutaApp" ], function(Moment, _) {
 				} else throw "Calendar tree is not correct";
 			},
 			
-			followBorderOnLeft: function(parent, branch) {
+			followBorderOnLeft: function(parent, branch, depth = 0) {
 				if (branch.isLeaf) {
-					return {parent: parent, leaf:branch};
+					return {parent: parent, leaf:branch, depth: depth};
 				} else {
-					return this.followBorderOnLeft(branch, branch.highChild);
+					return this.followBorderOnLeft(branch, branch.highChild, depth + 1);
 				}
 			},
 			
-			followBorderOnRight: function(parent, branch) {
+			followBorderOnRight: function(parent, branch, depth = 0) {
 				if (branch.isLeaf) {
-					return {parent: parent, leaf:branch};
+					return {parent: parent, leaf:branch, depth: depth};
 				} else {
-					return this.followBorderOnRight(branch, branch.lowChild);
+					return this.followBorderOnRight(branch, branch.lowChild, depth + 1);
 				}
 			},
 			
