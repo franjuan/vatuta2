@@ -240,6 +240,51 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 			_dependant : taskC
 		});
 		
+		project.calendar = {
+				timetables:  [{id: 1,
+							  name:'Base',
+							  description: '',
+							  color: '#C5CAE9',
+							  intervals:[
+							             {weekday:[false,true,true,true,true,false,false],
+							             ranges:[{from:{hours:8, minutes:0}, to:{hours:13,minutes:0}},
+							                     {from:{hours:14, minutes:0}, to:{hours:17,minutes:0}}
+							                     ]},
+					                     {weekday:[false,false,false,false,false,true,false],
+							             ranges:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
+							                     ]},
+					                     {weekday:[true,false,false,false,false,false,true],
+								             ranges:[]}
+							             ]},
+		                     {id:2,
+							  name:'Summer',
+							  description: '',
+							  color: '#FFA000',
+							  intervals:[
+							             {weekday:[false,true,true,true,true,true,false],
+							             ranges:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
+							                     ]},
+					                     {weekday:[true,false,false,false,false,false,true],
+								             ranges:[]}
+							             ]},
+		                     {id:3,
+							  name:'Vacation',
+							  description: '',
+							  color: '#FF5252',
+							  intervals:[
+					                     {weekday:[true,true,true,true,true,true,true],
+								             ranges:[]}
+							             ]}]};
+		project.calendar.tree = 		
+				{	isBranch:true,
+					lowDate: moment([2016,6,1]),
+					highDate: moment([2016,8,1]),
+					lowChild: {isLeaf:true, timetable:project.calendar.timetables[0]},
+					middleChild: {isLeaf:true, timetable:project.calendar.timetables[1]},
+					highChild: {isLeaf:true, timetable:project.calendar.timetables[0]}
+					
+				};
+		
 		Engine.calculateEarlyStartLateEnding();
 		
 		return project;

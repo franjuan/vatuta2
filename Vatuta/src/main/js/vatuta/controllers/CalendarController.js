@@ -13,54 +13,9 @@ function(moment) {
 				function($scope, $mdDialog, $mdToast, $project, $window, $mdSidenav, CalendarHandler) {
 					$scope.project = $project;
 					
-					$scope.timetables = [{id: 1,
-										  name:'Base',
-										  description: '',
-										  color: '#C5CAE9',
-										  intervals:[
-										             {weekday:[false,true,true,true,true,false,false],
-										             ranges:[{from:{hours:8, minutes:0}, to:{hours:13,minutes:0}},
-										                     {from:{hours:14, minutes:0}, to:{hours:17,minutes:0}}
-										                     ]},
-								                     {weekday:[false,false,false,false,false,true,false],
-										             ranges:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
-										                     ]},
-								                     {weekday:[true,false,false,false,false,false,true],
-											             ranges:[]}
-										             ]},
-					                     {id:2,
-										  name:'Summer',
-										  description: '',
-										  color: '#FFA000',
-										  intervals:[
-										             {weekday:[false,true,true,true,true,true,false],
-										             ranges:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
-										                     ]},
-								                     {weekday:[true,false,false,false,false,false,true],
-											             ranges:[]}
-										             ]},
-					                     {id:3,
-										  name:'Vacation',
-										  description: '',
-										  color: '#FF5252',
-										  intervals:[
-								                     {weekday:[true,true,true,true,true,true,true],
-											             ranges:[]}
-										             ]}];
-//					$scope.calendar = {
-//							tree: 	{	isBranch:true,
-//										lowDate: moment([2016,6,1]),
-//										highDate: moment([2016,8,1]),
-//										lowChild: {isLeaf:true, timetable:$scope.timetables[0]},
-//										middleChild: {isLeaf:true, timetable:$scope.timetables[1]},
-//										highChild: {isLeaf:true, timetable:$scope.timetables[0]}
-//										
-//									}
-//					};
-					
-					$scope.calendar = {
-							tree: {isLeaf: true, timetable:$scope.timetables[0]}
-					};
+					$scope.timetables = $scope.project.calendar.timetables;
+	
+					$scope.calendar = $scope.project.calendar;
 					
 					$scope.indexTimetables = 0;
 					
