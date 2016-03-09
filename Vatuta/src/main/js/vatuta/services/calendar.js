@@ -1,6 +1,6 @@
-define([ "moment", "lodash", "vatuta/vatutaApp" ], function(Moment, _) {
+define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 // TODO Create specs test file for calendar
-	angular.module('vatutaApp').factory('CalendarHandler', ["$project", function($project) {
+	angular.module('vatuta').factory('CalendarHandler', ["$project", function($project) {
 		return {
 			// TODO Test cases
 			changeDay: function(moment, calendar, timetable) {
