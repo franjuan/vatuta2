@@ -353,6 +353,94 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 			
 			workingTimeEquals: function(one, two) {
 				return angular.equals(one, two);
+			},
+			
+			upcomingWorkingTime: function(moment, calendar) {
+				// Extracted calendar data for moment
+				var current = this.searchNode(moment, calendar);
+				var timetable = current.leaf.timetable;
+				// When timetable ends
+				var endOfTimetable = current.highDate;
+				// When timetable starts to repeat
+				var endOfPeriod = Moment(moment).add(timetable.period.value, timetable.period.units);
+				var cursor = Moment(moment);
+				// Repeat for every slice until
+				// * End of timespan or timetable is reached
+				// * A whole period is completed, data is repeated so try in the next leaf/timetable
+				while ((!endOfTimetable || cursor.isBefore(endOfTimetable)) && cursor.isBefore(endOfPeriod)) {
+					var slice = this.sliceInTimeTable(cursor, timetable);
+					var start = _.reduce(slice.workingTimes, function(start, workingTime, index, workingTimes) {
+						if (this.isWithinWorkingTime(cursor, workingTime)) {
+							// If inside return the cursor time
+							return cursor;
+						} else if (this.isBeforeWorkingTime(cursor, workingTime)) {
+							// If working time is after, return the minimum beginning, the nearest
+							var beginning = this.workingTimeBeginning(cursor, workingTime)
+							return start == 0 ? beginning : Moment.min(start, beginning);
+						} else {
+							// If working time is before ignore
+							return start;
+						}
+					}, 0, this);
+					// If start found return
+					if (!!start) {
+						return start;
+					}
+					// If not, try in the next increment
+					cursor.add(timetable.increment.value, timetable.increment.units).startOf(timetable.increment.units);
+				}
+				// No start found in this timespan, search in the following
+				if (!!endOfTimetable) {
+					return this.upcomingWorkingTime(endOfTimetable, calendar);
+				}
+				// If endOfTimetable is null, it is because this was the last leaf in calendar tree, the last timespan in time
+				else {
+					throw "No upcoming working time possible when no start found in this timespan and there is no following timespan";
+				}
+			},
+			
+			pastWorkingTime: function(moment, calendar) {
+				// Extracted calendar data for moment
+				var current = this.searchNode(moment, calendar);
+				var timetable = current.leaf.timetable;
+				// When timetable starts
+				var startOfTimetable = current.lowDate;
+				// When timetable starts to repeat
+				var startOfPeriod = Moment(moment).subtract(timetable.period.value, timetable.period.units);
+				var cursor = Moment(moment);
+				// Repeat for every slice until
+				// * Start of timespan or timetable is reached and past through (in opposite to followingWorkingTime)
+				// * A whole period is completed, data is repeated so try in the next leaf/timetable
+				while ((!startOfTimetable || cursor.isSameOrAfter(startOfTimetable)) && cursor.isSameOrAfter(startOfPeriod)) {
+					var slice = this.sliceInTimeTable(cursor, timetable);
+					var end = _.reduce(slice.workingTimes, function(end, workingTime, index, workingTimes) {
+						if (this.isWithinWorkingTime(cursor, workingTime)) {
+							// If inside return the cursor time
+							return cursor;
+						} else if (this.isAfterWorkingTime(cursor, workingTime)) {
+							// If working time is after, return the maximum end, the nearest
+							var workingTimeEnding = this.workingTimeEnd(cursor, workingTime)
+							return end == 0 ? workingTimeEnding : Moment.max(end, workingTimeEnding);
+						} else {
+							// If working time is before ignore
+							return end;
+						}
+					}, 0, this);
+					// If end found return
+					if (!!end) {
+						return end;
+					}
+					// If not, try in the former increment
+					cursor.subtract(timetable.increment.value, timetable.increment.units).endOf(timetable.increment.units);
+				}
+				// No start found in this timespan, search in the former
+				if (!!startOfTimetable) {
+					return this.pastWorkingTime(Moment(startOfTimetable).subtract(1, "millisecond"), calendar);
+				}
+				// If endOfTimetable is null, it is because this was the first leaf in calendar tree, the first timespan in time
+				else {
+					throw "No past working time possible when no end found in this timespan and there is no preceding timespan";
+				}
 			}
 		}
 		
