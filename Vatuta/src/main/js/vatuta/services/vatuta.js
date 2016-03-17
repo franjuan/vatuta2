@@ -241,39 +241,46 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 		});
 		
 		project.calendar = {
+				
 				timetables:  [{id: 1,
 							  name:'Base',
 							  description: '',
 							  color: '#C5CAE9',
-							  intervals:[
-							             {weekday:[false,true,true,true,true,false,false],
-							             ranges:[{from:{hours:8, minutes:0}, to:{hours:13,minutes:0}},
+							  period: {units:'week', value: 1},
+							  increment: {units:'day', value: 1},
+							  slices:[
+							             {sliceSelector:[false,true,true,true,true,false,false],
+							             workingTimes:[{from:{hours:8, minutes:0}, to:{hours:13,minutes:0}},
 							                     {from:{hours:14, minutes:0}, to:{hours:17,minutes:0}}
 							                     ]},
-					                     {weekday:[false,false,false,false,false,true,false],
-							             ranges:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
+					                     {sliceSelector:[false,false,false,false,false,true,false],
+							             workingTimes:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
 							                     ]},
-					                     {weekday:[true,false,false,false,false,false,true],
-								             ranges:[]}
+					                     {sliceSelector:[true,false,false,false,false,false,true],
+								             workingTimes:[]}
 							             ]},
 		                     {id:2,
 							  name:'Summer',
 							  description: '',
 							  color: '#FFA000',
-							  intervals:[
-							             {weekday:[false,true,true,true,true,true,false],
-							             ranges:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
+							  period: {units:'week', value: 1},
+							  increment: {units:'day', value: 1},
+							  slices:[
+							             {sliceSelector:[false,true,true,true,true,true,false],
+							             workingTimes:[{from:{hours:8, minutes:0}, to:{hours:15,minutes:0}}
 							                     ]},
-					                     {weekday:[true,false,false,false,false,false,true],
-								             ranges:[]}
+					                     {sliceSelector:[true,false,false,false,false,false,true],
+								             workingTimes:[]}
 							             ]},
 		                     {id:3,
 							  name:'Vacation',
 							  description: '',
 							  color: '#FF5252',
-							  intervals:[
-					                     {weekday:[true,true,true,true,true,true,true],
-								             ranges:[]}
+							  period: {units:'week', value: 1},
+							  increment: {units:'day', value: 1},
+							  slices:[
+					                     {sliceSelector:[true,true,true,true,true,true,true],
+								             workingTimes:[]}
 							             ]}]};
 		project.calendar.tree = 		
 				{	isBranch:true,
@@ -284,6 +291,8 @@ define([ "vatuta/shared/Project", "vatuta/shared/Task", "vatuta/shared/BaseTask"
 					highChild: {isLeaf:true, timetable:project.calendar.timetables[0]}
 					
 				};
+//		project.calendar.tree = 		
+//		{	isLeaf:true, timetable:project.calendar.timetables[1]};
 		
 		Engine.calculateEarlyStartLateEnding();
 		

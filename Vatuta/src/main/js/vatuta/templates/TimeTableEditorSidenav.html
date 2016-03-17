@@ -19,24 +19,24 @@
 					</md-input-container>
 					<div class="colorPicker" label="Color" md-color-picker ng-model="timetables[selectedIndex].color"></div>
 				</form>
-				<md-subheader class="md-primary">Time ranges by weekday</md-subheader>
-				<form name="timeRangeForm" novalidate layout="column" layout-align="start start" class="sideNavForm">
-					<div ng-repeat="$interval in timetables[selectedIndex].intervals">
+				<md-subheader class="md-primary">Working times by weekday</md-subheader>
+				<form name="workingTimeForm" novalidate layout="column" layout-align="start start" class="sideNavForm">
+					<div ng-repeat="$slice in timetables[selectedIndex].slices">
 						<div>
-			    			<span ng-class="$interval.weekday[$weekday]?'weekDayIcon':'disabledWeekDayIcon'" ng-repeat="$weekday in [0,1,2,3,4,5,6]" ng-click="clickWeekDay(timetables[selectedIndex], $interval, $weekday, $event)">{{getWeekDays()[$weekday]}}</span>
+			    			<span ng-class="$slice.sliceSelector[$weekday]?'weekDayIcon':'disabledWeekDayIcon'" ng-repeat="$weekday in [0,1,2,3,4,5,6]" ng-click="clickWeekDay(timetables[selectedIndex], $slice, $weekday, $event)">{{getWeekDays()[$weekday]}}</span>
 			    		</div>
-			    		<div ng-repeat="$range in $interval.ranges">
+			    		<div ng-repeat="$workingTime in $slice.workingTimes">
 			    			<md-input-container  class="timeInput">
-			    				<input name="from" ng-model="$range.from" time-string required aria-label="from"></input>
+			    				<input name="from" ng-model="$workingTime.from" time-string required aria-label="from"></input>
 			    			</md-input-container>
 			    			<span> - </span>
 			    			<md-input-container class="timeInput">
-			    				<input name="to" ng-model="$range.to" time-string required aria-label="to"></input>
+			    				<input name="to" ng-model="$workingTime.to" time-string required aria-label="to"></input>
 			    			</md-input-container>
-			    			<md-button ng-click="removeInterval(timetables[selectedIndex], $interval, $range)"><md-icon class="material-icons">clear</md-icon><span>Remove</span></md-button>
+			    			<md-button ng-click="removeslice(timetables[selectedIndex], $slice, $workingTime)"><md-icon class="material-icons">clear</md-icon><span>Remove</span></md-button>
 			    		</div>
 			    		<div>
-			    			<md-button ng-click="addInterval(timetables[selectedIndex], $interval)"><md-icon class="material-icons">add</md-icon>
+			    			<md-button ng-click="addslice(timetables[selectedIndex], $slice)"><md-icon class="material-icons">add</md-icon>
 			    			<span>Add</span></md-button>
 			    		</div>
 			    	</div>

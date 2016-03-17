@@ -23,14 +23,14 @@
 	    	<div>
 	    		<table class="timeTable">
 	    			<tr class="weekDaysRow">
-	    				<td ng-repeat="$interval in timetables[indexTimetables].intervals">
-	    					<span class="weekDayIcon" ng-repeat="$weekday in [0,1,2,3,4,5,6]" ng-if="$interval.weekday[$weekday]">{{getWeekDays()[$weekday]}}</span>
+	    				<td ng-repeat="$slice in timetables[indexTimetables].slices">
+	    					<span class="weekDayIcon" ng-repeat="$weekday in [0,1,2,3,4,5,6]" ng-if="$slice.sliceSelector[$weekday]">{{getWeekDays()[$weekday]}}</span>
 	    				</td>
 	    			</tr>
 	    			<tr class="timeHoursRow">
-	    				<td class="timeHours" ng-repeat="$interval in timetables[indexTimetables].intervals">
-	    					<div ng-repeat="$range in $interval.ranges">{{$range.from| time:false:'--'}} - {{$range.to| time:false:'--'}}</div>
-	    					<div ng-if="$interval.ranges.length==0">No work</div>
+	    				<td class="timeHours" ng-repeat="$slice in timetables[indexTimetables].slices">
+	    					<div ng-repeat="$workingTime in $slice.workingTimes">{{$workingTime.from| time:false:'--'}} - {{$workingTime.to| time:false:'--'}}</div>
+	    					<div ng-if="$slice.workingTimes.length==0">No work</div>
 	    				</td>
 	    			</tr>
 	    		</table>

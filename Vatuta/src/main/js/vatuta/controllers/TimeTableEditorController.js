@@ -4,48 +4,48 @@ define([ "moment", "lodash", "vatuta/vatutaApp"], function(moment, _) {
 			return moment.weekdaysMin();
 		}
 		
-		$scope.clickWeekDay = function($timetable, $interval, $weekday, $event) {
-			var value = $interval.weekday[$weekday];
-			_.forEach($timetable.intervals, function(interval, index) {
+		$scope.clickWeekDay = function($timetable, $slice, $weekday, $event) {
+			var value = $slice.sliceSelector[$weekday];
+			_.forEach($timetable.slices, function(slice, index) {
 				// If clicked week day was disabled
 				if (!value) {
-					// Disable for the rest of the intervals
-					interval.weekday[$weekday] = false;
+					// Disable for the rest of the slices
+					slice.sliceSelector[$weekday] = false;
 				} else {
 					// If it was enabled and clicked
-					if (interval.weekday[$weekday]) {
+					if (slice.sliceSelector[$weekday]) {
 						// Disable the current one
-						interval.weekday[$weekday] = false;
-						// Enable for the next interval and create a new interval if needed
-						if (index >= $timetable.intervals.length - 1) {
-							$timetable.intervals.push(
-									{weekday:[false,false,false,false,false,false,false],
-										ranges:[]});
+						slice.sliceSelector[$weekday] = false;
+						// Enable for the next slice and create a new slice if needed
+						if (index >= $timetable.slices.length - 1) {
+							$timetable.slices.push(
+									{sliceSelector:[false,false,false,false,false,false,false],
+										workingTimes:[]});
 						}
-						$timetable.intervals[index+1].weekday[$weekday] = true;
+						$timetable.slices[index+1].sliceSelector[$weekday] = true;
 						return false;
 					}
 				}
 			});
 			// If clicked week day was disabled, enable for the selected one
 			if (!value) {
-				$interval.weekday[$weekday]=true;
+				$slice.sliceSelector[$weekday]=true;
 			}
-			// Remove weekday empty intervals
-			_.forEach($timetable.intervals, function(interval, index) {
-				if (_.every(interval.weekday, function (weekday) {return !weekday;})) {
-					$timetable.intervals.splice(index, 1);
+			// Remove weekday empty slices
+			_.forEach($timetable.slices, function(slice, index) {
+				if (_.every(slice.sliceSelector, function (weekday) {return !weekday;})) {
+					$timetable.slices.splice(index, 1);
 					return false;
 				}
 			});
 		}
 		
-		$scope.removeInterval= function(timetable, interval, range) {
-			CalendarHandler.removeRangeFromInterval($scope.calendar, timetable, interval, range);
+		$scope.removeSlice= function(timetable, slice, workingTime) {
+			CalendarHandler.removeWorkingTimeFromSlice($scope.calendar, timetable, slice, workingTime);
 		}
 		
-		$scope.addInterval = function(timetable, interval) {
-			CalendarHandler.addRangeToInterval($scope.calendar, timetable, interval);
+		$scope.addSlice = function(timetable, slice) {
+			CalendarHandler.addWorkingTimeToSlice($scope.calendar, timetable, slice);
 		}
 		
 	}]);

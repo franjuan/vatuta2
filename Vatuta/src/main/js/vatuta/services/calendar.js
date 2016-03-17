@@ -4,14 +4,18 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 		return {
 			// TODO Test cases
 			changeDay: function(moment, calendar, timetable) {
+				// Search current node and leaf
+				var current = this.search(moment, calendar.tree, null, null);
 				// Get current timetable
-				var leaf = this.searchTree(moment, calendar.tree);
+				//var leaf = this.searchTree(moment, calendar.tree);
+				var leaf = current.leaf;
 				// If it is the same no change expected, get back
 				if (this.timetableEquals(timetable, leaf.timetable)) {
 					return;
 				}
 				// Search for parentnode
-				var parent = this.searchNode(moment, calendar.tree);
+				//var parent = this.searchNode(moment, calendar.tree);
+				var parent = current.parent;
 				var day = moment.startOf('day');
 				var nextDay = Moment(day).add(1,'day');
 				// First node in empty calendar
@@ -75,7 +79,7 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 							}
 						}
 						if (!done) {
-							// If range matches with some separation a 2 leaves new node is needed
+							// If workingTime matches with some separation a 2 leaves new node is needed
 							if (parent.lowDate.isSame(nextDay) || parent.lowDate.isSame(day)
 									|| parent.highDate.isSame(nextDay) || parent.highDate.isSame(day)) {
 							this.addNode2Branch(
@@ -89,7 +93,7 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 													timetable:(parent.lowDate.isSame(nextDay)|| parent.highDate.isSame(nextDay))?timetable:leaf.timetable}
 									});
 							}
-							// If range does not match with separation date a 3leaves node is needed
+							// If workingTime does not match with separation date a 3leaves node is needed
 							else {
 								this.addNode2Branch(
 										parent,
@@ -154,6 +158,7 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 					}
 					
 					_.forEach(boundaries, function(boundary) {
+						if (node.isLeaf) return false; // If converted in last first boundary
 						var left = this.followBorderOnLeft(node, this.leavesInNode(node) == 3 & boundary.border == 'highDate'?node.middleChild:node.lowChild);
 						var right = this.followBorderOnRight(node, this.leavesInNode(node) == 3 & boundary.border == 'lowDate'?node.middleChild:node.highChild);
 						// Prune when value in both sides of border is the same
@@ -169,6 +174,9 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 							}
 						}
 					}, this);
+					
+					// If former operation converted node to leaf return
+					if (node.isLeaf) return;
 					
 					// If two leaves of three points to same timetable
 					if (!!node.middleChild && node.middleChild.isLeaf) {
@@ -255,37 +263,28 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 			},
 		
 			searchTimeTable: function(moment, calendar) {
-				return this.searchTree(moment, calendar.tree).timetable;
+				return this.search(moment, calendar.tree, null, null).leaf.timetable;
 			},
 			
-			searchTree: function(moment, node) {
-				if (node.isLeaf) {
-					return node;
-				} else if (node.isBranch) {
-					if (moment.isBefore(node.lowDate)) {
-						return this.searchTree(moment, node.lowChild);
-					} else if (moment.isSameOrAfter(node.highDate)) {
-						return this.searchTree(moment, node.highChild);
-					} else {
-						return this.searchTree(moment, node.middleChild);
-					}
-				} else throw "Calendar tree is not correct";
+			searchNode: function(moment, calendar) {
+				return this.search(moment, calendar.tree, null, null);
 			},
 			
-			searchNode: function(moment, node) {
+			search: function(moment, node, lowDate, highDate) {
 				if (node.isLeaf) {
-					return false;
+					return {leaf: node, lowDate: lowDate, highDate: highDate};
 				} else if (node.isBranch) {
 					var child;
 					if (moment.isBefore(node.lowDate)) {
-						child = this.searchNode(moment, node.lowChild);
+						child = this.search(moment, node.lowChild, lowDate, node.lowDate);
 					} else if (moment.isSameOrAfter(node.highDate)) {
-						child = this.searchNode(moment, node.highChild);
+						child = this.search(moment, node.highChild, node.highDate, highDate);
 					} else {
-						child = this.searchNode(moment, node.middleChild);
+						child = this.search(moment, node.middleChild, node.lowDate, node.highDate);
 					}
-					if (!child) {
-						return node;
+					if (!child.parent) {
+						child.parent = node;
+						return child;
 					} else {
 						return child;
 					}
@@ -308,21 +307,51 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 				}
 			},
 			
-			removeRangeFromInterval: function(calendar, timetable, interval, range2remove) {
-				_.remove(interval.ranges, function(range, index) {
-					return this.rangeEquals(range, range2remove);
+			removeWorkingTimeFromSlice: function(calendar, timetable, slice, workingTime2remove) {
+				_.remove(slice.workingTimes, function(workingTime, index) {
+					return this.workingTimeEquals(workingTime, workingTime2remove);
 				}, this);
 			},
 			
-			addRangeToInterval: function(calendar, timetable, interval) {
-				interval.ranges.push({from:{hours:0, minutes:0}, to:{hours:0,minutes:0}});
+			addWorkingTimeToSlice: function(calendar, timetable, slice) {
+				slice.workingTimes.push({from:{hours:0, minutes:0}, to:{hours:0,minutes:0}});
 			},
 			
 			timetableEquals: function(one, two) {
 				return one.id == two.id;
 			},
 			
-			rangeEquals: function(one, two) {
+			sliceInTimeTable(moment, timetable) {
+				return _.find(timetable.slices, function(slice, index, slices) {
+					return slice.sliceSelector[moment.day()];
+				});
+			},
+			
+			isWithinWorkingTime(moment, workingTime) {
+				var from = this.workingTimeBeginning(moment, workingTime);
+				var to = this.workingTimeEnd(moment, workingTime);
+				return moment.isSameOrAfter(from) && moment.isSameOrBefore(to); 
+			},
+			
+			isAfterWorkingTime(moment, workingTime) {
+				var to = this.workingTimeEnd(moment, workingTime);
+				return moment.isAfter(to); 
+			},
+			
+			isBeforeWorkingTime(moment, workingTime) {
+				var from = this.workingTimeBeginning(moment, workingTime);
+				return moment.isBefore(from); 
+			},
+			
+			workingTimeBeginning(moment, workingTime) {
+				return Moment(moment).hours(workingTime.from.hours).minutes(workingTime.from.minutes).seconds(0).milliseconds(0);
+			},
+			
+			workingTimeEnd(moment, workingTime) {
+				return Moment(moment).hours(workingTime.to.hours).minutes(workingTime.to.minutes).seconds(0).milliseconds(0);
+			},
+			
+			workingTimeEquals: function(one, two) {
 				return angular.equals(one, two);
 			}
 		}
