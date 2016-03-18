@@ -147,14 +147,31 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 					this.pruneTree(node.highChild, node.highDate, highLimit);
 					if (!!node.middleChild) this.pruneTree(node.middleChild, node.lowDate, node.highDate);
 					
+					// If two leaves of three points to same timetable
+					if (!!node.middleChild && node.middleChild.isLeaf) {
+						if (node.lowChild.isLeaf && this.timetableEquals(node.lowChild.timetable, node.middleChild.timetable)) {
+							this.removeNode2Branch(node, 'lowChild');
+						} else if (node.highChild.isLeaf && this.timetableEquals(node.middleChild.timetable, node.highChild.timetable)) {
+							this.removeNode2Branch(node, 'highChild');
+						}
+					}
+					
+					// Convert to leaf when all branches are the same timetable (all are leaves). If that's true the former step converted the node to a 2 leaves node
+					if ((node.lowChild.isLeaf && node.highChild.isLeaf && !node.middleChild && this.timetableEquals(node.lowChild.timetable, node.highChild.timetable))) {
+						this.removeNode2Branch(node, 'lowChild');
+					}
+					
 					// Join sibling nodes when overlapping
 					var boundaries = [];
 					if (this.leavesInNode(node)==3) {
 						// If 3 leaves, check both borders
 						boundaries = [{border:'lowDate'},{border:'highDate'}];
-					} else {
+					} else if (this.leavesInNode(node)==2) {
 						// If 2 leaves, check the unique border
 						boundaries = [{border:'lowDate'}];
+					} else {
+						// It's a leaf
+						return;
 					}
 					
 					_.forEach(boundaries, function(boundary) {
@@ -174,23 +191,6 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 							}
 						}
 					}, this);
-					
-					// If former operation converted node to leaf return
-					if (node.isLeaf) return;
-					
-					// If two leaves of three points to same timetable
-					if (!!node.middleChild && node.middleChild.isLeaf) {
-						if (node.lowChild.isLeaf && this.timetableEquals(node.lowChild.timetable, node.middleChild.timetable)) {
-							this.removeNode2Branch(node, 'lowChild');
-						} else if (node.highChild.isLeaf && this.timetableEquals(node.middleChild.timetable, node.highChild.timetable)) {
-							this.removeNode2Branch(node, 'highChild');
-						}
-					}
-					
-					// Convert to leaf when all branches are the same timetable (all are leaves). If that's true the former step converted the node to a 2 leaves node
-					if ((node.lowChild.isLeaf && node.highChild.isLeaf && !node.middleChild && this.timetableEquals(node.lowChild.timetable, node.highChild.timetable))) {
-						this.removeNode2Branch(node, 'lowChild');
-					}
 				}
 			},
 			
