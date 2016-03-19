@@ -113,7 +113,8 @@
 					<preloadSources>
 					</preloadSources>
 					<customRunnerTemplate>${project.basedir}/src/test/resources/CustomSpecRunner.htmltemplate</customRunnerTemplate>
-					<systemPropertyVariables>
+					<webDriverClassName>org.openqa.selenium.firefox.FirefoxDriver</webDriverClassName>
+					<!-- <systemPropertyVariables>
 						<phantomjs.binary.path>${phantomjs.binary.path}</phantomjs.binary.path>
 					</systemPropertyVariables>
 					<webDriverClassName>org.openqa.selenium.phantomjs.PhantomJSDriver</webDriverClassName>
@@ -122,7 +123,7 @@
 							<name>phantomjs.binary.path</name>
 							<value>${phantomjs.binary}</value>
 						</capability>
-					</webDriverCapabilities>
+					</webDriverCapabilities> -->
 					<haltOnFailure>true</haltOnFailure>
 				</configuration>
 			</plugin>
