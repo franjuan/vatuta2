@@ -174,14 +174,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			if (moment.isMoment(earlyStart)) {
 				if (this.earlyEnd() && earlyStart.isAfter(this.earlyEnd()) ){
 					throw {
-						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is before than early start " + earlyStart.ToString(),
+						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is before than early start " + earlyStart.toString(),
 						task: this,
 						error: "StartEndConstraint"
 						}
 				}
 				if (this.earlyEnd() && !this.isEstimated() && this.duration().addTo(earlyStart).isAfter(this.earlyEnd()) ){
 					throw {
-						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is smaller than early start " + earlyStart.ToString() + " with duration added",
+						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is smaller than early start " + earlyStart.toString() + " with duration added",
 						task: this,
 						error: "DurationConstraint"
 						}
@@ -194,14 +194,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			if (moment.isMoment(earlyEnd)) {
 				if (this.earlyStart() && earlyEnd.isBefore(this.earlyStart()) ){
 					throw {
-						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is before than early start " + earlyEnd.ToString(),
+						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + earlyEnd.toString() + " is before than early start " + this.earlyStart().toString(),
 						task: this,
 						error: "StartEndConstraint"
 						}
 				}
 				if (this.earlyStart() && !this.isEstimated() && this.duration().addTo(this.earlyStart()).isAfter(earlyEnd) ){
 					throw {
-						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is smaller than early start " + earlyEnd.ToString() + " with duration added",
+						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + earlyEnd.toString() + " is smaller than early start " + this.earlyStart().toString() + " with duration added",
 						task: this,
 						error: "DurationConstraint"
 						}
@@ -214,14 +214,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			if (moment.isMoment(lateStart)) {
 				if (this.lateEnd() && lateStart.isAfter(this.lateEnd()) ){
 					throw {
-						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.lateEnd().toString() + " is before than late start " + lateStart.ToString(),
+						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.lateEnd().toString() + " is before than late start " + lateStart.toString(),
 						task: this,
 						error: "StartEndConstraint"
 						}
 				}
 				if (this.lateEnd() && !this.isEstimated() && this.duration().addTo(lateStart).isAfter(this.lateEnd()) ){
 					throw {
-						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.lateEnd().toString() + " is smaller than late start " + lateStart.ToString() + " with duration added",
+						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.lateEnd().toString() + " is smaller than late start " + lateStart.toString() + " with duration added",
 						task: this,
 						error: "DurationConstraint"
 						}
@@ -234,14 +234,14 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 			if (moment.isMoment(lateEnd)) {
 				if (this.lateStart() && lateEnd.isBefore(this.lateStart()) ){
 					throw {
-						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.LateEnd().toString() + " is before than late start " + lateEnd.ToString(),
+						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + lateEnd.toString() + " is before than late start " + this.lateStart().toString(),
 						task: this,
 						error: "StartEndConstraint"
 						}
 				}
 				if (this.lateStart() && !this.isEstimated() && this.duration().addTo(this.lateStart()).isAfter(lateEnd) ){
 					throw {
-						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.LateEnd().toString() + " is smaller than late start " + lateEnd.ToString() + " with duration added",
+						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + lateEnd.toString() + " is smaller than late start " + this.lateStart().toString() + " with duration added",
 						task: this,
 						error: "DurationConstraint"
 						}
