@@ -19,15 +19,15 @@
 					  	{name : 'vatuta', location: '/js/vatuta'},
 					  	{name : 'underscorejs',	location : 'http://underscorejs.org', main: 'underscore-min'},
 					  	{name : 'lodash', location: '/js/lib', main: 'lodash.min'},
-					  	{name : 'easeljs', location: 'https://code.createjs.com', main: 'easeljs-0.8.1.min'},
+					  	{name : 'easeljs', location: 'https://code.createjs.com', main: 'easeljs-0.8.2.min'},
 					  	{name : 'resurrect', location: '/js/lib', main: 'resurrect'},
 					  	{name : 'moment', location: '/js/lib', main: 'moment.min'}
 					  ], 
 					  baseUrl : '/js/'"></script>
 
 	<script	src="https://code.jquery.com/jquery-2.1.4.js"></script>
-	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
-	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-mocks.js"></script>
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+	<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-mocks.js"></script>
 	<script src="/js/lib/resurrect.js"></script>
 	
     <script>

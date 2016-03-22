@@ -1,6 +1,5 @@
 define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
-// TODO Create specs test file for calendar
-	angular.module('vatuta').factory('CalendarHandler', ["$project", function($project) {
+	angular.module('vatuta').factory('CalendarHandler', [function() {
 		return {
 			// TODO Test cases
 			changeDay: function(moment, calendar, timetable) {
@@ -357,6 +356,7 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 			
 			upcomingWorkingTime: function(moment, calendar) {
 				// Extracted calendar data for moment
+				// TODO: When call from Duration.addTo this search has been already performed, take advantage of that 
 				var current = this.searchNode(moment, calendar);
 				var timetable = current.leaf.timetable;
 				// When timetable ends
@@ -441,6 +441,44 @@ define([ "moment", "lodash", "vatuta/vatutaMod" ], function(Moment, _) {
 				else {
 					throw "No past working time possible when no end found in this timespan and there is no preceding timespan";
 				}
+			},
+			getSlice(moment, timetable) {
+				return _.find(timetable.slices, function(slice) { return slice.sliceSelector[moment.day()]; });
+			},
+			addWorkintTimeTo(moment, timeValue, unit, calendar) {
+				var cursor = Moment(moment);
+				var remainingTime = timeValue;
+				// Extracted calendar data for moment
+				var current = this.searchNode(cursor, calendar);
+				var timetable = current.leaf.timetable;
+				// When timetable ends
+				var endOfTimetable = current.highDate;
+				while((!endOfTimetable || cursor.isBefore(endOfTimetable)) && remainingTime > 0) {
+					// Get slice
+					var slice = this.getSlice(cursor, timetable);
+					// Analyse every workingTime
+					_.forEach(slice.workingTimes, _.bind(function(workingTime, index, workingTimes) {
+						// If cursor is before or within workingTime, apply
+						if (!this.isAfterWorkingTime(cursor, workingTime)) {
+							// Whatever it happens after
+							var from = Moment.max(cursor, this.workingTimeBeginning(cursor, workingTime));
+							// Whatever it happens before
+							var to = Moment.min(
+										this.workingTimeEnd(cursor, workingTime),
+										Moment(from).add(remainingTime, unit));
+							if (endOfTimetable) to = Moment.min(endOfTimetable, to);
+							remainingTime -= to.diff(from, unit, true);
+							cursor = to;
+						}
+						// Do not iterate through others workingTimes if there is not remainingTime to apply
+						if (remainingTime == 0) return false;
+					}, this));
+					// Go next slice if not finished
+					if (remainingTime > 0) {
+						cursor.add(timetable.increment.value, timetable.increment.units).startOf(timetable.increment.units);
+					}
+				}
+				return {cursor: cursor, efectiveTime: timeValue - remainingTime};
 			}
 		}
 		

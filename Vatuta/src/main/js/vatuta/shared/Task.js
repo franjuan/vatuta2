@@ -179,6 +179,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 						error: "StartEndConstraint"
 						}
 				}
+				// TODO: Esto no funciona con el horario de verano
 				if (this.earlyEnd() && !this.isEstimated() && this.duration().addTo(earlyStart).isAfter(this.earlyEnd()) ){
 					throw {
 						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + this.earlyEnd().toString() + " is smaller than early start " + earlyStart.toString() + " with duration added",
@@ -199,6 +200,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 						error: "StartEndConstraint"
 						}
 				}
+				// TODO: Esto no funciona con el horario de verano
 				if (this.earlyStart() && !this.isEstimated() && this.duration().addTo(this.earlyStart()).isAfter(earlyEnd) ){
 					throw {
 						message: "Error at task " + this.index() + ".- " + this.name() + ", early end " + earlyEnd.toString() + " is smaller than early start " + this.earlyStart().toString() + " with duration added",
@@ -219,6 +221,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 						error: "StartEndConstraint"
 						}
 				}
+				// TODO: Esto no funciona con el horario de verano
 				if (this.lateEnd() && !this.isEstimated() && this.duration().addTo(lateStart).isAfter(this.lateEnd()) ){
 					throw {
 						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + this.lateEnd().toString() + " is smaller than late start " + lateStart.toString() + " with duration added",
@@ -239,6 +242,7 @@ define([ "dojo/_base/declare", "dojo/_base/lang", "lodash", "moment", "vatuta/sh
 						error: "StartEndConstraint"
 						}
 				}
+				// TODO: Esto no funciona con el horario de verano
 				if (this.lateStart() && !this.isEstimated() && this.duration().addTo(this.lateStart()).isAfter(lateEnd) ){
 					throw {
 						message: "Error at task " + this.index() + ".- " + this.name() + ", late end " + lateEnd.toString() + " is smaller than late start " + this.lateStart().toString() + " with duration added",
